@@ -1,0 +1,58 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Usuarios y permisos | Frente Comepipas</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet"><link rel="stylesheet" href="assets/css/variables.css"><link rel="stylesheet" href="assets/css/style.css"><link rel="stylesheet" href="assets/css/responsive.css"><script>if(!protectAdminPage("usuarios")){throw new Error("Acceso bloqueado");}</script></head><body><header class="site-header"><div class="container nav"><a class="brand" href="index.html"><img src="assets/images/brand/escudo-transparente.png"><div><span data-config="nombre">FRENTE COMEPIPAS</span><small data-config="subtitulo">PEÑA MALAGUISTA</small></div></a><button class="menu-btn"><span></span><span></span><span></span></button><nav class="nav-links"><a class="" href="index.html">Inicio</a><a class="" href="la-pena.html">La Peña</a><a class="" href="noticias.html" data-feature="noticias">Noticias</a><a class="" href="tienda.html" data-feature="tienda">Tienda</a><a class="" href="viajes.html" data-feature="viajes">Viajes</a><a class="" href="socios.html" data-feature="socios">Socios</a><a class="" href="galeria.html" data-feature="galeria">Galería</a><a class="active" href="contacto.html" data-feature="contacto">Contacto</a></nav></div></header>
+
+<main class="admin-page">
+<section class="admin-layout">
+  <aside class="admin-sidebar">
+    <h2>Usuarios y permisos</h2>
+    <p>Frente Comepipas</p>
+    <a class="btn btn-gold" href="admin.html">Volver al panel</a>
+    <button id="resetUsers" class="btn btn-outline">Restaurar usuarios</button>
+    <div class="auth-user-box">
+      <strong data-auth-name></strong>
+      <span data-auth-role></span>
+    </div>
+    <button class="btn btn-outline" data-auth-logout>Cerrar sesión</button>
+  </aside>
+
+  <div class="admin-content users-admin">
+    <div class="members-topbar">
+      <div><span class="kicker">Seguridad</span><h1>Usuarios administradores</h1></div>
+      <button id="newUserButton" class="btn btn-primary">Nuevo usuario</button>
+    </div>
+
+    <section class="members-table-wrap">
+      <table class="members-table">
+        <thead><tr><th>Usuario</th><th>Rol</th><th>Estado</th><th>Acciones</th></tr></thead>
+        <tbody id="usersTableBody"></tbody>
+      </table>
+    </section>
+  </div>
+</section>
+</main>
+
+<div id="userModal" class="store-modal">
+  <div class="store-modal-dialog">
+    <button class="store-modal-close">×</button>
+    <h2 id="userModalTitle">Nuevo usuario</h2>
+    <form id="userForm" class="store-form-grid">
+      <input type="hidden" name="id">
+      <label>Nombre<input name="nombre" required></label>
+      <label>Correo<input name="email" type="email" required></label>
+      <label>Contraseña<input name="password" type="password"></label>
+      <label>Rol
+        <select name="rol">
+          <option value="superadmin">Superadministrador</option>
+          <option value="presidente">Presidente</option>
+          <option value="secretario">Secretario</option>
+          <option value="tesorero">Tesorero</option>
+          <option value="viajes">Responsable de viajes</option>
+          <option value="editor">Editor</option>
+        </select>
+      </label>
+      <label class="news-checkbox full"><input type="checkbox" name="activo"> Usuario activo</label>
+      <button class="btn btn-primary full" type="submit">Guardar usuario</button>
+    </form>
+  </div>
+</div>
+
+<footer class="site-footer"><div class="container footer-grid"><div><h4 data-config="nombre">Frente Comepipas</h4><p data-config="lema">Levantando copas contigo desde 2007.</p></div><div><h4>La Peña</h4><a href="la-pena.html">Historia</a><a href="socios.html" data-feature="socios">Hazte socio</a></div><div><h4>Actividad</h4><a href="viajes.html" data-feature="viajes">Viajes</a><a href="calendario.html" data-feature="calendario">Calendario</a><a href="calendario.html" data-feature="calendario">Calendario</a><a href="tienda.html" data-feature="tienda">Tienda</a></div><div><h4>Contacto</h4><p data-config="ciudad">Málaga, Andalucía</p><p data-config="email">contacto@frentecomepipas.es</p><a href="admin.html">Administración</a></div></div><div class="footer-bottom">© 2026 Frente Comepipas</div></footer><div class="toast"></div><script src="assets/js/roles.js"></script><script src="assets/js/admin-users.js"></script><script src="assets/js/auth.js"></script><script src="assets/js/audit.js"></script><script src="assets/js/users-admin.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/supabase-config.js"></script><script src="assets/js/supabase-client.js"></script><script src="assets/js/api.js"></script><script src="assets/js/data-mode.js"></script></body></html>

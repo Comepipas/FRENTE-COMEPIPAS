@@ -1,0 +1,99 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Socios | Frente Comepipas</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet"><link rel="stylesheet" href="assets/css/variables.css"><link rel="stylesheet" href="assets/css/style.css"><link rel="stylesheet" href="assets/css/responsive.css"></head><body><header class="site-header"><div class="container nav"><a class="brand" href="index.html"><img src="assets/images/brand/escudo-transparente.png"><div><span data-config="nombre">FRENTE COMEPIPAS</span><small data-config="subtitulo">PEÑA MALAGUISTA</small></div></a><button class="menu-btn"><span></span><span></span><span></span></button><nav class="nav-links"><a class="" href="index.html">Inicio</a><a class="" href="la-pena.html">La Peña</a><a class="" href="noticias.html" data-feature="noticias">Noticias</a><a class="" href="tienda.html" data-feature="tienda">Tienda</a><a class="" href="viajes.html" data-feature="viajes">Viajes</a><a class="active" href="socios.html" data-feature="socios">Socios</a><a class="" href="galeria.html" data-feature="galeria">Galería</a><a class="" href="contacto.html" data-feature="contacto">Contacto</a></nav></div></header><main>
+<section class="page-hero">
+  <div class="container">
+    <h1>ZONA DE SOCIOS</h1>
+    <p>Carné digital, cuotas, viajes y compras.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+
+    <div id="memberLoginView" class="member-login-card" id="login">
+      <span class="kicker">Acceso privado</span>
+      <h2>Iniciar sesión</h2>
+      <p>Accede a tu espacio personal como socio.</p>
+
+      <form id="memberLoginForm">
+        <label>
+          Correo
+          <input type="email" name="email" required>
+        </label>
+        <label>
+          Contraseña
+          <input type="password" name="password" required>
+        </label>
+        <p id="memberLoginError" class="member-login-error"></p>
+        <button class="btn btn-primary" type="submit">Entrar</button>
+      </form>
+
+      <div class="v11-account-links"><a class="btn btn-dark-outline" href="activar-cuenta.html">Soy socio: activar mi cuenta</a><a class="btn btn-dark-outline" href="alta-socio.html">Todavía no soy socio</a></div><p class="v11-help">El acceso es exclusivo para socios activos de Frente Comepipas.</p>
+    </div>
+
+    <div id="memberDashboard" class="member-shell" hidden>
+      <aside class="member-sidebar">
+        <div class="member-profile">
+          <div class="member-avatar">👤</div>
+          <h3 id="memberName">Socio Ejemplo</h3>
+          <p>Socio n.º <strong id="memberNumber">0001</strong></p>
+        </div>
+
+        <nav>
+          <button data-member-demo="Panel principal">Inicio</button>
+          <button data-member-demo="Edición del perfil preparada">Mi perfil</button>
+          <button data-member-demo="Carné digital visible en el panel">Carné digital</button>
+          <button data-member-demo="Solicitudes de entradas en preparación">Mis solicitudes</button>
+          <button data-member-demo="Historial de compras en preparación">Mis compras</button>
+          <button id="memberLogout">Cerrar sesión</button>
+        </nav>
+      </aside>
+
+      <div class="member-main">
+        <section class="member-main-card">
+          <span class="kicker">Bienvenido</span>
+          <h2>Hola, <span id="memberName">Socio Ejemplo</span></h2>
+          <p>Tu espacio privado reúne el carné, las solicitudes de entradas, las compras y los álbumes exclusivos.</p>
+        </section>
+
+        <section class="member-main-card">
+          <h3>Carné digital</h3>
+          <div class="digital-card">
+            <div>
+              <span>PEÑA MALAGUISTA</span>
+              <h2>FRENTE COMEPIPAS</h2>
+              <p>Socio n.º <strong id="memberNumber">0001</strong></p>
+              <p>Temporada <strong id="memberSeason">2026/27</strong></p>
+              <p>Cuota: <strong id="memberFee">Al día</strong></p>
+            </div>
+            <div class="qr" aria-label="Código QR de demostración"></div>
+          </div>
+        </section>
+
+        <section class="member-stats">
+          <div class="member-stat"><span>Viajes</span><strong id="memberTrips">3</strong></div>
+          <div class="member-stat"><span>Compras</span><strong id="memberOrders">2</strong></div>
+          <div class="member-stat"><span>Desde</span><strong id="memberSince">2007</strong></div>
+        </section>
+
+        <section class="member-main-card">
+          <h3>Mis datos</h3>
+          <div class="member-row"><span>Teléfono</span><strong id="memberPhone">600 000 000</strong></div>
+          <div class="member-row"><span>Ciudad</span><strong id="memberCity">Málaga</strong></div>
+          <div class="member-row"><span>Estado de cuota</span><strong id="memberFee">Al día</strong></div>
+        </section>
+
+        <section class="member-main-card">
+          <h3>Acciones rápidas</h3>
+          <div class="member-actions">
+            <button class="btn btn-primary" data-member-demo="Solicitud de entradas preparada">Solicitar entrada</button>
+            <button class="btn btn-dark-outline" data-member-demo="Pago de cuotas preparado">Pagar cuota</button>
+            <button class="btn btn-dark-outline" data-member-demo="Descarga del carné preparada">Descargar carné</button>
+          </div>
+        </section>
+      </div>
+    </div>
+
+  </div>
+</section>
+<section class="section"><div class="container"><a class="btn btn-primary" href="area-socio.html">Acceder al área del socio</a></div></section></main>
+<footer class="site-footer"><div class="container footer-grid"><div><h4 data-config="nombre">Frente Comepipas</h4><p data-config="lema">Levantando copas contigo desde 2007.</p></div><div><h4>La Peña</h4><a href="la-pena.html">Historia</a><a href="socios.html" data-feature="socios">Hazte socio</a></div><div><h4>Actividad</h4><a href="viajes.html" data-feature="viajes">Viajes</a><a href="calendario.html" data-feature="calendario">Calendario</a><a href="calendario.html" data-feature="calendario">Calendario</a><a href="tienda.html" data-feature="tienda">Tienda</a></div><div><h4>Contacto</h4><p data-config="ciudad">Málaga, Andalucía</p><p data-config="email">contacto@frentecomepipas.es</p><a href="admin.html">Administración</a></div></div><div class="footer-bottom">© 2026 Frente Comepipas</div></footer><div class="toast"></div><script src="assets/js/config.js"></script><script src="assets/js/site-settings.js"></script><script src="assets/js/site-settings-runtime.js"></script><script src="assets/js/features.js"></script><script src="assets/js/members.js"></script><script src="assets/js/app.js"></script><script src="assets/js/socios.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/supabase-config.js"></script><script src="assets/js/supabase-client.js"></script><script src="assets/js/api.js"></script><script src="assets/js/data-mode.js"></script></body></html>

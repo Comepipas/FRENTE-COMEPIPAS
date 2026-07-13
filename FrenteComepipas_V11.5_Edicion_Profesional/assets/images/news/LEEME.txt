@@ -1,0 +1,15 @@
+CAMBIAR IMÁGENES DE NOTICIAS
+
+Sustituye los archivos JPG manteniendo el mismo nombre:
+
+- temporada.jpg
+- viaje.jpg
+- socios.jpg
+- evento.jpg
+
+Recomendación:
+- Formato horizontal
+- Tamaño mínimo: 1400 x 800 píxeles
+
+Para cambiar títulos, categorías, fechas y textos:
+assets/js/news.js

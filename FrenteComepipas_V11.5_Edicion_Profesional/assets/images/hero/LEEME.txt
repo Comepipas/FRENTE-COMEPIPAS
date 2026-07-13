@@ -1,0 +1,16 @@
+CAMBIAR LA FOTO PRINCIPAL
+
+Método más fácil:
+1. Elige una foto JPG.
+2. Llámala exactamente: hero.jpg
+3. Sustituye el archivo hero.jpg de esta carpeta.
+4. Recarga la web con Ctrl + F5.
+
+Recomendación:
+- Formato horizontal
+- Resolución mínima: 1920 x 1080 píxeles
+- La parte importante de la foto debe estar cerca del centro
+
+Método alternativo:
+Puedes usar otro nombre y cambiar heroImage en:
+assets/js/config.js

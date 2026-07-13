@@ -1,0 +1,83 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Copias de seguridad | Frente Comepipas</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet"><link rel="stylesheet" href="assets/css/variables.css"><link rel="stylesheet" href="assets/css/style.css"><link rel="stylesheet" href="assets/css/responsive.css"><script>if(!protectAdminPage("dashboard")){throw new Error("Acceso bloqueado");}</script><script>document.addEventListener("DOMContentLoaded",()=>protectAdminPage("dashboard"));</script></head><body><header class="site-header"><div class="container nav"><a class="brand" href="index.html"><img src="assets/images/brand/escudo-transparente.png"><div><span data-config="nombre">FRENTE COMEPIPAS</span><small data-config="subtitulo">PEÑA MALAGUISTA</small></div></a><button class="menu-btn"><span></span><span></span><span></span></button><nav class="nav-links"><a class="" href="index.html">Inicio</a><a class="" href="la-pena.html">La Peña</a><a class="" href="noticias.html" data-feature="noticias">Noticias</a><a class="" href="tienda.html" data-feature="tienda">Tienda</a><a class="" href="viajes.html" data-feature="viajes">Viajes</a><a class="" href="socios.html" data-feature="socios">Socios</a><a class="" href="galeria.html" data-feature="galeria">Galería</a><a class="active" href="contacto.html" data-feature="contacto">Contacto</a></nav></div></header>
+
+<main class="admin-page">
+<section class="admin-layout">
+  <aside class="admin-sidebar">
+    <h2>Copias de seguridad</h2>
+    <p>Frente Comepipas</p>
+    <a class="btn btn-gold" href="admin.html">Volver al panel</a>
+    <div class="auth-user-box">
+      <strong data-auth-name></strong>
+      <span data-auth-role></span>
+    </div>
+    <button class="btn btn-outline" data-auth-logout>Cerrar sesión</button>
+  </aside>
+
+  <div class="admin-content backups-admin">
+    <div class="members-topbar">
+      <div>
+        <span class="kicker">Seguridad de datos</span>
+        <h1>Copias de seguridad</h1>
+      </div>
+    </div>
+
+    <section class="backup-stats">
+      <div class="backup-stat">
+        <span>Módulos con datos locales</span>
+        <strong id="backupModules">0</strong>
+      </div>
+      <div class="backup-stat">
+        <span>Copias registradas</span>
+        <strong id="backupCount">0</strong>
+      </div>
+      <div class="backup-stat">
+        <span>Última operación</span>
+        <strong id="backupLast">Nunca</strong>
+      </div>
+    </section>
+
+    <section class="backup-layout">
+      <article class="backup-panel">
+        <h2>Copia completa</h2>
+        <p>Descarga en un único archivo todos los datos personalizados guardados en este navegador.</p>
+
+        <div class="backup-actions">
+          <button id="createBackupButton" class="btn btn-primary">Crear y descargar copia</button>
+
+          <label class="btn btn-dark-outline backup-upload">
+            Restaurar una copia
+            <input id="restoreBackupInput" type="file" accept=".json,application/json">
+          </label>
+
+          <button id="clearProjectData" class="btn btn-dark-outline">Eliminar datos locales</button>
+        </div>
+
+        <div class="backup-warning">
+          Guarda las copias en un lugar seguro. La restauración sustituye los datos locales actuales.
+        </div>
+
+        <p id="backupMessage" class="backup-message"></p>
+      </article>
+
+      <article class="backup-panel">
+        <h2>Exportar por módulos</h2>
+        <p>Descarga solo la información del módulo que necesites.</p>
+        <div id="backupModulesGrid" class="backup-modules-grid"></div>
+      </article>
+    </section>
+
+    <section class="backup-panel">
+      <div class="members-topbar">
+        <div>
+          <span class="kicker">Registro local</span>
+          <h2>Historial de copias</h2>
+        </div>
+        <button id="clearBackupHistory" class="btn btn-dark-outline">Borrar historial</button>
+      </div>
+      <div id="backupHistory" class="backup-history"></div>
+    </section>
+  </div>
+</section>
+</main>
+
+<footer class="site-footer"><div class="container footer-grid"><div><h4 data-config="nombre">Frente Comepipas</h4><p data-config="lema">Levantando copas contigo desde 2007.</p></div><div><h4>La Peña</h4><a href="la-pena.html">Historia</a><a href="socios.html" data-feature="socios">Hazte socio</a></div><div><h4>Actividad</h4><a href="viajes.html" data-feature="viajes">Viajes</a><a href="calendario.html" data-feature="calendario">Calendario</a><a href="calendario.html" data-feature="calendario">Calendario</a><a href="tienda.html" data-feature="tienda">Tienda</a></div><div><h4>Contacto</h4><p data-config="ciudad">Málaga, Andalucía</p><p data-config="email">contacto@frentecomepipas.es</p><a href="admin.html">Administración</a></div></div><div class="footer-bottom">© 2026 Frente Comepipas</div></footer><div class="toast"></div><script src="assets/js/roles.js"></script><script src="assets/js/admin-users.js"></script><script src="assets/js/auth.js"></script><script src="assets/js/audit.js"></script><script src="assets/js/backups-admin.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/supabase-config.js"></script><script src="assets/js/supabase-client.js"></script><script src="assets/js/api.js"></script><script src="assets/js/data-mode.js"></script></body></html>

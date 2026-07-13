@@ -1,0 +1,65 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Auditoría | Frente Comepipas</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet"><link rel="stylesheet" href="assets/css/variables.css"><link rel="stylesheet" href="assets/css/style.css"><link rel="stylesheet" href="assets/css/responsive.css"><script>if(!protectAdminPage("dashboard")){throw new Error("Acceso bloqueado");}</script><script>document.addEventListener("DOMContentLoaded",()=>protectAdminPage("dashboard"));</script></head><body><header class="site-header"><div class="container nav"><a class="brand" href="index.html"><img src="assets/images/brand/escudo-transparente.png"><div><span data-config="nombre">FRENTE COMEPIPAS</span><small data-config="subtitulo">PEÑA MALAGUISTA</small></div></a><button class="menu-btn"><span></span><span></span><span></span></button><nav class="nav-links"><a class="" href="index.html">Inicio</a><a class="" href="la-pena.html">La Peña</a><a class="" href="noticias.html" data-feature="noticias">Noticias</a><a class="" href="tienda.html" data-feature="tienda">Tienda</a><a class="" href="viajes.html" data-feature="viajes">Viajes</a><a class="" href="socios.html" data-feature="socios">Socios</a><a class="" href="galeria.html" data-feature="galeria">Galería</a><a class="active" href="contacto.html" data-feature="contacto">Contacto</a></nav></div></header>
+
+<main class="admin-page">
+<section class="admin-layout">
+  <aside class="admin-sidebar">
+    <h2>Auditoría</h2>
+    <p>Frente Comepipas</p>
+    <a class="btn btn-gold" href="admin.html">Volver al panel</a>
+    <div class="auth-user-box">
+      <strong data-auth-name></strong>
+      <span data-auth-role></span>
+    </div>
+    <button class="btn btn-outline" data-auth-logout>Cerrar sesión</button>
+  </aside>
+
+  <div class="admin-content audit-admin">
+    <div class="members-topbar">
+      <div>
+        <span class="kicker">Registro de actividad</span>
+        <h1>Auditoría del sistema</h1>
+      </div>
+      <div class="members-topbar-actions">
+        <button id="exportAudit" class="btn btn-dark-outline">Exportar CSV</button>
+        <button id="clearAudit" class="btn btn-dark-outline">Limpiar historial</button>
+      </div>
+    </div>
+
+    <section class="audit-stats">
+      <div class="audit-stat"><span>Registros totales</span><strong id="auditTotal">0</strong></div>
+      <div class="audit-stat"><span>Actividad de hoy</span><strong id="auditToday">0</strong></div>
+      <div class="audit-stat"><span>Avisos</span><strong id="auditWarnings">0</strong></div>
+      <div class="audit-stat"><span>Usuarios registrados</span><strong id="auditUsers">0</strong></div>
+    </section>
+
+    <section class="audit-panel">
+      <div class="audit-filters">
+        <input id="auditSearch" type="search" placeholder="Buscar actividad...">
+        <select id="auditModule"><option>Todos</option></select>
+        <select id="auditAction"><option>Todos</option></select>
+        <select id="auditUser"><option>Todos</option></select>
+        <input id="auditDateFrom" type="date" title="Desde">
+        <input id="auditDateTo" type="date" title="Hasta">
+      </div>
+
+      <div class="members-table-wrap">
+        <table class="members-table">
+          <thead>
+            <tr>
+              <th>Fecha y hora</th>
+              <th>Usuario</th>
+              <th>Módulo</th>
+              <th>Acción</th>
+              <th>Elemento</th>
+              <th>Detalle</th>
+            </tr>
+          </thead>
+          <tbody id="auditTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</section>
+</main>
+
+<footer class="site-footer"><div class="container footer-grid"><div><h4 data-config="nombre">Frente Comepipas</h4><p data-config="lema">Levantando copas contigo desde 2007.</p></div><div><h4>La Peña</h4><a href="la-pena.html">Historia</a><a href="socios.html" data-feature="socios">Hazte socio</a></div><div><h4>Actividad</h4><a href="viajes.html" data-feature="viajes">Viajes</a><a href="calendario.html" data-feature="calendario">Calendario</a><a href="calendario.html" data-feature="calendario">Calendario</a><a href="tienda.html" data-feature="tienda">Tienda</a></div><div><h4>Contacto</h4><p data-config="ciudad">Málaga, Andalucía</p><p data-config="email">contacto@frentecomepipas.es</p><a href="admin.html">Administración</a></div></div><div class="footer-bottom">© 2026 Frente Comepipas</div></footer><div class="toast"></div><script src="assets/js/roles.js"></script><script src="assets/js/admin-users.js"></script><script src="assets/js/auth.js"></script><script src="assets/js/audit.js"></script><script src="assets/js/audit-admin.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/supabase-config.js"></script><script src="assets/js/supabase-client.js"></script><script src="assets/js/api.js"></script><script src="assets/js/data-mode.js"></script></body></html>

@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Renovaciones 2027/28 | Frente Comepipas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/variables.css"><link rel="stylesheet" href="assets/css/style.css"><link rel="stylesheet" href="assets/css/responsive.css"><link rel="stylesheet" href="assets/css/renewals-admin.css">
+</head>
+<body>
+<header class="site-header"><div class="container nav"><a class="brand" href="index.html"><img src="assets/images/brand/escudo-transparente.png" alt="Escudo"><div><span>FRENTE COMEPIPAS</span><small>PEÑA MALAGUISTA</small></div></a><nav class="nav-links"><a href="index.html">Ver web</a><a href="admin.html">Administración</a></nav></div></header>
+<main class="renewals-page">
+<section class="renewals-hero"><div class="container"><span class="kicker">Preparación temporada 2027/28</span><h1>Renovaciones de socios y abonos</h1><p>Configura las cuotas de la peña por edad, los precios de abono por sector y controla cuánto debe pagar cada socio.</p><div class="renewals-actions"><button id="openCampaign" class="btn btn-primary">Abrir campaña 2027/28</button><button id="closeCampaign" class="btn btn-dark-outline">Cerrar campaña</button><a class="btn btn-gold" href="admin.html">Volver al panel</a></div><div id="campaignStatus" class="campaign-status"></div></div></section>
+<section class="container renewals-grid">
+<article class="renewals-card"><div class="card-heading"><div><span class="kicker">Cuota de peña</span><h2>Categorías por edad</h2></div><button id="addCategory" class="btn btn-primary">Nueva categoría</button></div><p class="muted">La categoría se calcula por fecha de nacimiento, pero la directiva podrá modificarla para casos especiales.</p><div class="table-scroll"><table class="renewals-table"><thead><tr><th>Categoría</th><th>Edad mínima</th><th>Edad máxima</th><th>Cuota</th><th>Exento</th><th></th></tr></thead><tbody id="categoryRows"></tbody></table></div></article>
+<article class="renewals-card"><div class="card-heading"><div><span class="kicker">Abonos Málaga CF</span><h2>Precios por sector</h2></div><button id="addSector" class="btn btn-primary">Nuevo sector</button></div><p class="muted">Estos importes pueden sobrescribirse individualmente en la ficha de un socio.</p><div class="table-scroll"><table class="renewals-table"><thead><tr><th>Sector / zona</th><th>Tipo</th><th>Precio</th><th></th></tr></thead><tbody id="sectorRows"></tbody></table></div></article>
+</section>
+<section class="container renewals-card member-renewals"><div class="card-heading"><div><span class="kicker">Control de directiva</span><h2>Simulador y seguimiento</h2></div><button id="addRenewal" class="btn btn-primary">Añadir socio</button></div>
+<div class="renewals-summary"><div><span>Total socios</span><strong id="rTotal">0</strong></div><div><span>Renovación solicitada</span><strong id="rRequested">0</strong></div><div><span>Pagados</span><strong id="rPaid">0</strong></div><div><span>Importe previsto</span><strong id="rAmount">0 €</strong></div></div>
+<div class="table-scroll"><table class="renewals-table"><thead><tr><th>Socio</th><th>Categoría</th><th>Sector</th><th>Abono</th><th>Cuota peña</th><th>Total</th><th>Estado</th><th></th></tr></thead><tbody id="renewalRows"></tbody></table></div></section>
+</main>
+<div id="renewalModal" class="renewal-modal"><div class="renewal-dialog"><button class="renewal-close" data-close>×</button><h2 id="modalTitle">Editar</h2><form id="renewalForm" class="renewal-form"></form></div></div>
+<div class="toast"></div>
+<script src="assets/js/renewals-admin.js"></script>
+</body></html>

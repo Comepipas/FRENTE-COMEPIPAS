@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Acceso administración | Frente Comepipas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/variables.css">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/responsive.css">
+</head>
+<body>
+<main class="auth-page">
+  <section class="auth-card">
+    <div class="auth-brand">
+      <img src="assets/images/brand/escudo-transparente.png" alt="Escudo Frente Comepipas">
+      <span class="kicker">Área privada</span>
+      <h1>Administración</h1>
+      <p>Acceso para miembros autorizados de la junta.</p>
+    </div>
+
+    <form id="adminLoginForm">
+      <label>Correo<input type="email" name="email" required></label>
+      <label>Contraseña<input type="password" name="password" required></label>
+      <p id="loginError" class="auth-error"></p>
+      <button class="btn btn-primary" type="submit" style="width:100%">Entrar</button>
+    </form>
+
+    <div class="auth-demo">
+      <strong>Acceso de demostración</strong><br>
+      admin@frentecomepipas.es<br>
+      Contraseña: 2007
+    </div>
+  </section>
+</main>
+<script src="assets/js/roles.js"></script>
+<script src="assets/js/admin-users.js"></script>
+<script src="assets/js/auth.js"></script><script src="assets/js/audit.js"></script>
+<script src="assets/js/login.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/supabase-config.js"></script><script src="assets/js/supabase-client.js"></script><script src="assets/js/api.js"></script><script src="assets/js/data-mode.js"></script></body>
+</html>

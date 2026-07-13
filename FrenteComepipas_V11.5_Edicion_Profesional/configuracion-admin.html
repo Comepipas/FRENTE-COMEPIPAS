@@ -1,0 +1,80 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Configuración general | Frente Comepipas</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet"><link rel="stylesheet" href="assets/css/variables.css"><link rel="stylesheet" href="assets/css/style.css"><link rel="stylesheet" href="assets/css/responsive.css"><script>if(!protectAdminPage("dashboard")){throw new Error("Acceso bloqueado");}</script><script>document.addEventListener("DOMContentLoaded",()=>protectAdminPage("dashboard"));</script></head><body><header class="site-header"><div class="container nav"><a class="brand" href="index.html"><img src="assets/images/brand/escudo-transparente.png"><div><span data-config="nombre">FRENTE COMEPIPAS</span><small data-config="subtitulo">PEÑA MALAGUISTA</small></div></a><button class="menu-btn"><span></span><span></span><span></span></button><nav class="nav-links"><a class="" href="index.html">Inicio</a><a class="" href="la-pena.html">La Peña</a><a class="" href="noticias.html" data-feature="noticias">Noticias</a><a class="" href="tienda.html" data-feature="tienda">Tienda</a><a class="" href="viajes.html" data-feature="viajes">Viajes</a><a class="" href="socios.html" data-feature="socios">Socios</a><a class="" href="galeria.html" data-feature="galeria">Galería</a><a class="active" href="contacto.html" data-feature="contacto">Contacto</a></nav></div></header>
+
+<main class="admin-page">
+<section class="admin-layout">
+  <aside class="admin-sidebar">
+    <h2>Configuración</h2>
+    <p>Frente Comepipas</p>
+    <a class="btn btn-gold" href="admin.html">Volver al panel</a>
+    <button id="resetSiteSettings" class="btn btn-outline">Restaurar configuración</button>
+    <div class="auth-user-box">
+      <strong data-auth-name></strong>
+      <span data-auth-role></span>
+    </div>
+    <button class="btn btn-outline" data-auth-logout>Cerrar sesión</button>
+  </aside>
+
+  <div class="admin-content settings-admin">
+    <div class="members-topbar">
+      <div>
+        <span class="kicker">Personalización</span>
+        <h1>Configuración general</h1>
+      </div>
+    </div>
+
+    <section class="settings-layout">
+      <article class="settings-panel">
+        <form id="siteSettingsForm" class="settings-form-grid">
+
+          <h3 class="settings-section-title">Identidad</h3>
+          <label>Nombre<input name="nombre" required></label>
+          <label>Subtítulo<input name="subtitulo"></label>
+          <label class="full">Lema<input name="lema"></label>
+          <label>Temporada<input name="temporada"></label>
+          <label>Año de fundación<input name="fundacion"></label>
+
+          <h3 class="settings-section-title">Contacto</h3>
+          <label>Email<input name="email" type="email"></label>
+          <label>Teléfono<input name="telefono"></label>
+          <label>WhatsApp<input name="whatsapp"></label>
+          <label>Dirección<input name="direccion"></label>
+
+          <h3 class="settings-section-title">Redes sociales</h3>
+          <label>Instagram<input name="instagram"></label>
+          <label>Facebook<input name="facebook"></label>
+          <label>X / Twitter<input name="x"></label>
+          <label>YouTube<input name="youtube"></label>
+          <label>TikTok<input name="tiktok"></label>
+
+          <h3 class="settings-section-title">Imágenes</h3>
+          <label>Foto hero<input name="heroImage" placeholder="hero.jpg"></label>
+          <label>Posición hero<input name="heroPosition" placeholder="center center"></label>
+          <label>Escudo<input name="escudo" placeholder="escudo-transparente.png"></label>
+          <label>Logo<input name="logo" placeholder="don-comepipas-transparente.png"></label>
+
+          <h3 class="settings-section-title">Colores</h3>
+          <label>Color principal<input name="colorPrimario" type="color"></label>
+          <label>Color secundario<input name="colorSecundario" type="color"></label>
+          <label>Color acento<input name="colorAcento" type="color"></label>
+
+          <button class="btn btn-primary full" type="submit">Guardar configuración</button>
+          <p id="settingsSaved" class="settings-saved full"></p>
+        </form>
+      </article>
+
+      <article class="settings-panel">
+        <h2>Vista previa</h2>
+        <div id="previewHero" class="settings-preview">
+          <img id="previewCrest" src="assets/images/brand/escudo-transparente.png" alt="Escudo">
+          <h2 id="previewName">Frente Comepipas</h2>
+          <p id="previewSlogan">Levantando copas contigo desde 2007</p>
+          <span id="previewSeason" class="preview-season">2026/27</span>
+          <span class="preview-button">Hazte socio</span>
+        </div>
+      </article>
+    </section>
+  </div>
+</section>
+</main>
+
+<footer class="site-footer"><div class="container footer-grid"><div><h4 data-config="nombre">Frente Comepipas</h4><p data-config="lema">Levantando copas contigo desde 2007.</p></div><div><h4>La Peña</h4><a href="la-pena.html">Historia</a><a href="socios.html" data-feature="socios">Hazte socio</a></div><div><h4>Actividad</h4><a href="viajes.html" data-feature="viajes">Viajes</a><a href="calendario.html" data-feature="calendario">Calendario</a><a href="calendario.html" data-feature="calendario">Calendario</a><a href="tienda.html" data-feature="tienda">Tienda</a></div><div><h4>Contacto</h4><p data-config="ciudad">Málaga, Andalucía</p><p data-config="email">contacto@frentecomepipas.es</p><a href="admin.html">Administración</a></div></div><div class="footer-bottom">© 2026 Frente Comepipas</div></footer><div class="toast"></div><script src="assets/js/roles.js"></script><script src="assets/js/admin-users.js"></script><script src="assets/js/auth.js"></script><script src="assets/js/audit.js"></script><script src="assets/js/site-settings.js"></script><script src="assets/js/site-settings-runtime.js"></script><script src="assets/js/settings-admin.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/supabase-config.js"></script><script src="assets/js/supabase-client.js"></script><script src="assets/js/api.js"></script><script src="assets/js/data-mode.js"></script></body></html>

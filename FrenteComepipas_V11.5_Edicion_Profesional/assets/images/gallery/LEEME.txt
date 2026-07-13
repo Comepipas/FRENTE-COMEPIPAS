@@ -1,0 +1,16 @@
+CAMBIAR FOTOS Y VÍDEOS DE LA GALERÍA
+
+Para cambiar imágenes:
+1. Sustituye los JPG de esta carpeta.
+2. Mantén el mismo nombre o actualízalo en:
+   assets/js/gallery.js
+
+Recomendación:
+- Formato horizontal
+- Tamaño mínimo: 1400 x 900 píxeles
+
+Para añadir vídeos:
+- Usa tipo: "video"
+- En archivo, pega una URL de inserción de YouTube:
+  https://www.youtube.com/embed/ID_DEL_VIDEO
+- Añade una miniatura JPG en esta carpeta.

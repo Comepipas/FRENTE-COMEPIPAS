@@ -1,0 +1,84 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Supabase y migración | Frente Comepipas</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet"><link rel="stylesheet" href="assets/css/variables.css"><link rel="stylesheet" href="assets/css/style.css"><link rel="stylesheet" href="assets/css/responsive.css"><script>if(!protectAdminPage("dashboard")){throw new Error("Acceso bloqueado");}</script><script>document.addEventListener("DOMContentLoaded",()=>protectAdminPage("dashboard"));</script></head><body><header class="site-header"><div class="container nav"><a class="brand" href="index.html"><img src="assets/images/brand/escudo-transparente.png"><div><span data-config="nombre">FRENTE COMEPIPAS</span><small data-config="subtitulo">PEÑA MALAGUISTA</small></div></a><button class="menu-btn"><span></span><span></span><span></span></button><nav class="nav-links"><a class="" href="index.html">Inicio</a><a class="" href="la-pena.html">La Peña</a><a class="" href="noticias.html" data-feature="noticias">Noticias</a><a class="" href="tienda.html" data-feature="tienda">Tienda</a><a class="" href="viajes.html" data-feature="viajes">Viajes</a><a class="" href="socios.html" data-feature="socios">Socios</a><a class="" href="galeria.html" data-feature="galeria">Galería</a><a class="active" href="contacto.html" data-feature="contacto">Contacto</a></nav></div></header>
+
+<main class="admin-page">
+<section class="admin-layout">
+  <aside class="admin-sidebar">
+    <h2>Supabase</h2>
+    <p>Frente Comepipas</p>
+    <a class="btn btn-gold" href="admin.html">Volver al panel</a>
+    <div class="auth-user-box">
+      <strong data-auth-name></strong>
+      <span data-auth-role></span>
+    </div>
+    <button class="btn btn-outline" data-auth-logout>Cerrar sesión</button>
+  </aside>
+
+  <div class="admin-content migration-admin">
+    <div class="members-topbar">
+      <div>
+        <span class="kicker">Modo online</span>
+        <h1>Conexión y migración</h1>
+      </div>
+      <span id="migrationStatus" class="migration-status is-local">Modo local</span>
+    </div>
+
+    <section class="migration-layout">
+      <article class="migration-panel">
+        <h2>Estado de la conexión</h2>
+        <p id="migrationDetail">Comprobando configuración...</p>
+
+        <div class="migration-actions">
+          <button id="testSupabaseButton" class="btn btn-primary">Comprobar conexión</button>
+          <a class="btn btn-dark-outline" href="supabase/README_SETUP.md">Abrir guía de configuración</a>
+        </div>
+
+        <div class="supabase-code">
+assets/js/supabase-config.js
+
+enabled: true
+url: "TU_URL"
+anonKey: "TU_CLAVE_PUBLICA"
+        </div>
+      </article>
+
+      <article class="migration-panel">
+        <h2>Datos locales detectados</h2>
+        <div id="migrationInventory" class="migration-inventory"></div>
+      </article>
+    </section>
+
+    <section class="migration-layout">
+      <article class="migration-panel">
+        <h2>Migrar a Supabase</h2>
+        <p>Envía a la nube los datos guardados en este navegador.</p>
+        <button id="pushToSupabase" class="btn btn-primary">Migrar local → Supabase</button>
+      </article>
+
+      <article class="migration-panel">
+        <h2>Descargar desde Supabase</h2>
+        <p>Sustituye los datos locales por la información online.</p>
+        <button id="pullFromSupabase" class="btn btn-dark-outline">Supabase → local</button>
+      </article>
+    </section>
+
+    <section class="migration-panel">
+      <h2>Progreso</h2>
+      <p id="migrationProgress" class="migration-progress">Sin operaciones pendientes.</p>
+      <div id="migrationResults" class="migration-results"></div>
+    </section>
+
+    <section class="migration-panel">
+      <h2>Pasos necesarios</h2>
+      <div class="supabase-steps">
+        <div class="supabase-step"><div><strong>Crear el proyecto</strong><p>Crea una cuenta y un proyecto en Supabase.</p></div></div>
+        <div class="supabase-step"><div><strong>Ejecutar SQL</strong><p>Ejecuta schema, policies, storage y seed.</p></div></div>
+        <div class="supabase-step"><div><strong>Añadir credenciales</strong><p>Pega la URL y la clave pública.</p></div></div>
+        <div class="supabase-step"><div><strong>Crear administrador</strong><p>Crea el usuario en Authentication y añade su perfil.</p></div></div>
+        <div class="supabase-step"><div><strong>Migrar datos</strong><p>Usa el botón de migración de esta página.</p></div></div>
+      </div>
+    </section>
+  </div>
+</section>
+</main>
+
+<footer class="site-footer"><div class="container footer-grid"><div><h4 data-config="nombre">Frente Comepipas</h4><p data-config="lema">Levantando copas contigo desde 2007.</p></div><div><h4>La Peña</h4><a href="la-pena.html">Historia</a><a href="socios.html" data-feature="socios">Hazte socio</a></div><div><h4>Actividad</h4><a href="viajes.html" data-feature="viajes">Viajes</a><a href="calendario.html" data-feature="calendario">Calendario</a><a href="calendario.html" data-feature="calendario">Calendario</a><a href="tienda.html" data-feature="tienda">Tienda</a></div><div><h4>Contacto</h4><p data-config="ciudad">Málaga, Andalucía</p><p data-config="email">contacto@frentecomepipas.es</p><a href="admin.html">Administración</a></div></div><div class="footer-bottom">© 2026 Frente Comepipas</div></footer><div class="toast"></div><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/roles.js"></script><script src="assets/js/admin-users.js"></script><script src="assets/js/auth.js"></script><script src="assets/js/audit.js"></script><script src="assets/js/supabase-config.js"></script><script src="assets/js/supabase-client.js"></script><script src="assets/js/api.js"></script><script src="assets/js/sync.js"></script><script src="assets/js/migration-admin.js"></script></body></html>

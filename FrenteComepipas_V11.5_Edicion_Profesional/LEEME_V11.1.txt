@@ -1,0 +1,7 @@
+FRENTE COMEPIPAS V11.1 - EDICIÓN PROFESIONAL
+
+1. Abre index.html para ver la web.
+2. Abre admin.html para acceder al panel.
+3. En el panel pulsa “Renovaciones 2027/28”.
+4. El nuevo módulo permite configurar cuotas por edad, precios de abono por sector y simular renovaciones individuales.
+5. En esta entrega los datos se guardan en el navegador del dispositivo.

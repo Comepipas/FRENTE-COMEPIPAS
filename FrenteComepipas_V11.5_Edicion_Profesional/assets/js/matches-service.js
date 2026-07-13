@@ -1,0 +1,12 @@
+const MATCHES_CACHE_KEY="frente_matches_cache_v11";
+function getMatchesConfig(){return window.FRENTE_MATCHES_CONFIG||{mode:"manual",manualMatches:[]}}
+function readMatchesCache(){try{return JSON.parse(localStorage.getItem(MATCHES_CACHE_KEY))}catch{return null}}
+function saveMatchesCache(v){localStorage.setItem(MATCHES_CACHE_KEY,JSON.stringify(v))}
+function normalizeMatch(m,i=0){return{id:m.id||`match-${i}`,competition:m.competition||m.competicion||"Partido",home:m.home||m.local||"",away:m.away||m.visitante||"",date:m.date||m.fecha||"",stadium:m.stadium||m.estadio||"",status:m.status||m.estado||"Programado",confirmed:m.confirmed??m.confirmado??true,source:m.source||m.fuente||"Fuente externa"}}
+function manualMatches(){try{return (JSON.parse(localStorage.getItem("frente_matches_manual_v11"))||getMatchesConfig().manualMatches||[]).map(normalizeMatch)}catch{return (getMatchesConfig().manualMatches||[]).map(normalizeMatch)}}
+async function fetchRemoteMatches(){const c=getMatchesConfig();if(!c.remoteUrl)throw new Error("No hay URL remota configurada");const r=await fetch(c.remoteUrl,{cache:"no-store"});if(!r.ok)throw new Error(`HTTP ${r.status}`);const d=await r.json();return (Array.isArray(d)?d:(d.matches||d.partidos||[])).map(normalizeMatch)}
+async function loadMatches(force=false){const c=getMatchesConfig(),cache=readMatchesCache(),ttl=Number(c.refreshMinutes||60)*60000;if(!force&&cache?.updatedAt&&Date.now()-new Date(cache.updatedAt).getTime()<ttl)return cache;if(c.mode==="remote"){try{const p={matches:await fetchRemoteMatches(),updatedAt:new Date().toISOString(),mode:"remote",error:null};saveMatchesCache(p);return p}catch(e){const p={matches:manualMatches(),updatedAt:new Date().toISOString(),mode:"manual-fallback",error:e.message};saveMatchesCache(p);return p}}const p={matches:manualMatches(),updatedAt:new Date().toISOString(),mode:"manual",error:null};saveMatchesCache(p);return p}
+function isTeam(n){return (getMatchesConfig().teamAliases||[]).some(a=>String(a).toLowerCase()===String(n||"").toLowerCase())}
+function getNextMatch(rows){const now=Date.now();return (rows||[]).filter(m=>m.date&&new Date(m.date).getTime()>=now-7200000).sort((a,b)=>new Date(a.date)-new Date(b.date))[0]||null}
+function nextOpponent(m){return !m?"":isTeam(m.home)?m.away:m.home}
+function matchVenueLabel(m){return !m?"":isTeam(m.home)?`Local · ${m.stadium||"Estadio por confirmar"}`:`Visitante · ${m.stadium||"Estadio por confirmar"}`}
