@@ -24,20 +24,25 @@
     <form id="adminLoginForm">
       <label>Correo<input type="email" name="email" required></label>
       <label>Contraseña<input type="password" name="password" required></label>
-      <p id="loginError" class="auth-error"></p>
+      <p id="loginStatus" class="auth-status"></p><p id="loginError" class="auth-error"></p>
       <button class="btn btn-primary" type="submit" style="width:100%">Entrar</button>
     </form>
 
+    <p style="text-align:center;margin-top:1rem"><a href="recuperar-clave.html?origen=admin">¿Has olvidado la contraseña?</a></p>
+
     <div class="auth-demo">
-      <strong>Acceso de demostración</strong><br>
-      admin@frentecomepipas.es<br>
-      Contraseña: 2007
+      <strong>Acceso seguro con Supabase</strong><br>
+      Utiliza el correo y la contraseña del usuario creado en Supabase Auth.
     </div>
   </section>
 </main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/js/supabase-config.js"></script>
+<script src="assets/js/supabase-client.js?v=13.3.0-r5"></script>
 <script src="assets/js/roles.js"></script>
-<script src="assets/js/admin-users.js"></script>
-<script src="assets/js/auth.js"></script><script src="assets/js/audit.js"></script>
-<script src="assets/js/login.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/supabase-config.js"></script><script src="assets/js/supabase-client.js"></script><script src="assets/js/api.js"></script><script src="assets/js/data-mode.js"></script></body>
+<script src="assets/js/auth-bootstrap-v13.3.js"></script>
+<script src="assets/js/auth.js?v=22-commit6"></script>
+<script src="assets/js/audit.js"></script>
+<script src="assets/js/login.js?v=13.3.0-r5"></script>
+</body>
 </html>

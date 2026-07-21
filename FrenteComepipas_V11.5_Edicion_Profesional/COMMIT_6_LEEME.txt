@@ -1,0 +1,18 @@
+FRENTE COMEPIPAS V22 · COMMIT 6
+INICIALIZACIÓN CORRECTA DEL ADMINISTRADOR
+
+1. Abre Supabase > SQL Editor.
+2. Ejecuta el archivo:
+   supabase/commits/COMMIT_6_INICIALIZACION_ADMIN.sql
+3. Cierra sesión en la aplicación y vuelve a entrar.
+
+QUÉ HACE
+- En una instalación nueva, el primer usuario autenticado se crea como
+  superadmin en admin_profiles y administrador en perfiles.
+- En instalaciones existentes, sincroniza automáticamente los usuarios del
+  panel administrativo con perfiles. Así las políticas RLS basadas en
+  es_directivo() reconocen correctamente al administrador.
+- Nunca promociona a un usuario normal cuando ya existe un administrador.
+
+ARCHIVO WEB MODIFICADO
+- assets/js/auth.js

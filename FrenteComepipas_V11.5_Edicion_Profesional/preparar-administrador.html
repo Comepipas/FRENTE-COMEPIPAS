@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Preparar administrador | Frente Comepipas</title>
+<link rel="stylesheet" href="assets/css/variables.css"><link rel="stylesheet" href="assets/css/style.css">
+<style>body{background:#eef4fa}.setup{max-width:850px;margin:40px auto;background:#fff;padding:28px;border-radius:20px}.step{border-top:1px solid #dde5ee;padding:18px 0}.step:first-of-type{border-top:0}.code{background:#f5f7fa;border-radius:10px;padding:13px;overflow:auto}.ok{color:#087f5b}.bad{color:#c92a2a}</style>
+</head><body><main class="setup">
+<span class="kicker">V13.3.0 R5</span><h1>Preparar el primer administrador</h1>
+<div class="step"><h2>1. Crear usuario en Supabase</h2><p>Supabase → Authentication → Users → Add user. Escribe el correo y una contraseña segura. Activa la confirmación automática del correo si aparece esa opción.</p></div>
+<div class="step"><h2>2. Asociar el rol</h2><p>Copia el UUID del usuario y ejecuta en SQL Editor:</p>
+<pre class="code">insert into public.admin_profiles (user_id, nombre, rol, activo)
+values (
+  'PEGA_AQUI_EL_UUID_DEL_USUARIO',
+  'Administrador principal',
+  'superadmin',
+  true
+)
+on conflict (user_id) do update
+set nombre = excluded.nombre,
+    rol = excluded.rol,
+    activo = excluded.activo;</pre></div>
+<div class="step"><h2>3. Probar el acceso</h2><a class="btn btn-primary" href="login.html">Abrir inicio de sesión</a></div>
+<div class="step"><h2>Comprobación técnica</h2><button id="checkBtn" class="btn btn-dark-outline">Comprobar configuración</button><p id="result"></p></div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/supabase-config.js"></script>
+<script>
+document.getElementById("checkBtn").onclick=async()=>{
+ const out=document.getElementById("result"),c=window.FRENTE_SUPABASE_CONFIG||{};
+ if(!c.enabled||!c.url||!c.anonKey){out.className="bad";out.textContent="Falta configurar supabase-config.js";return}
+ try{
+  const sb=window.supabase.createClient(c.url,c.anonKey,{auth:{persistSession:false}});
+  const {error}=await sb.from("admin_profiles").select("user_id",{count:"exact",head:true});
+  if(error)throw error;
+  out.className="ok";out.textContent="Configuración correcta. Ya puedes crear el usuario y entrar.";
+ }catch(e){out.className="bad";out.textContent=e.message||String(e)}
+};
+</script></body></html>

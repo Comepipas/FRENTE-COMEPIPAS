@@ -1,0 +1,16 @@
+COMMIT 10 · LISTADO AVANZADO DE RENOVACIONES
+
+No requiere ejecutar SQL.
+
+Novedades:
+- Búsqueda por número, nombre y apellidos.
+- Filtro por estado, sector y categoría.
+- Resumen dinámico de resultados, total y pendiente.
+- Botón para limpiar todos los filtros.
+- Exportación a Excel respetando los filtros activos.
+
+Prueba recomendada:
+1. Abre Renovaciones > Renovaciones.
+2. Combina varios filtros.
+3. Comprueba los contadores.
+4. Exporta el Excel y verifica que contiene solo los registros visibles.

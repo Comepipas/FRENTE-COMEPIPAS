@@ -1,0 +1,7 @@
+FRENTE COMEPIPAS · V22 COMMIT 11
+
+1. Ejecuta en Supabase: supabase/commits/COMMIT_11_METODOS_PAGO_CONFIGURABLES.sql
+2. Sustituye los archivos y recarga con Ctrl + F5.
+3. En Renovaciones > Cobros configura los métodos permitidos.
+
+Configuración inicial: Pago con tarjeta activo y predeterminado; transferencia e ingreso en cuenta activos; Bizum, efectivo, TPV presencial y otro desactivados.

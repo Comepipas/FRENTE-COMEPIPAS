@@ -62,8 +62,8 @@ function renderMediaGrid(){
   grid.innerHTML=items.length?items.map(item=>`
     <article class="media-admin-card">
       <div class="media-admin-thumb">
-        ${item.tipo==="Imagen" ? `<img src="assets/images/gallery/${item.archivo}" alt="${item.titulo}">`
-        : item.tipo==="Vídeo" ? `<img src="assets/images/gallery/${item.miniatura||"celebracion.jpg"}" alt="${item.titulo}"><span>▶</span>`
+        ${item.tipo==="Imagen" ? `<img src="${FrenteImageTools.src(item.archivo)}" alt="${item.titulo}">`
+        : item.tipo==="Vídeo" ? `<img src="${FrenteImageTools.src(item.miniatura||"celebracion.jpg")}" alt="${item.titulo}"><span>▶</span>`
         : `<div class="media-doc-icon">DOC</div>`}
       </div>
       <div class="media-admin-body">
@@ -123,7 +123,7 @@ function previewMedia(id){
 
   let media="";
   if(item.tipo==="Imagen"){
-    media=`<img src="assets/images/gallery/${item.archivo}" alt="${item.titulo}">`;
+    media=`<img src="${FrenteImageTools.src(item.archivo)}" alt="${item.titulo}">`;
   }else if(item.tipo==="Vídeo"){
     media=`<iframe src="${item.archivo}" allowfullscreen></iframe>`;
   }else{
@@ -164,6 +164,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   document.getElementById("mediaStatus")?.addEventListener("change",renderMediaGrid);
   document.getElementById("mediaSeason")?.addEventListener("change",renderMediaGrid);
   document.getElementById("newMediaButton")?.addEventListener("click",()=>openMediaForm());
+  document.getElementById("mediaFile")?.addEventListener("change",async e=>{try{const data=await FrenteImageTools.read(e.target.files[0],1800,.84);document.getElementById("mediaForm").elements.archivo.value=data;document.getElementById("mediaForm").elements.tipo.value="Imagen"}catch(err){alert(err.message)}});
   document.getElementById("exportMedia")?.addEventListener("click",exportMediaCSV);
 
   document.getElementById("mediaForm")?.addEventListener("submit",e=>{

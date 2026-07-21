@@ -1,0 +1,21 @@
+FRENTE COMEPIPAS · COMMIT 22.1
+CORRECCIÓN DEFINITIVA DEL BUG DE DESTINATARIOS
+
+CAUSA REAL
+El proyecto considera activas las fichas cuyo estado sea Activo, Activa o Alta.
+La primera corrección del módulo Comunicaciones solo aceptaba Activo, por lo que
+una base de datos con socios en estado Alta devolvía 0 destinatarios.
+
+INSTALACIÓN
+1. Sustituye los archivos del proyecto por los incluidos en este ZIP.
+2. Abre Supabase > SQL Editor.
+3. Ejecuta completo PASO_COMMIT_22_1_EJECUTAR_EN_SUPABASE.sql.
+4. Comprueba que la primera consulta final devuelve socios_activos_reconocidos mayor que 0.
+5. Crea una comunicación nueva para Socios activos y pulsa Preparar y enviar.
+
+CORRECCIONES
+- Reconoce Activo, Activa y Alta como estados activos.
+- Mantiene socios sin correo en avisos internos y canal combinado.
+- Reconstruye destinatarios y avisos al volver a preparar.
+- Reinicia contadores de envío.
+- Incluye consultas de diagnóstico al final del SQL.

@@ -1,0 +1,9 @@
+FRENTE COMEPIPAS · COMMIT 17
+
+1. Ejecuta PASO_COMMIT_17_EJECUTAR_EN_SUPABASE.sql en SQL Editor, después del Commit 16.
+2. En Supabase > Authentication > URL Configuration, configura la URL publicada de la web como Site URL.
+3. Añade como Redirect URLs: /socios.html y /recuperar-clave.html de tu dominio.
+4. Para activar una cuenta, el socio debe existir previamente con número, teléfono, correo y estado activo.
+5. El socio usa Activar mi cuenta, confirma el correo si Supabase lo exige y después entra desde Socios.
+
+La fecha de nacimiento y el número de socio no son editables por el socio.

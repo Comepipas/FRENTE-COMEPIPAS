@@ -1,0 +1,15 @@
+FRENTE COMEPIPAS · V22 COMMIT 1
+
+Cambios incluidos:
+- Renovaciones usa Supabase como origen único de lectura.
+- Eliminada la carga visual de cifras demo cuando no hay conexión.
+- Unificados los indicadores y las tarjetas de campaña.
+- Corregida la carga duplicada de Supabase en renovaciones-admin.html.
+- No se modifican Socios ni Cuotas.
+
+Prueba recomendada:
+1. Abrir index.html con Live Server.
+2. Iniciar sesión.
+3. Abrir renovaciones-admin.html.
+4. Confirmar “Conectado a Supabase”.
+5. Confirmar que la tarjeta 2027/28 coincide con los indicadores superiores.

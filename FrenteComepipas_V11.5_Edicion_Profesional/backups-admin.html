@@ -1,83 +1,98 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Copias de seguridad | Frente Comepipas</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet"><link rel="stylesheet" href="assets/css/variables.css"><link rel="stylesheet" href="assets/css/style.css"><link rel="stylesheet" href="assets/css/responsive.css"><script>if(!protectAdminPage("dashboard")){throw new Error("Acceso bloqueado");}</script><script>document.addEventListener("DOMContentLoaded",()=>protectAdminPage("dashboard"));</script></head><body><header class="site-header"><div class="container nav"><a class="brand" href="index.html"><img src="assets/images/brand/escudo-transparente.png"><div><span data-config="nombre">FRENTE COMEPIPAS</span><small data-config="subtitulo">PEÑA MALAGUISTA</small></div></a><button class="menu-btn"><span></span><span></span><span></span></button><nav class="nav-links"><a class="" href="index.html">Inicio</a><a class="" href="la-pena.html">La Peña</a><a class="" href="noticias.html" data-feature="noticias">Noticias</a><a class="" href="tienda.html" data-feature="tienda">Tienda</a><a class="" href="viajes.html" data-feature="viajes">Viajes</a><a class="" href="socios.html" data-feature="socios">Socios</a><a class="" href="galeria.html" data-feature="galeria">Galería</a><a class="active" href="contacto.html" data-feature="contacto">Contacto</a></nav></div></header>
-
-<main class="admin-page">
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Copias de seguridad Excel | Frente Comepipas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/variables.css"><link rel="stylesheet" href="assets/css/style.css"><link rel="stylesheet" href="assets/css/responsive.css">
+<link rel="stylesheet" href="assets/css/copias-excel-v13.2.css">
+</head>
+<body>
+<main class="admin-page backup-page">
 <section class="admin-layout">
-  <aside class="admin-sidebar">
-    <h2>Copias de seguridad</h2>
-    <p>Frente Comepipas</p>
-    <a class="btn btn-gold" href="admin.html">Volver al panel</a>
-    <div class="auth-user-box">
-      <strong data-auth-name></strong>
-      <span data-auth-role></span>
-    </div>
-    <button class="btn btn-outline" data-auth-logout>Cerrar sesión</button>
-  </aside>
+<aside class="admin-sidebar">
+<h2>Copias Excel V13.2</h2>
+<p>Protección de los datos guardados en el navegador</p>
+<a class="btn btn-gold" href="admin.html">Volver al panel</a>
+<a class="btn btn-outline" href="socios-admin.html">Gestión de socios</a>
+<div class="admin-note">Esta herramienta permite guardar en un Excel los datos locales y restaurarlos después.</div>
+</aside>
 
-  <div class="admin-content backups-admin">
-    <div class="members-topbar">
-      <div>
-        <span class="kicker">Seguridad de datos</span>
-        <h1>Copias de seguridad</h1>
-      </div>
-    </div>
+<div class="admin-content">
+<div class="members-topbar">
+<div>
+<span class="kicker">V13.2 · Seguridad local</span>
+<h1>Copias de seguridad en Excel</h1>
+<p>Descarga una copia completa antes de borrar datos del navegador, cambiar de ordenador o hacer pruebas importantes.</p>
+</div>
+<div class="members-topbar-actions">
+<button id="createBackupBtn" class="btn btn-primary">Crear copia Excel</button>
+</div>
+</div>
 
-    <section class="backup-stats">
-      <div class="backup-stat">
-        <span>Módulos con datos locales</span>
-        <strong id="backupModules">0</strong>
-      </div>
-      <div class="backup-stat">
-        <span>Copias registradas</span>
-        <strong id="backupCount">0</strong>
-      </div>
-      <div class="backup-stat">
-        <span>Última operación</span>
-        <strong id="backupLast">Nunca</strong>
-      </div>
-    </section>
+<section class="backup-alert">
+<strong>Importante</strong>
+<span>Mientras los módulos no estén conectados a Supabase, los datos locales pueden desaparecer al borrar el almacenamiento del navegador. La copia Excel permite recuperarlos.</span>
+</section>
 
-    <section class="backup-layout">
-      <article class="backup-panel">
-        <h2>Copia completa</h2>
-        <p>Descarga en un único archivo todos los datos personalizados guardados en este navegador.</p>
+<section class="backup-stats">
+<article><span>Socios locales</span><strong id="backupMembersCount">0</strong></article>
+<article><span>Solicitudes de material</span><strong id="backupRequestsCount">0</strong></article>
+<article><span>Elementos de material</span><strong id="backupItemsCount">0</strong></article>
+<article><span>Pagos de demostración</span><strong id="backupPaymentsCount">0</strong></article>
+<article><span>Documentos firmados</span><strong id="backupDocumentsCount">0</strong></article>
+</section>
 
-        <div class="backup-actions">
-          <button id="createBackupButton" class="btn btn-primary">Crear y descargar copia</button>
+<section class="backup-grid">
+<article class="backup-card">
+<div class="backup-icon">⬇️</div>
+<h2>Crear copia completa</h2>
+<p>Genera un archivo Excel con varias hojas y todos los datos locales reconocidos por la aplicación.</p>
+<ul>
+<li>Socios</li><li>Material</li><li>Solicitudes</li><li>Pagos</li><li>Documentación</li><li>Información técnica</li>
+</ul>
+<button id="downloadBackupBtn" class="btn btn-primary">Descargar copia .xlsx</button>
+</article>
 
-          <label class="btn btn-dark-outline backup-upload">
-            Restaurar una copia
-            <input id="restoreBackupInput" type="file" accept=".json,application/json">
-          </label>
+<article class="backup-card">
+<div class="backup-icon">⬆️</div>
+<h2>Restaurar una copia</h2>
+<p>Selecciona un Excel creado por esta aplicación. Primero verás un resumen y nada se sustituirá sin tu confirmación.</p>
+<input id="restoreFileInput" type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" hidden>
+<button id="chooseRestoreBtn" class="btn btn-dark-outline">Seleccionar copia Excel</button>
+<div id="restoreFileInfo" class="restore-file-info" hidden></div>
+</article>
+</section>
 
-          <button id="clearProjectData" class="btn btn-dark-outline">Eliminar datos locales</button>
-        </div>
+<section id="restorePreviewPanel" class="restore-preview" hidden>
+<div class="panel-title-row">
+<div><span class="kicker">Vista previa</span><h2>Contenido de la copia</h2><p id="restorePreviewText">Revisa los datos antes de restaurar.</p></div>
+</div>
+<div id="restoreSheetCards" class="restore-sheet-cards"></div>
+<div class="restore-options">
+<label><input id="restoreMembers" type="checkbox" checked> Restaurar socios</label>
+<label><input id="restoreMaterial" type="checkbox" checked> Restaurar material y solicitudes</label>
+<label><input id="restorePayments" type="checkbox" checked> Restaurar pagos locales</label>
+<label><input id="restoreDocuments" type="checkbox" checked> Restaurar documentación y firmas</label>
+</div>
+<label class="danger-confirm"><input id="restoreConfirm" type="checkbox"> Entiendo que los datos locales actuales de los módulos seleccionados serán sustituidos.</label>
+<div class="restore-actions">
+<button id="cancelRestoreBtn" class="btn btn-dark-outline">Cancelar</button>
+<button id="applyRestoreBtn" class="btn btn-primary" disabled>Restaurar datos</button>
+</div>
+</section>
 
-        <div class="backup-warning">
-          Guarda las copias en un lugar seguro. La restauración sustituye los datos locales actuales.
-        </div>
-
-        <p id="backupMessage" class="backup-message"></p>
-      </article>
-
-      <article class="backup-panel">
-        <h2>Exportar por módulos</h2>
-        <p>Descarga solo la información del módulo que necesites.</p>
-        <div id="backupModulesGrid" class="backup-modules-grid"></div>
-      </article>
-    </section>
-
-    <section class="backup-panel">
-      <div class="members-topbar">
-        <div>
-          <span class="kicker">Registro local</span>
-          <h2>Historial de copias</h2>
-        </div>
-        <button id="clearBackupHistory" class="btn btn-dark-outline">Borrar historial</button>
-      </div>
-      <div id="backupHistory" class="backup-history"></div>
-    </section>
-  </div>
+<section class="backup-history">
+<h2>Registro de copias realizadas en este navegador</h2>
+<div id="backupHistoryList"></div>
+</section>
+</div>
 </section>
 </main>
-
-<footer class="site-footer"><div class="container footer-grid"><div><h4 data-config="nombre">Frente Comepipas</h4><p data-config="lema">Levantando copas contigo desde 2007.</p></div><div><h4>La Peña</h4><a href="la-pena.html">Historia</a><a href="socios.html" data-feature="socios">Hazte socio</a></div><div><h4>Actividad</h4><a href="viajes.html" data-feature="viajes">Viajes</a><a href="calendario.html" data-feature="calendario">Calendario</a><a href="calendario.html" data-feature="calendario">Calendario</a><a href="tienda.html" data-feature="tienda">Tienda</a></div><div><h4>Contacto</h4><p data-config="ciudad">Málaga, Andalucía</p><p data-config="email">contacto@frentecomepipas.es</p><a href="admin.html">Administración</a></div></div><div class="footer-bottom">© 2026 Frente Comepipas</div></footer><div class="toast"></div><script src="assets/js/roles.js"></script><script src="assets/js/admin-users.js"></script><script src="assets/js/auth.js"></script><script src="assets/js/audit.js"></script><script src="assets/js/backups-admin.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/supabase-config.js"></script><script src="assets/js/supabase-client.js"></script><script src="assets/js/api.js"></script><script src="assets/js/data-mode.js"></script></body></html>
+<div id="backupToast" class="material-toast" hidden></div>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="assets/js/excel-v13.1.js"></script>
+<script src="assets/js/members-db.js"></script>
+<script src="assets/js/copias-excel-v13.2.js"></script>
+</body></html>

@@ -1,0 +1,2 @@
+numero;nombre;dni;nacimiento;direccion;telefono;email;alta;estado;cuenta;categoria;cuota;importe_cuota;tipo;sector;fila;asiento;precio_abono;observaciones
+0100;Ejemplo Socio;12345678Z;1990-05-20;Málaga;600123123;ejemplo@correo.es;2027-07-01;Activo;Pendiente de activar;Adulto;Pendiente;20;Socio;Preferencia;8;42;495;Fila de ejemplo

@@ -1,117 +1,17 @@
-const GALLERY = window.FRENTE_GALLERY || [];
-let currentItems = [];
-let currentIndex = 0;
-
-function uniqueValues(key){
-  return [...new Set(GALLERY.map(item => item[key]).filter(Boolean))];
+const MEDIA_KEY="frente_media_library_v1";
+function galleryData(){
+ let managed=[];try{managed=JSON.parse(localStorage.getItem(MEDIA_KEY)||"[]")}catch{}
+ const published=managed.filter(x=>x.estado==="Publicado"&&(x.tipo==="Imagen"||x.tipo==="Vídeo")).map(x=>({titulo:x.titulo,tipo:x.tipo==="Vídeo"?"video":"foto",categoria:x.album||"Galería",temporada:x.temporada||"Sin temporada",archivo:x.archivo,miniatura:x.miniatura,descripcion:x.descripcion||""}));
+ return published.length?published:(window.FRENTE_GALLERY||[]);
 }
-
-function setupGalleryFilters(){
-  const category = document.getElementById("galleryCategory");
-  const season = document.getElementById("gallerySeason");
-
-  uniqueValues("categoria").forEach(value=>{
-    category?.insertAdjacentHTML("beforeend", `<option>${value}</option>`);
-  });
-
-  uniqueValues("temporada").forEach(value=>{
-    season?.insertAdjacentHTML("beforeend", `<option>${value}</option>`);
-  });
-}
-
-function filteredGallery(){
-  const category = document.getElementById("galleryCategory")?.value || "Todas";
-  const season = document.getElementById("gallerySeason")?.value || "Todas";
-
-  return GALLERY.filter(item =>
-    (category === "Todas" || item.categoria === category) &&
-    (season === "Todas" || item.temporada === season)
-  );
-}
-
-function renderGallery(){
-  const grid = document.getElementById("galleryGrid");
-  if(!grid) return;
-
-  currentItems = filteredGallery();
-
-  if(!currentItems.length){
-    grid.innerHTML = '<div class="gallery-empty">No hay contenido para este filtro.</div>';
-    return;
-  }
-
-  grid.innerHTML = currentItems.map((item,index)=>`
-    <button class="gallery-card" data-index="${index}">
-      <img src="assets/images/gallery/${item.miniatura || item.archivo}" alt="${item.titulo}">
-      <span class="gallery-type">${item.tipo === "video" ? "▶ Vídeo" : "Foto"}</span>
-      <span class="gallery-card-overlay">
-        <small>${item.categoria} · ${item.temporada}</small>
-        <strong>${item.titulo}</strong>
-      </span>
-    </button>
-  `).join("");
-
-  grid.querySelectorAll(".gallery-card").forEach(card=>{
-    card.addEventListener("click",()=>openViewer(Number(card.dataset.index)));
-  });
-}
-
-function openViewer(index){
-  currentIndex = index;
-  updateViewer();
-  document.getElementById("galleryViewer")?.classList.add("open");
-  document.body.style.overflow = "hidden";
-}
-
-function closeViewer(){
-  document.getElementById("galleryViewer")?.classList.remove("open");
-  document.body.style.overflow = "";
-  const media = document.getElementById("viewerMedia");
-  if(media) media.innerHTML = "";
-}
-
-function updateViewer(){
-  const item = currentItems[currentIndex];
-  if(!item) return;
-
-  const media = document.getElementById("viewerMedia");
-  const title = document.getElementById("viewerTitle");
-  const description = document.getElementById("viewerDescription");
-  const meta = document.getElementById("viewerMeta");
-
-  if(item.tipo === "video"){
-    media.innerHTML = `<iframe src="${item.archivo}" title="${item.titulo}" allowfullscreen></iframe>`;
-  }else{
-    media.innerHTML = `<img src="assets/images/gallery/${item.archivo}" alt="${item.titulo}">`;
-  }
-
-  title.textContent = item.titulo;
-  description.textContent = item.descripcion || "";
-  meta.textContent = `${item.categoria} · ${item.temporada}`;
-}
-
-function changeViewer(step){
-  if(!currentItems.length) return;
-  currentIndex = (currentIndex + step + currentItems.length) % currentItems.length;
-  updateViewer();
-}
-
-document.addEventListener("DOMContentLoaded",()=>{
-  setupGalleryFilters();
-  renderGallery();
-
-  document.getElementById("galleryCategory")?.addEventListener("change",renderGallery);
-  document.getElementById("gallerySeason")?.addEventListener("change",renderGallery);
-  document.getElementById("galleryClose")?.addEventListener("click",closeViewer);
-  document.getElementById("galleryPrev")?.addEventListener("click",()=>changeViewer(-1));
-  document.getElementById("galleryNext")?.addEventListener("click",()=>changeViewer(1));
-  document.getElementById("galleryViewer")?.addEventListener("click",event=>{
-    if(event.target.id === "galleryViewer") closeViewer();
-  });
-
-  document.addEventListener("keydown",event=>{
-    if(event.key === "Escape") closeViewer();
-    if(event.key === "ArrowLeft") changeViewer(-1);
-    if(event.key === "ArrowRight") changeViewer(1);
-  });
-});
+let currentItems=[],currentIndex=0;
+const src=(v)=>window.FrenteImageTools?FrenteImageTools.src(v):(/^(data:|https?:|blob:)/.test(v||'')?v:`assets/images/gallery/${v}`);
+function uniqueValues(key){return [...new Set(galleryData().map(x=>x[key]).filter(Boolean))]}
+function setupGalleryFilters(){const c=document.getElementById('galleryCategory'),s=document.getElementById('gallerySeason');uniqueValues('categoria').forEach(v=>c?.insertAdjacentHTML('beforeend',`<option>${v}</option>`));uniqueValues('temporada').forEach(v=>s?.insertAdjacentHTML('beforeend',`<option>${v}</option>`))}
+function filteredGallery(){const c=document.getElementById('galleryCategory')?.value||'Todas',s=document.getElementById('gallerySeason')?.value||'Todas';return galleryData().filter(x=>(c==='Todas'||x.categoria===c)&&(s==='Todas'||x.temporada===s))}
+function renderGallery(){const g=document.getElementById('galleryGrid');if(!g)return;currentItems=filteredGallery();g.innerHTML=currentItems.length?currentItems.map((x,i)=>`<button class="gallery-card" data-index="${i}"><img src="${src(x.miniatura||x.archivo)}" alt="${x.titulo}"><span class="gallery-type">${x.tipo==='video'?'▶ Vídeo':'Foto'}</span><span class="gallery-card-overlay"><small>${x.categoria} · ${x.temporada}</small><strong>${x.titulo}</strong></span></button>`).join(''):'<div class="gallery-empty">No hay contenido para este filtro.</div>';g.querySelectorAll('.gallery-card').forEach(b=>b.onclick=()=>openViewer(+b.dataset.index))}
+function openViewer(i){currentIndex=i;updateViewer();document.getElementById('galleryViewer')?.classList.add('open');document.body.style.overflow='hidden'}
+function closeViewer(){document.getElementById('galleryViewer')?.classList.remove('open');document.body.style.overflow='';const m=document.getElementById('viewerMedia');if(m)m.innerHTML=''}
+function updateViewer(){const x=currentItems[currentIndex];if(!x)return;document.getElementById('viewerMedia').innerHTML=x.tipo==='video'?`<iframe src="${x.archivo}" title="${x.titulo}" allowfullscreen></iframe>`:`<img src="${src(x.archivo)}" alt="${x.titulo}">`;document.getElementById('viewerTitle').textContent=x.titulo;document.getElementById('viewerDescription').textContent=x.descripcion||'';document.getElementById('viewerMeta').textContent=`${x.categoria} · ${x.temporada}`}
+function changeViewer(n){if(currentItems.length){currentIndex=(currentIndex+n+currentItems.length)%currentItems.length;updateViewer()}}
+document.addEventListener('DOMContentLoaded',()=>{setupGalleryFilters();renderGallery();document.getElementById('galleryCategory')?.addEventListener('change',renderGallery);document.getElementById('gallerySeason')?.addEventListener('change',renderGallery);document.getElementById('galleryClose')?.addEventListener('click',closeViewer);document.getElementById('galleryPrev')?.addEventListener('click',()=>changeViewer(-1));document.getElementById('galleryNext')?.addEventListener('click',()=>changeViewer(1));document.getElementById('galleryViewer')?.addEventListener('click',e=>{if(e.target.id==='galleryViewer')closeViewer()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeViewer();if(e.key==='ArrowLeft')changeViewer(-1);if(e.key==='ArrowRight')changeViewer(1)})});

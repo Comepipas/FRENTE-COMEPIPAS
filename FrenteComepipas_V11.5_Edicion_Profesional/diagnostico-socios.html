@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Diagnóstico socios Supabase</title>
+<style>body{font-family:Arial;padding:30px;background:#eef4fa;color:#10243e}.card{max-width:850px;margin:auto;background:white;padding:24px;border-radius:16px}.ok{color:#087f5b}.bad{color:#c92a2a}pre{white-space:pre-wrap;background:#f5f7fa;padding:14px;border-radius:10px}</style></head>
+<body><main class="card"><h1>Diagnóstico de socios</h1><p id="status">Comprobando…</p><pre id="result"></pre><a href="socios-admin.html">Abrir gestión de socios</a></main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/js/supabase-config.js"></script>
+<script>
+(async()=>{
+ const status=document.getElementById("status"),out=document.getElementById("result");
+ try{
+  const c=window.FRENTE_SUPABASE_CONFIG||{};
+  if(!c.enabled||!c.url||!c.anonKey)throw new Error("Falta configurar supabase-config.js");
+  const client=window.supabase.createClient(c.url,c.anonKey,{auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false}});
+  const {data,error,count}=await client.from("socios").select("id,numero_socio,nombre,apellidos",{count:"exact"}).order("numero_socio").limit(5);
+  if(error)throw error;
+  status.className="ok";status.textContent="Conexión y lectura correctas.";
+  out.textContent=JSON.stringify({count,primeros_socios:data},null,2);
+ }catch(e){
+  status.className="bad";status.textContent="La conexión existe, pero la lectura de socios ha fallado.";
+  out.textContent=(e.message||String(e))+"\n\nSi aparece permission denied o RLS, hay que crear las políticas de acceso.";
+ }
+})();
+</script></body></html>

@@ -1,0 +1,9 @@
+FRENTE COMEPIPAS · COMMIT 19
+VIAJES Y RESERVAS EN SUPABASE
+
+1. Ejecuta PASO_COMMIT_19_EJECUTAR_EN_SUPABASE.sql en Supabase.
+2. Publica todos los archivos sustituyendo el Commit 18.
+3. Administración: viajes-admin.html.
+4. Socios: pestaña Mis reservas del Área del Socio.
+
+Incluye viajes, aforo, precios, acompañantes, lista de espera, pagos, exportación CSV y RLS.

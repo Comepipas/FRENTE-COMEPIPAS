@@ -1,0 +1,20 @@
+V22 · COMMIT 13 — GESTIÓN VISUAL DE IMÁGENES E HISTORIA
+
+NOVEDADES
+- Tienda/material: cada elemento puede usar emoji o una foto elegida desde el PC.
+- Hero de portada: cambio de imagen desde el editor visual, sin editar código.
+- Multimedia/galería: subida de imágenes desde el PC y publicación automática en la galería.
+- La Peña: nueva página pública completa con historia, valores, fotografía y cronología.
+- Nuevo administrador historia-admin.html para editar todo el contenido de La Peña.
+- Optimización automática de imágenes para reducir tamaño.
+
+IMPORTANTE
+En modo local, las imágenes se guardan en el navegador mediante localStorage. Se ven en ese navegador y equipo. Para compartirlas entre todos los dispositivos y publicar en producción, el siguiente paso es conectar estas mismas pantallas con Supabase Storage y tablas de contenido.
+
+PRUEBA RÁPIDA
+1. Entrar en admin.html.
+2. Abrir Material y solicitudes, editar una camiseta o bufanda y elegir una foto.
+3. Abrir Multimedia, crear una Imagen, elegir archivo y marcar Publicado.
+4. Abrir Galería y comprobar la imagen.
+5. Abrir Editor visual portada y cambiar el hero.
+6. Abrir Historia de la Peña, editar textos, foto y cronología.

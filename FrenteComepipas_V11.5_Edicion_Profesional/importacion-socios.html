@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Importación de socios | Frente Comepipas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/variables.css"><link rel="stylesheet" href="assets/css/style.css"><link rel="stylesheet" href="assets/css/responsive.css">
+<link rel="stylesheet" href="assets/css/importacion-socios-v13.css">
+</head>
+<body>
+<main class="admin-page import-page">
+<section class="admin-layout">
+<aside class="admin-sidebar">
+<h2>Importación V13.0</h2>
+<p>Centro de altas y actualizaciones masivas</p>
+<a class="btn btn-gold" href="socios-admin.html">Volver a socios</a>
+<a class="btn btn-outline" href="assets/data/plantilla-importacion-socios-v13.1.xlsx" download>Descargar plantilla Excel</a>
+<div class="admin-note">La importación funciona en modo demostración local y deja un informe antes de aplicar cambios.</div>
+</aside>
+
+<div class="admin-content">
+<div class="members-topbar">
+<div><span class="kicker">V13.0 · Importación</span><h1>Importar socios desde Excel</h1><p>Sube el archivo, revisa las columnas, detecta duplicados y aplica los cambios cuando todo esté correcto.</p></div>
+<div class="members-topbar-actions"><button id="resetImportBtn" class="btn btn-dark-outline">Reiniciar</button></div>
+</div>
+
+<section class="import-steps">
+<article class="active" data-step-card="1"><span>1</span><strong>Archivo</strong><small>Seleccionar Excel</small></article>
+<article data-step-card="2"><span>2</span><strong>Columnas</strong><small>Revisar asignación</small></article>
+<article data-step-card="3"><span>3</span><strong>Comprobación</strong><small>Errores y duplicados</small></article>
+<article data-step-card="4"><span>4</span><strong>Importar</strong><small>Aplicar cambios</small></article>
+</section>
+
+<section id="step1" class="import-panel active">
+<div id="dropZone" class="drop-zone">
+<div class="drop-icon">📄</div>
+<h2>Arrastra aquí el archivo Excel</h2>
+<p>También puedes seleccionarlo desde tu ordenador.</p>
+<input id="csvFileInput" type="file" accept=".xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv" hidden>
+<button id="chooseCsvBtn" class="btn btn-primary">Seleccionar archivo</button>
+<small>Formatos admitidos: .xlsx, .xls y .csv · Formato principal: Excel (.xlsx)</small>
+</div>
+<div id="fileInfo" class="file-info" hidden></div>
+<div id="sheetSelectorWrap" class="file-info" hidden>
+  <label><strong>Hoja del libro</strong>
+    <select id="sheetSelector"></select>
+  </label>
+</div>
+<div class="import-actions"><span></span><button id="goStep2Btn" class="btn btn-primary" disabled>Continuar</button></div>
+</section>
+
+<section id="step2" class="import-panel">
+<div class="panel-card">
+<h2>Asignación de columnas</h2>
+<p>El sistema intenta reconocer automáticamente los encabezados. Corrige cualquier columna que no coincida.</p>
+<div id="mappingGrid" class="mapping-grid"></div>
+</div>
+<div class="import-actions"><button class="btn btn-dark-outline" data-back="1">Atrás</button><button id="analyzeBtn" class="btn btn-primary">Analizar archivo</button></div>
+</section>
+
+<section id="step3" class="import-panel">
+<section class="import-summary">
+<article><span>Filas leídas</span><strong id="summaryRows">0</strong></article>
+<article class="success"><span>Nuevos socios</span><strong id="summaryNew">0</strong></article>
+<article class="warning"><span>Actualizaciones</span><strong id="summaryUpdates">0</strong></article>
+<article class="danger"><span>Errores</span><strong id="summaryErrors">0</strong></article>
+</section>
+<div class="panel-card">
+<div class="panel-title-row"><div><h2>Resultado de comprobación</h2><p>Ningún dato se ha guardado todavía.</p></div><button id="downloadErrorsBtn" class="btn btn-dark-outline" hidden>Descargar errores Excel</button></div>
+<div class="preview-filters"><button class="active" data-preview-filter="">Todos</button><button data-preview-filter="nuevo">Nuevos</button><button data-preview-filter="actualizar">Actualizaciones</button><button data-preview-filter="error">Errores</button></div>
+<div class="import-table-wrap"><table><thead><tr><th>Fila</th><th>Nº socio</th><th>Nombre</th><th>DNI</th><th>Email</th><th>Resultado</th><th>Detalle</th></tr></thead><tbody id="analysisTable"></tbody></table></div>
+</div>
+<div class="import-actions"><button class="btn btn-dark-outline" data-back="2">Atrás</button><button id="applyImportBtn" class="btn btn-primary">Aplicar importación</button></div>
+</section>
+
+<section id="step4" class="import-panel">
+<div class="import-complete">
+<div class="complete-icon">✓</div>
+<h2>Importación completada</h2>
+<p id="completeText">Los datos se han guardado correctamente.</p>
+<div class="complete-actions"><a class="btn btn-primary" href="socios-admin.html">Abrir gestión de socios</a><button id="newImportBtn" class="btn btn-dark-outline">Realizar otra importación</button></div>
+</div>
+</section>
+</div>
+</section>
+</main>
+<div id="importToast" class="material-toast" hidden></div>
+<script src="assets/js/members-db.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script><script src="assets/js/excel-v13.1.js"></script><script src="assets/js/importacion-socios-v13.1.js"></script>
+</body></html>

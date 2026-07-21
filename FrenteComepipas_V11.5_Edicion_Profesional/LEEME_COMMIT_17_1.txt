@@ -1,0 +1,14 @@
+COMMIT 17.1 · INSTALACIÓN
+
+1. Ejecuta PASO_COMMIT_17_1_EJECUTAR_EN_SUPABASE.sql en SQL Editor.
+2. En Supabase > Authentication > URL Configuration añade:
+   https://frente-comepipas.vercel.app/**
+3. Para usar el botón Enviar invitación, despliega la Edge Function incluida:
+   supabase functions deploy invite-member
+   (Supabase crea automáticamente SUPABASE_URL, SUPABASE_ANON_KEY y SUPABASE_SERVICE_ROLE_KEY).
+4. Publica esta carpeta en Vercel.
+5. Prueba primero con un socio de prueba que tenga número, teléfono, email y estado activo.
+
+La activación propia funciona sin desplegar la Edge Function. El botón administrativo Enviar invitación sí necesita esa función.
+
+Si ya existe un usuario confirmado en Authentication con el mismo correo, abre la ficha del socio y pulsa “Vincular usuario existente”.

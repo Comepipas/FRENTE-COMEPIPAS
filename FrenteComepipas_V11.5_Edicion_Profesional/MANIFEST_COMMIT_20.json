@@ -1,0 +1,20 @@
+{
+  "base": "Commit 19",
+  "commit": 20,
+  "module": "Catálogo de material y solicitudes sin pago online",
+  "sql": "PASO_COMMIT_20_EJECUTAR_EN_SUPABASE.sql",
+  "pages": [
+    "tienda.html",
+    "tienda-admin.html",
+    "area-socio.html"
+  ],
+  "scripts": [
+    "assets/js/material-service-v20.js",
+    "assets/js/material-public-v20.js",
+    "assets/js/material-admin-v20.js",
+    "assets/js/material-member-v20.js"
+  ],
+  "styles": [
+    "assets/css/material-v20.css"
+  ]
+}

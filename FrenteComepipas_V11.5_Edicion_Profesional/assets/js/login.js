@@ -1,25 +1,46 @@
+document.addEventListener("DOMContentLoaded", async () => {
+  const form = document.getElementById("adminLoginForm");
+  const error = document.getElementById("loginError");
+  const status = document.getElementById("loginStatus");
+  const button = form?.querySelector('button[type="submit"]');
+  const next = new URLSearchParams(location.search).get("next") || "admin.html";
 
-document.addEventListener("DOMContentLoaded",()=>{
-  if(getAuthSession()){
-    const next = new URLSearchParams(location.search).get("next") || "admin.html";
-    location.href = next;
-    return;
+  function message(text, isError = false) {
+    if (error) error.textContent = isError ? text : "";
+    if (status) status.textContent = isError ? "" : text;
   }
 
-  document.getElementById("adminLoginForm")?.addEventListener("submit",event=>{
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const user = loginAdmin(data.get("email"), data.get("password"));
-    const error = document.getElementById("loginError");
-
-    if(!user){
-      error.textContent = "Correo o contraseña incorrectos.";
+  try {
+    message("Comprobando sesión…");
+    const session = await restoreAuthSession();
+    if (session) {
+      location.replace(next);
       return;
     }
+    message("");
+  } catch (e) {
+    console.error(e);
+    message(e.message || "No se pudo comprobar la sesión.", true);
+  }
 
-    error.textContent = "";
-    if(window.logAudit) logAudit("Inicio de sesión","Seguridad","Sesión administrativa","Acceso correcto al panel","info");
-    const next = new URLSearchParams(location.search).get("next") || "admin.html";
-    location.href = next;
+  form?.addEventListener("submit", async event => {
+    event.preventDefault();
+    const data = new FormData(form);
+    button.disabled = true;
+    message("Iniciando sesión…");
+
+    try {
+      await loginAdmin(data.get("email"), data.get("password"));
+      location.replace(next);
+    } catch (e) {
+      console.error(e);
+      const text =
+        e.message?.includes("Invalid login credentials")
+          ? "Correo o contraseña incorrectos."
+          : (e.message || "No se pudo iniciar sesión.");
+      message(text, true);
+    } finally {
+      button.disabled = false;
+    }
   });
 });

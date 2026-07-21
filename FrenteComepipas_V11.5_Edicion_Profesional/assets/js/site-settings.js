@@ -9,6 +9,7 @@ window.FRENTE_SITE_SETTINGS = {
   telefono: "",
   whatsapp: "",
   direccion: "Málaga, Andalucía",
+  ciudad: "Málaga, Andalucía",
 
   instagram: "",
   facebook: "",
@@ -20,6 +21,7 @@ window.FRENTE_SITE_SETTINGS = {
   heroPosition: "center center",
   escudo: "escudo-transparente.png",
   logo: "don-comepipas-transparente.png",
+  favicon: "escudo-transparente.png",
 
   colorPrimario: "#0057B8",
   colorSecundario: "#002B5C",

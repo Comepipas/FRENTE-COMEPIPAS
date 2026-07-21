@@ -1,0 +1,21 @@
+COMMIT 22 · CENTRO DE COMUNICACIONES SUPABASE + BREVO
+
+INSTALACIÓN
+1. Ejecuta PASO_COMMIT_22_EJECUTAR_EN_SUPABASE.sql en Supabase SQL Editor.
+2. Despliega la función Edge: supabase functions deploy send-communication
+3. Configura secretos:
+   supabase secrets set BREVO_API_KEY=tu_clave
+   supabase secrets set BREVO_SENDER_EMAIL=correo_verificado@tudominio.es
+   supabase secrets set BREVO_SENDER_NAME="Frente Comepipas"
+4. Sustituye el proyecto publicado por el contenido completo de este ZIP.
+
+FUNCIONAMIENTO
+- Administración > Comunicaciones.
+- Segmentos: todos, activos, cuota al día y categorías de edad.
+- Canales: correo, aviso interno o ambos.
+- Los avisos internos aparecen en Área del Socio > Notificaciones.
+- La programación queda registrada. Para automatización horaria se puede invocar la función mediante Supabase Cron; mientras tanto se puede enviar manualmente desde el panel al llegar la hora.
+
+SEGURIDAD
+- La clave de Brevo nunca está en el navegador: permanece como secreto de la Edge Function.
+- RLS limita administración y lectura de avisos al socio correspondiente.

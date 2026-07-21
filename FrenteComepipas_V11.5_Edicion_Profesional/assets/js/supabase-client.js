@@ -1,53 +1,92 @@
+window.FrenteSupabase = (() => {
+  "use strict";
 
-window.FrenteSupabase = {
-  client: null,
-  mode: "local",
-  error: null,
+  let client = null;
+  let initPromise = null;
+  let mode = "offline";
+  let lastError = null;
 
-  configured(){
-    const c = window.FRENTE_SUPABASE_CONFIG || {};
-    return Boolean(c.enabled && c.url && c.anonKey);
-  },
+  function config() {
+    return window.FRENTE_SUPABASE_CONFIG || {};
+  }
 
-  async init(){
-    const c = window.FRENTE_SUPABASE_CONFIG || {};
+  function configured() {
+    const c = config();
+    return Boolean(c.enabled === true && c.url && c.anonKey);
+  }
 
-    if(!this.configured()){
-      this.mode = "local";
-      return {ok:true,mode:"local",reason:"Supabase no configurado"};
+  function timeout(promise, milliseconds, message) {
+    let timer;
+    return Promise.race([
+      promise,
+      new Promise((_, reject) => {
+        timer = setTimeout(() => reject(new Error(message)), milliseconds);
+      })
+    ]).finally(() => clearTimeout(timer));
+  }
+
+  async function init() {
+    if (client && mode === "online") {
+      return { ok: true, mode, client };
     }
+    if (initPromise) return initPromise;
 
-    if(!window.supabase?.createClient){
-      this.mode = "local";
-      this.error = "No se cargó la librería de Supabase.";
-      return {ok:false,mode:"local",error:this.error};
-    }
+    initPromise = (async () => {
+      const c = config();
 
-    try{
-      this.client = window.supabase.createClient(c.url,c.anonKey,{
-        auth:{
-          persistSession:true,
-          autoRefreshToken:true,
-          detectSessionInUrl:true
-        }
-      });
-
-      const {error} = await this.client.from("site_settings").select("id").limit(1);
-
-      if(error) throw error;
-
-      this.mode = "online";
-      this.error = null;
-      return {ok:true,mode:"online"};
-    }catch(error){
-      this.error = error?.message || String(error);
-
-      if(c.fallbackToLocal){
-        this.mode = "local";
-        return {ok:false,mode:"local",error:this.error};
+      if (!configured()) {
+        mode = "offline";
+        throw new Error("Supabase no está configurado.");
       }
 
-      throw error;
-    }
+      if (!window.supabase?.createClient) {
+        mode = "offline";
+        throw new Error("No se pudo cargar la librería de Supabase.");
+      }
+
+      try {
+        if (!client) {
+          client = window.supabase.createClient(c.url.replace(/\/+$/, ""), c.anonKey, {
+            auth: {
+              persistSession: true,
+              autoRefreshToken: true,
+              detectSessionInUrl: false,
+              storageKey: "frente-comepipas-auth-v13-3"
+            },
+            global: {
+              headers: { "x-client-info": "frente-comepipas-v13.3.0-r4" }
+            }
+          });
+        }
+
+        const probe = await timeout(
+          client.from("socios").select("id", { count: "exact", head: true }),
+          12000,
+          "Supabase no respondió en 12 segundos."
+        );
+
+        if (probe.error) throw probe.error;
+
+        mode = "online";
+        lastError = null;
+        return { ok: true, mode, client };
+      } catch (error) {
+        mode = "offline";
+        lastError = error?.message || String(error);
+        throw error;
+      } finally {
+        initPromise = null;
+      }
+    })();
+
+    return initPromise;
   }
-};
+
+  return {
+    get client() { return client; },
+    get mode() { return mode; },
+    get error() { return lastError; },
+    configured,
+    init
+  };
+})();

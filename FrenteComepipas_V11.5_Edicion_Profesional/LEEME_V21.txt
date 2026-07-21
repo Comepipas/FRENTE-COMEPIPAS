@@ -1,0 +1,18 @@
+FRENTE COMEPIPAS V21 - GESTIÓN DE CUOTAS
+
+Incluye:
+- Lectura real desde Supabase.
+- Registro de pagos.
+- Nueva cuota manual.
+- Edición de cuota.
+- Anulación lógica y reactivación.
+- Filtros, estadísticas y CSV.
+
+ANTES DE PROBAR:
+1. Abra PASO_V21_EJECUTAR_EN_SUPABASE.sql.
+2. Copie su contenido en Supabase > SQL Editor y pulse Run.
+3. Abra index.html con Open with Live Server.
+4. Inicie sesión y abra cuotas-admin.html.
+
+NOTA:
+La restricción única de la base de datos evita crear dos cuotas para el mismo socio y temporada.

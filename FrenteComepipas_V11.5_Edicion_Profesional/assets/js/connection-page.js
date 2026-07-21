@@ -1,13 +1,1 @@
-async function showStatus(){
- const cfg=window.SUPABASE_CONFIG||{},box=document.getElementById('connectionStatus');
- box.innerHTML=`<strong>Modo:</strong> ${cfg.enabled?'Supabase':'Local'}<br><strong>URL:</strong> ${cfg.url||'Sin configurar'}<br><strong>Cliente:</strong> ${window.FC_SUPABASE?.ready?'Preparado':window.FC_SUPABASE?.error||'No iniciado'}`;
- if(cfg.enabled){const result=await window.FC_DATA.test();box.className='connection-status '+(result.ok?'ok':'error');box.insertAdjacentHTML('beforeend',`<br><strong>Prueba:</strong> ${result.message}`)}
-}
-document.addEventListener('DOMContentLoaded',()=>{
- showStatus();
- document.getElementById('testConnection')?.addEventListener('click',showStatus);
- document.getElementById('migrateData')?.addEventListener('click',async()=>{
-  const out=document.getElementById('migrationResult');out.textContent='Migrando...';
-  try{const r=await window.FC_DATA.migrateLocal();out.textContent='Migración terminada: '+Object.entries(r).map(([k,v])=>`${k}: ${v}`).join(', ')}catch(e){out.textContent='Error: '+e.message}
- });
-});
+async function showStatus(){const cfg=window.FRENTE_SUPABASE_CONFIG||{},box=document.getElementById("connectionStatus");box.innerHTML=`<strong>Configurado:</strong> ${cfg.enabled?"Sí":"No"}<br><strong>URL:</strong> ${cfg.url||"Sin configurar"}<br><strong>Cliente:</strong> comprobando…`;try{const result=await window.FrenteSupabase.init();box.className="connection-status "+(result.mode==="online"?"ok":"error");box.insertAdjacentHTML("beforeend",`<br><strong>Resultado:</strong> ${result.mode==="online"?"Conexión correcta":result.error||result.reason||"Sin conexión"}`)}catch(e){box.className="connection-status error";box.insertAdjacentHTML("beforeend",`<br><strong>Error:</strong> ${e.message}`)}}document.addEventListener("DOMContentLoaded",()=>{showStatus();document.getElementById("testConnection")?.addEventListener("click",showStatus);document.getElementById("migrateData")?.addEventListener("click",()=>{document.getElementById("migrationResult").textContent="La migración automática local queda desactivada para socios V13.3.0. Usa la importación Excel → Supabase de la siguiente fase."})});
