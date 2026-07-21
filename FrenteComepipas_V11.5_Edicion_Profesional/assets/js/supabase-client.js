@@ -54,7 +54,7 @@ window.FrenteSupabase = (() => {
               storageKey: "frente-comepipas-auth-v13-3"
             },
             global: {
-              headers: { "x-client-info": "frente-comepipas-v23.2" }
+              headers: { "x-client-info": "frente-comepipas-v23.3" }
             }
           });
         }
