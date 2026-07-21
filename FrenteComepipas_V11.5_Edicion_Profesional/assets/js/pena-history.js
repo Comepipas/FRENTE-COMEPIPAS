@@ -30,15 +30,36 @@ window.FRENTE_PENA_DEFAULTS={
 
   async function supabaseClient(){
     if(!window.FrenteSupabase?.configured?.())return null;
-    try{return (await window.FrenteSupabase.init()).client}
-    catch{return null}
+    try{
+      const result=await window.FrenteSupabase.init();
+      return result?.client||window.FrenteSupabase.client||null;
+    }catch(error){
+      console.warn('No se pudo iniciar Supabase para la historia:',error?.message||error);
+      return null;
+    }
+  }
+
+  function normalizeHistory(content){
+    const base=cloneDefaults();
+    if(!content||typeof content!=='object')return base;
+    const merged={...base,...content};
+    merged.timeline=Array.isArray(content.timeline)?content.timeline:base.timeline;
+    return merged;
   }
 
   async function getPenaHistory(){
     const client=await supabaseClient();
     if(client){
-      const {data,error}=await client.from(TABLE).select('content').eq('id',CONTENT_ID).maybeSingle();
-      if(!error&&data?.content)return {...cloneDefaults(),...data.content};
+      const {data,error}=await client
+        .from(TABLE)
+        .select('content,updated_at')
+        .eq('id',CONTENT_ID)
+        .maybeSingle();
+      if(!error&&data?.content){
+        const content=normalizeHistory(data.content);
+        try{localStorage.setItem(LOCAL_KEY,JSON.stringify(content))}catch{}
+        return content;
+      }
       if(error)console.warn('No se pudo cargar la historia desde Supabase:',error.message);
     }
     return localHistory();
@@ -47,14 +68,15 @@ window.FRENTE_PENA_DEFAULTS={
   async function savePenaHistory(content){
     const client=await supabaseClient();
     if(!client)throw new Error('No hay conexión con Supabase. Los cambios no se han publicado.');
+    const normalized=normalizeHistory(content);
     const {error}=await client.from(TABLE).upsert({
       id:CONTENT_ID,
-      content,
+      content:normalized,
       updated_at:new Date().toISOString()
     },{onConflict:'id'});
     if(error)throw error;
-    localStorage.setItem(LOCAL_KEY,JSON.stringify(content));
-    return content;
+    localStorage.setItem(LOCAL_KEY,JSON.stringify(normalized));
+    return normalized;
   }
 
   async function resetPenaHistory(){
@@ -67,7 +89,7 @@ window.FRENTE_PENA_DEFAULTS={
       updated_at:new Date().toISOString()
     },{onConflict:'id'});
     if(error)throw error;
-    localStorage.removeItem(LOCAL_KEY);
+    localStorage.setItem(LOCAL_KEY,JSON.stringify(content));
     return content;
   }
 
@@ -109,6 +131,7 @@ window.FRENTE_PENA_DEFAULTS={
 
   document.addEventListener('DOMContentLoaded',async()=>{
     if(!document.getElementById('penaTitle'))return;
-    renderHistory(await getPenaHistory());
+    const history=await getPenaHistory();
+    renderHistory(history);
   });
 })();

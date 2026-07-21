@@ -1,0 +1,16 @@
+COMMIT 23.2 — HISTORIA PÚBLICA CORREGIDA
+
+No hay que ejecutar ningún SQL nuevo.
+
+Corrección principal:
+- La conexión general de Supabase ya no comprueba la tabla socios para abrir páginas públicas.
+- Ahora comprueba site_content, que tiene lectura pública.
+- la-pena.html carga Supabase antes del módulo de historia.
+- Se fuerzan versiones nuevas de los JavaScript para evitar caché de Vercel o del navegador.
+
+Publicación:
+1. Copiar todo el contenido de esta carpeta sobre el repositorio de GitHub.
+2. Reemplazar los archivos existentes.
+3. Commit to main.
+4. Push origin.
+5. Esperar el despliegue de Vercel y recargar con Ctrl+F5.
