@@ -1,4 +1,71 @@
-const KEY='frente_pena_history_v1';let timeline=[];
-function data(){return window.getPenaHistory()}
-function renderTimeline(){document.getElementById('historyTimelineRows').innerHTML=timeline.map((x,i)=>`<div class="history-row"><input data-i="${i}" data-k="year" value="${x.year||''}" placeholder="Año"><input data-i="${i}" data-k="title" value="${x.title||''}" placeholder="Título"><textarea data-i="${i}" data-k="text" placeholder="Texto">${x.text||''}</textarea><button type="button" data-remove="${i}">Eliminar</button></div>`).join('');document.querySelectorAll('[data-i]').forEach(e=>e.oninput=()=>timeline[+e.dataset.i][e.dataset.k]=e.value);document.querySelectorAll('[data-remove]').forEach(e=>e.onclick=()=>{timeline.splice(+e.dataset.remove,1);renderTimeline()})}
-document.addEventListener('DOMContentLoaded',()=>{const d=data(),f=document.getElementById('historyForm');['eyebrow','title','intro','valuesTitle','values','image'].forEach(k=>f.elements[k].value=d[k]||'');timeline=JSON.parse(JSON.stringify(d.timeline||[]));renderTimeline();document.getElementById('historyImageFile').onchange=async e=>{try{const v=await FrenteImageTools.read(e.target.files[0],1600,.84);f.elements.image.value=v;document.getElementById('historyPreview').src=v;document.getElementById('historyPreview').hidden=false}catch(err){alert(err.message)}};if(d.image){document.getElementById('historyPreview').src=d.image;document.getElementById('historyPreview').hidden=false}document.getElementById('addHistoryRow').onclick=()=>{timeline.push({year:'',title:'',text:''});renderTimeline()};f.onsubmit=e=>{e.preventDefault();const out=Object.fromEntries(new FormData(f).entries());out.timeline=timeline;localStorage.setItem(KEY,JSON.stringify(out));document.getElementById('historyMessage').textContent='Historia guardada correctamente.'};document.getElementById('resetHistory').onclick=()=>{if(confirm('¿Restaurar la historia inicial?')){localStorage.removeItem(KEY);location.reload()}}});
+let timeline=[];
+
+function escapeAttr(value=''){
+  return String(value).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function renderTimeline(){
+  document.getElementById('historyTimelineRows').innerHTML=timeline.map((x,i)=>`<div class="history-row"><input data-i="${i}" data-k="year" value="${escapeAttr(x.year)}" placeholder="Año"><input data-i="${i}" data-k="title" value="${escapeAttr(x.title)}" placeholder="Título"><textarea data-i="${i}" data-k="text" placeholder="Texto">${escapeAttr(x.text)}</textarea><button type="button" data-remove="${i}">Eliminar</button></div>`).join('');
+  document.querySelectorAll('[data-i]').forEach(el=>el.oninput=()=>timeline[+el.dataset.i][el.dataset.k]=el.value);
+  document.querySelectorAll('[data-remove]').forEach(el=>el.onclick=()=>{timeline.splice(+el.dataset.remove,1);renderTimeline()});
+}
+
+function showMessage(text,isError=false){
+  const el=document.getElementById('historyMessage');
+  el.textContent=text;
+  el.style.color=isError?'#b42318':'';
+}
+
+async function fillForm(){
+  const data=await window.getPenaHistory();
+  const form=document.getElementById('historyForm');
+  ['eyebrow','title','intro','valuesTitle','values','image'].forEach(key=>form.elements[key].value=data[key]||'');
+  timeline=JSON.parse(JSON.stringify(data.timeline||[]));
+  renderTimeline();
+  const preview=document.getElementById('historyPreview');
+  if(data.image){preview.src=data.image;preview.hidden=false}else{preview.hidden=true}
+}
+
+document.addEventListener('DOMContentLoaded',async()=>{
+  const form=document.getElementById('historyForm');
+  showMessage('Cargando historia…');
+  await fillForm();
+  showMessage('');
+
+  document.getElementById('historyImageFile').onchange=async event=>{
+    try{
+      const value=await FrenteImageTools.read(event.target.files[0],1600,.84);
+      form.elements.image.value=value;
+      const preview=document.getElementById('historyPreview');
+      preview.src=value;
+      preview.hidden=false;
+    }catch(error){alert(error.message)}
+  };
+
+  document.getElementById('addHistoryRow').onclick=()=>{timeline.push({year:'',title:'',text:''});renderTimeline()};
+
+  form.onsubmit=async event=>{
+    event.preventDefault();
+    const button=form.querySelector('button[type="submit"]');
+    button.disabled=true;
+    showMessage('Publicando cambios…');
+    try{
+      const output=Object.fromEntries(new FormData(form).entries());
+      output.timeline=timeline;
+      await window.savePenaHistory(output);
+      showMessage('Historia publicada correctamente. Ya es visible para todos.');
+    }catch(error){
+      showMessage(error.message||'No se pudo publicar la historia.',true);
+    }finally{button.disabled=false}
+  };
+
+  document.getElementById('resetHistory').onclick=async()=>{
+    if(!confirm('¿Restaurar y publicar la historia inicial?'))return;
+    try{
+      showMessage('Restaurando contenido…');
+      await window.resetPenaHistory();
+      await fillForm();
+      showMessage('Historia inicial restaurada y publicada.');
+    }catch(error){showMessage(error.message||'No se pudo restaurar.',true)}
+  };
+});

@@ -1,0 +1,14 @@
+FRENTE COMEPIPAS · COMMIT 23.1 · HISTORIA EN SUPABASE
+
+1. En Supabase abre SQL Editor > New query.
+2. Ejecuta el archivo:
+   supabase/migrations/023_commit_23_historia_publica.sql
+3. Sustituye los archivos de tu proyecto por los incluidos en esta carpeta.
+4. En GitHub Desktop: Commit to main y Push origin.
+5. Espera el despliegue de Vercel.
+6. Entra en Historia desde el panel, guarda el texto y comprueba la web pública.
+
+CORRECCIÓN 23.1
+El SQL ya no usa public.is_admin(), que no existe en tu base de datos.
+Incluye una función específica public.c23_is_admin() basada en admin_profiles.
+El script es repetible y corrige también una ejecución anterior que quedara a medias.
