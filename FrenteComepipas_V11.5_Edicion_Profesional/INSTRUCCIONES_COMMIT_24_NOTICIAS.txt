@@ -1,0 +1,13 @@
+COMMIT 24.0 — NOTICIAS CON SUPABASE
+
+1. En Supabase abre SQL Editor.
+2. Abre database/migrations/009_v24_news_supabase.sql, copia todo y ejecútalo.
+3. Copia todos los archivos de esta carpeta sobre tu proyecto y reemplaza.
+4. GitHub Desktop: Commit to main y Push origin.
+5. Espera el despliegue de Vercel.
+6. Entra en https://frente-comepipas.vercel.app/noticias-admin.html
+7. Crea una noticia con estado Publicada y pulsa Guardar publicación.
+8. Debe aparecer: “Noticia guardada y comprobada en Supabase”.
+9. Comprueba la publicación en https://frente-comepipas.vercel.app/noticias.html
+
+Las noticias ya no dependen del localStorage. Las imágenes elegidas desde el PC se comprimen y se guardan junto a la noticia en Supabase.
