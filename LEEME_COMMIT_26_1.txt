@@ -1,0 +1,14 @@
+COMMIT 26.1 · IMAGEN ON TOUR DESDE EL ORDENADOR
+
+1. Ejecuta PASO_COMMIT_26_1_EJECUTAR_EN_SUPABASE.sql en Supabase.
+2. Copia el contenido de esta carpeta sobre la raíz de FRENTE-COMEPIPAS.
+3. En GitHub Desktop usa el resumen: Commit 26.1 - Imagen ON TOUR desde el ordenador
+4. Pulsa Commit to main y Push origin.
+
+CAMBIOS:
+- Sustituye el campo obligatorio de URL por Seleccionar archivo.
+- Recorta automáticamente la imagen al centro en formato 16:9 (1600 x 900).
+- Convierte y comprime la imagen a WebP antes de subirla.
+- Guarda la imagen en Supabase Storage, bucket on-tour-images.
+- Permite cambiar la imagen y elimina del Storage la portada anterior.
+- Si no hay imagen o falla, muestra la ilustración ON TOUR por defecto.
