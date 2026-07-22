@@ -3,13 +3,13 @@
 const STORAGE_KEY="frente_members_v112";
 const $=id=>document.getElementById(id);
 const TARGETS=[
-["numero","Número de socio",["numero","número","num_socio","numero_socio","socio"]],
-["nombre","Nombre y apellidos",["nombre","nombre_completo","socio_nombre","apellidos"]],
+["numero","Número de socio",["numero","número","num_socio","numero_socio","socio","numero de abonado","número de abonado","abonado"]],
+["nombre","Nombre y apellidos",["nombre","nombre_completo","socio_nombre","apellidos","nombre y apellidos","nombre completo"]],
 ["dni","DNI/NIE",["dni","nie","documento"]],
 ["nacimiento","Fecha de nacimiento",["nacimiento","fecha_nacimiento","fecha de nacimiento"]],
 ["direccion","Dirección",["direccion","dirección","domicilio"]],
 ["telefono","Teléfono",["telefono","teléfono","movil","móvil"]],
-["email","Correo electrónico",["email","correo","correo_electronico"]],
+["email","Correo electrónico",["email","correo","correo_electronico","correo electrónico","direccion de correo electronico","dirección de correo electrónico"]],
 ["alta","Fecha de alta",["alta","fecha_alta"]],
 ["estado","Estado",["estado"]],
 ["cuenta","Cuenta web",["cuenta","cuenta_web"]],
@@ -70,8 +70,39 @@ function selectSheet(name){
 }
 function prepareMapping(){mapping={};TARGETS.forEach(([key,label,aliases])=>{const idx=headers.findIndex(h=>aliases.includes(normalize(h)));mapping[key]=idx>=0?headers[idx]:""});$("mappingGrid").innerHTML=TARGETS.map(([key,label])=>`<label class="mapping-row"><span>${label}</span><select data-map="${key}"><option value="">No importar</option>${headers.map(h=>`<option ${mapping[key]===h?"selected":""}>${escapeHtml(h)}</option>`).join("")}</select></label>`).join("")}
 function currentMembers(){try{const local=JSON.parse(localStorage.getItem(STORAGE_KEY)||"null");return Array.isArray(local)?local:(window.FRENTE_MEMBERS_DB||[])}catch{return window.FRENTE_MEMBERS_DB||[]}}
-function valueAt(row,key){const h=mapping[key];if(!h)return"";return String(row[headers.indexOf(h)]??"").trim()}
+function rawValueAt(row,key){const h=mapping[key];if(!h)return"";return row[headers.indexOf(h)]??""}
+function valueAt(row,key){const value=rawValueAt(row,key);return value instanceof Date?value:String(value).trim()}
 function validEmail(v){return !v||/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)}
+function pad2(v){return String(v).padStart(2,"0")}
+function buildIsoDate(year,month,day){
+ year=Number(year);month=Number(month);day=Number(day);
+ if(!Number.isInteger(year)||!Number.isInteger(month)||!Number.isInteger(day)||year<1900||year>2100||month<1||month>12||day<1||day>31)return"";
+ const date=new Date(Date.UTC(year,month-1,day));
+ if(date.getUTCFullYear()!==year||date.getUTCMonth()!==month-1||date.getUTCDate()!==day)return"";
+ return `${year}-${pad2(month)}-${pad2(day)}`;
+}
+function normalizeExcelDate(value){
+ if(value==null||value==="")return"";
+ if(value instanceof Date&&!Number.isNaN(value.getTime()))return buildIsoDate(value.getFullYear(),value.getMonth()+1,value.getDate());
+ if(typeof value==="number"&&Number.isFinite(value)){
+  const parsed=window.XLSX?.SSF?.parse_date_code?.(value);
+  return parsed?buildIsoDate(parsed.y,parsed.m,parsed.d):"";
+ }
+ const text=String(value).trim();
+ if(!text)return"";
+ let match=text.match(/^(\d{4})[-\/.](\d{1,2})[-\/.](\d{1,2})(?:[T\s].*)?$/);
+ if(match)return buildIsoDate(match[1],match[2],match[3]);
+ match=text.match(/^(\d{1,2})[-\/.](\d{1,2})[-\/.](\d{2}|\d{4})(?:[T\s].*)?$/);
+ if(match){let year=Number(match[3]);if(year<100)year+=year>=50?1900:2000;return buildIsoDate(year,match[2],match[1])}
+ if(/^\d+(?:[.,]\d+)?$/.test(text)){
+  const serial=Number(text.replace(",","."));
+  const parsed=window.XLSX?.SSF?.parse_date_code?.(serial);
+  if(parsed)return buildIsoDate(parsed.y,parsed.m,parsed.d);
+ }
+ const parsedDate=new Date(text);
+ if(!Number.isNaN(parsedDate.getTime()))return buildIsoDate(parsedDate.getFullYear(),parsedDate.getMonth()+1,parsedDate.getDate());
+ return"";
+}
 function validDate(v){return !v||/^\d{4}-\d{2}-\d{2}$/.test(v)}
 function analyze(){
  document.querySelectorAll("[data-map]").forEach(s=>mapping[s.dataset.map]=s.value);
@@ -79,11 +110,17 @@ function analyze(){
  const members=currentMembers();
  analysis=rows.map((row,index)=>{
   const data={};TARGETS.forEach(([k])=>data[k]=valueAt(row,k));
+  const nacimientoOriginal=rawValueAt(row,"nacimiento");
+  const altaOriginal=rawValueAt(row,"alta");
+  data.nacimiento=normalizeExcelDate(nacimientoOriginal);
+  data.alta=normalizeExcelDate(altaOriginal);
   const errors=[];
   if(!data.numero)errors.push("Falta número de socio");
   if(!data.nombre)errors.push("Falta nombre");
   if(!validEmail(data.email))errors.push("Email no válido");
-  if(!validDate(data.nacimiento))errors.push("Nacimiento debe ser AAAA-MM-DD");
+  if(nacimientoOriginal!==""&&!data.nacimiento)errors.push("Fecha de nacimiento no válida");
+  if(altaOriginal!==""&&!data.alta)errors.push("Fecha de alta no válida");
+  if(!validDate(data.nacimiento))errors.push("Nacimiento debe ser una fecha válida");
   const duplicate=members.find(m=>normalize(m.numero)===normalize(data.numero)||data.dni&&normalize(m.dni)===normalize(data.dni));
   const duplicateInFile=rows.slice(0,index).some(r=>normalize(valueAt(r,"numero"))===normalize(data.numero)&&data.numero);
   if(duplicateInFile)errors.push("Número repetido dentro del archivo");
