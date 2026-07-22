@@ -1,0 +1,17 @@
+FRENTE COMEPIPAS · COMMIT 26.2 · ON TOUR PROFESIONAL
+
+1. Ejecuta PASO_COMMIT_26_2_EJECUTAR_EN_SUPABASE.sql en Supabase > SQL Editor.
+2. Copia viajes-admin.html y la carpeta assets dentro de tu repositorio.
+3. Sustituye los archivos cuando Windows lo pregunte.
+4. En GitHub Desktop usa: Commit 26.2 - ON TOUR profesional
+5. Pulsa Push origin y espera el despliegue de Vercel.
+
+INCLUYE
+- Buscador y filtros por temporada, estado y archivados.
+- Estados automáticos: plazo finalizado, completo y últimas plazas.
+- Capacidad y plazas disponibles.
+- Duplicar y archivar desplazamientos.
+- Enlace Cómo llegar con Google Maps.
+- Gestión rápida de solicitudes.
+- Exportación real a Excel .xlsx.
+- Subida de portada desde el ordenador conservada del Commit 26.1.
