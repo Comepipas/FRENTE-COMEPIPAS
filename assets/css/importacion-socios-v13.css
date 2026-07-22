@@ -3,9 +3,5 @@
 @media(max-width:850px){.import-steps,.import-summary{grid-template-columns:repeat(2,1fr)}.mapping-grid{grid-template-columns:1fr}}
 @media(max-width:520px){.import-steps,.import-summary{grid-template-columns:1fr}.mapping-row{grid-template-columns:1fr}.panel-title-row{flex-direction:column}}
 
-/* Commit 26.3: mejora de contraste del panel lateral de importación */
-.import-page .admin-sidebar{background:#e7f0f8;color:#071b35}
-.import-page .admin-sidebar h2,.import-page .admin-sidebar p{color:#071b35;text-shadow:none}
-.import-page .admin-sidebar .btn-outline{color:#071b35;border-color:#8aa5bf;background:rgba(255,255,255,.7)}
-.import-page .admin-sidebar .btn-outline:hover{background:#fff;border-color:#0e5ca8}
-.import-page .admin-sidebar .admin-note{color:#5e4600;background:#fff5cf;border:1px solid #e7b93e}
+/* Commit 26.4 */
+.admin-sidebar,.admin-sidebar p,.admin-sidebar .admin-note{color:#0b2745}.admin-sidebar .btn-outline{color:#0b3f73;border-color:#8aa7c3}.import-progress-panel{margin-top:16px}.import-progress-panel progress{width:100%;height:18px;accent-color:#0e5ca8}.import-progress-panel p{color:#334155;font-weight:700}

@@ -54,13 +54,13 @@ window.FrenteSupabase = (() => {
               storageKey: "frente-comepipas-auth-v13-3"
             },
             global: {
-              headers: { "x-client-info": "frente-comepipas-v23.3" }
+              headers: { "x-client-info": "frente-comepipas-v13.3.0-r4" }
             }
           });
         }
 
         const probe = await timeout(
-          client.from("site_content").select("id", { count: "exact", head: true }),
+          client.from("socios").select("id", { count: "exact", head: true }),
           12000,
           "Supabase no respondió en 12 segundos."
         );

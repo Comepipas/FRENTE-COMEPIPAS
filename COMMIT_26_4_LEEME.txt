@@ -1,0 +1,25 @@
+FRENTE COMEPIPAS · COMMIT 26.4
+IMPORTACIÓN REAL DE SOCIOS EN SUPABASE
+
+ANTES DE PROBAR
+1. Copiar y reemplazar todos los archivos de este paquete en el repositorio.
+2. Abrir Supabase > SQL Editor.
+3. Ejecutar:
+   supabase/migrations/027_commit_26_4_importacion_socios_supabase.sql
+4. Subir el commit a GitHub y esperar el despliegue de Vercel.
+5. Recargar con Ctrl+F5.
+
+CAMBIOS
+- La importación deja de usar localStorage y escribe directamente en public.socios.
+- DNI/NIE como identificador principal para localizar y actualizar socios.
+- DNI obligatorio para mayores de edad; opcional para menores.
+- Menores sin DNI se comparan provisionalmente por nombre completo y nacimiento.
+- Las celdas vacías del segundo Excel no borran datos que ya existan.
+- Un Excel posterior puede completar sector, fila, asiento, precio y demás campos.
+- Nuevo campo fecha_alta_pena para conservar la antigüedad histórica.
+- El número de socio no se genera durante la importación: queda pendiente para asignarlo por antigüedad.
+- Fechas Excel, DD/MM/AAAA, DD-MM-AAAA y AAAA-MM-DD se convierten automáticamente.
+- Barra de progreso e informe de errores.
+
+IMPORTANTE
+La asignación/reordenación automática del número de socio por antigüedad será un módulo posterior y deberá incluir confirmación y vista previa antes de modificar números existentes.

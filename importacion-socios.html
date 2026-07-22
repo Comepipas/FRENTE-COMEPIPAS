@@ -6,22 +6,22 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/variables.css"><link rel="stylesheet" href="assets/css/style.css"><link rel="stylesheet" href="assets/css/responsive.css">
-<link rel="stylesheet" href="assets/css/importacion-socios-v13.css?v=26.3">
+<link rel="stylesheet" href="assets/css/importacion-socios-v13.css">
 </head>
 <body>
 <main class="admin-page import-page">
 <section class="admin-layout">
 <aside class="admin-sidebar">
-<h2>Importación V13.0.1</h2>
+<h2>Importación Supabase</h2>
 <p>Centro de altas y actualizaciones masivas</p>
 <a class="btn btn-gold" href="socios-admin.html">Volver a socios</a>
 <a class="btn btn-outline" href="assets/data/plantilla-importacion-socios-v13.1.xlsx" download>Descargar plantilla Excel</a>
-<div class="admin-note">La importación funciona en modo demostración local y deja un informe antes de aplicar cambios.</div>
+<div class="admin-note">Importación real en Supabase. El DNI identifica al socio; el número de socio queda pendiente hasta asignarlo por antigüedad.</div>
 </aside>
 
 <div class="admin-content">
 <div class="members-topbar">
-<div><span class="kicker">V13.0 · Importación</span><h1>Importar socios desde Excel</h1><p>Sube el archivo, revisa las columnas, detecta duplicados y aplica los cambios cuando todo esté correcto.</p></div>
+<div><span class="kicker">Commit 26.4 · Supabase</span><h1>Importar socios desde Excel</h1><p>Sube el archivo, revisa las columnas, detecta duplicados y aplica los cambios cuando todo esté correcto.</p></div>
 <div class="members-topbar-actions"><button id="resetImportBtn" class="btn btn-dark-outline">Reiniciar</button></div>
 </div>
 
@@ -71,8 +71,10 @@
 <div class="preview-filters"><button class="active" data-preview-filter="">Todos</button><button data-preview-filter="nuevo">Nuevos</button><button data-preview-filter="actualizar">Actualizaciones</button><button data-preview-filter="error">Errores</button></div>
 <div class="import-table-wrap"><table><thead><tr><th>Fila</th><th>Nº socio</th><th>Nombre</th><th>DNI</th><th>Email</th><th>Resultado</th><th>Detalle</th></tr></thead><tbody id="analysisTable"></tbody></table></div>
 </div>
-<div class="import-actions"><button class="btn btn-dark-outline" data-back="2">Atrás</button><button id="applyImportBtn" class="btn btn-primary">Aplicar importación</button></div>
+<div class="import-actions"><button class="btn btn-dark-outline" data-back="2">Atrás</button><button id="applyImportBtn" class="btn btn-primary">Importar a Supabase</button></div>
 </section>
+
+<section id="importProgressPanel" class="panel-card import-progress-panel" hidden><h2>Importando en Supabase</h2><p id="importProgressText">Preparando importación…</p><progress id="importProgress" max="100" value="0"></progress></section>
 
 <section id="step4" class="import-panel">
 <div class="import-complete">
@@ -86,6 +88,6 @@
 </section>
 </main>
 <div id="importToast" class="material-toast" hidden></div>
-<script src="assets/js/members-db.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script><script src="assets/js/excel-v13.1.js"></script><script src="assets/js/importacion-socios-v13.1.js?v=26.3"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/supabase-config.js"></script><script src="assets/js/supabase-client.js?v=26.4"></script><script src="assets/js/core/app-config-v13.3.js?v=26.4"></script><script src="assets/js/core/database-v13.3.js?v=26.4"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script><script src="assets/js/excel-v13.1.js"></script><script src="assets/js/importacion-socios-v13.1.js?v=26.4"></script>
 </body></html>
