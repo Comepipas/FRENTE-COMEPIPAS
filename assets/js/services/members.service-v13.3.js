@@ -4,7 +4,7 @@ window.FrenteMembersService=(()=>{
  const db=()=>window.FrenteDatabase.getClient();
  function cleanText(v){const x=String(v??"").trim();return x||null}
  function ageAt(birth,reference=new Date()){if(!birth)return null;const b=new Date(`${birth}T00:00:00`);if(Number.isNaN(b.getTime()))return null;let age=reference.getFullYear()-b.getFullYear();const m=reference.getMonth()-b.getMonth();if(m<0||(m===0&&reference.getDate()<b.getDate()))age--;return age>=0?age:null}
- function map(row){return {...row,numero:String(row.numero_socio??"").padStart(4,"0"),nombreCompleto:`${row.nombre||""} ${row.apellidos||""}`.trim(),cuenta:row.cuenta_activada?"Activada":"Pendiente de activar",cuota:row.cuota_al_dia?"Al día":"Pendiente",nacimiento:row.fecha_nacimiento,edadActual:ageAt(row.fecha_nacimiento),alta:row.fecha_alta,fechaAltaPena:row.fecha_alta_pena,precioAbono:Number(row.precio_abono||0),observaciones:row.observaciones_internas}}
+ function map(row){return {...row,numero:String(row.numero_socio??"").padStart(4,"0"),nombreCompleto:`${row.nombre||""} ${row.apellidos||""}`.trim(),cuenta:row.cuenta_activada?"Activada":"Pendiente de activar",cuota:row.cuota_al_dia?"Al día":"Pendiente",nacimiento:row.fecha_nacimiento,edadActual:ageAt(row.fecha_nacimiento),alta:row.fecha_alta,precioAbono:Number(row.precio_abono||0),observaciones:row.observaciones_internas}}
  async function list({search="",status="",category="",account="",fee="",page=1,pageSize=cfg().pageSize}={}){
    let query=db().from(cfg().table).select(cfg().select,{count:"exact"});
    const term=String(search||"").trim().replace(/[,%()]/g," ");
@@ -24,7 +24,7 @@ window.FrenteMembersService=(()=>{
    const p={
     numero_socio:Number(form.numero_socio),nombre:String(form.nombre||"").trim(),apellidos:String(form.apellidos||"").trim(),dni:cleanText(form.dni)?.toUpperCase()||null,
     fecha_nacimiento:cleanText(form.fecha_nacimiento),telefono:cleanText(form.telefono),email:cleanText(form.email)?.toLowerCase()||null,direccion:cleanText(form.direccion),foto_url:cleanText(form.foto_url),
-    fecha_alta:cleanText(form.fecha_alta),fecha_alta_pena:cleanText(form.fecha_alta_pena),categoria:cleanText(form.categoria),cuenta_activada:Boolean(form.cuenta_activada),cuota_al_dia:Boolean(form.cuota_al_dia),sector:cleanText(form.sector),fila:cleanText(form.fila),asiento:cleanText(form.asiento),
+    fecha_alta:cleanText(form.fecha_alta),categoria:cleanText(form.categoria),cuenta_activada:Boolean(form.cuenta_activada),cuota_al_dia:Boolean(form.cuota_al_dia),sector:cleanText(form.sector),fila:cleanText(form.fila),asiento:cleanText(form.asiento),
     tipo_abono:cleanText(form.tipo_abono),precio_abono:Number(form.precio_abono||0),numero_abonado_malaga:cleanText(form.numero_abonado_malaga),observaciones_internas:cleanText(form.observaciones_internas)
    };
    if(form.estado)p.estado=form.estado;
