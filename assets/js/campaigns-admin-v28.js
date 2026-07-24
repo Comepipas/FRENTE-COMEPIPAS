@@ -1,10 +1,11 @@
 (() => {
 'use strict';
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
-let sb,campaigns=[],current=null,categories=[],records=[],issues=[],previewRows=[];
+let sb,campaigns=[],current=null,categories=[],records=[],issues=[],previewRows=[],previewPage=1;
 const euro=n=>new Intl.NumberFormat('es-ES',{style:'currency',currency:'EUR'}).format(Number(n||0));
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-function msg(text,type='info'){ $('#c28Message').innerHTML=`<div class="c28-alert">${esc(text)}</div>`; }
+function msg(text,type='info'){ const box=$('#c28Message'); if(box) box.innerHTML=`<div class="c28-alert">${esc(text)}</div>`; }
+function importMsg(text,type='info'){ const box=$('#importStatus'); if(box) box.innerHTML=`<div class="c28-alert ${type==='error'?'c28-alert-error':''}">${esc(text)}</div>`; }
 async function init(){try{sb=(await FrenteSupabase.init()).client;$('#c28Connection').textContent='Supabase conectado';$('#c28Connection').className='badge badge-success';bind();await loadCampaigns();}catch(e){msg(e.message);$('#c28Connection').textContent='Sin conexión';}}
 function bind(){
  $('#c28Reload').onclick=()=>loadAll(); $('#campaignSelect').onchange=async e=>{current=campaigns.find(c=>c.id===e.target.value);await loadAll();};
@@ -27,9 +28,66 @@ async function addCategory(){const {error}=await sb.from('campanas_categorias').
 async function saveCategory(id){const o={};$$(`[data-cat="${id}"]`).forEach(i=>o[i.dataset.field]=i.value===''?null:(['edad_min','edad_max','cuota'].includes(i.dataset.field)?Number(i.value):i.value));const {error}=await sb.from('campanas_categorias').update(o).eq('id',id);if(error)return msg(error.message);msg('Categoría guardada.');await loadAll();}
 function normalizeKey(k){return String(k||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]/g,'');}
 function pick(row,names){const map=Object.fromEntries(Object.entries(row).map(([k,v])=>[normalizeKey(k),v]));for(const n of names){const v=map[normalizeKey(n)];if(v!==undefined&&v!=='')return v;}return null;}
-async function previewExcel(){const file=$('#excelFile').files[0];if(!file)return msg('Selecciona un archivo.');const buf=await file.arrayBuffer();const wb=XLSX.read(buf,{type:'array',cellDates:true});previewRows=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{defval:''});if(!previewRows.length)return msg('El archivo no contiene filas.');const sample=previewRows.slice(0,5);$('#importPreview').innerHTML=`<p><strong>${previewRows.length}</strong> filas detectadas.</p><div style="overflow:auto"><table class="c28-table"><thead><tr>${Object.keys(sample[0]).map(k=>`<th>${esc(k)}</th>`).join('')}</tr></thead><tbody>${sample.map(r=>`<tr>${Object.keys(sample[0]).map(k=>`<td>${esc(r[k])}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;$('#confirmImport').disabled=false;}
-async function confirmImport(){if(!previewRows.length)return;$('#confirmImport').disabled=true;msg('Importando y conciliando…');const {data:members,error:merr}=await sb.from('socios').select('id,numero_socio,nombre,apellidos,dni,fecha_nacimiento');if(merr)return msg(merr.message);const byDni=new Map((members||[]).filter(m=>m.dni).map(m=>[normalizeKey(m.dni),m]));const origin=$('#importOrigin').value,rows=[],newIssues=[];for(const r of previewRows){const dni=String(pick(r,['dni','nif','dni/nif','documento'])||'').trim();const name=String(pick(r,['nombre','nombre y apellidos','abonado','socio'])||'').trim();const member=byDni.get(normalizeKey(dni));const price=Number(pick(r,['precio final','importe final','precio abono','importe abono','total abono'])||0);const discount=Number(pick(r,['descuento','descuentos','cesion','cesión'])||0);const fee=Number(pick(r,['cuota pena','cuota peña','cuota socio'])||0);const paid=Number(pick(r,['importe pagado','pagado','total cobrado'])||0);const gestion=normalizeKey(pick(r,['gestion abono','renovacion','tramitado por'])||'').includes('club')?'club':'pena';rows.push({campana_id:current.id,socio_id:member?.id||null,origen:origin,dni_club:dni||null,nombre_club:name||null,zona_club:pick(r,['zona','sector']),categoria_club:pick(r,['tipo abono','categoria','categoría']),precio_original:Number(pick(r,['precio original','precio'])||price),descuento_club:discount,precio_abono:price,categoria_pena:pick(r,['categoria pena','categoría peña']),cuota_base:fee,cuota_final:fee,gestion_abono:gestion,estado:paid>0?'pagado':(member?'pendiente_revision':'incidencia'),forma_pago:pick(r,['forma pago','metodo pago','método pago'])||null,importe_pagado:paid,datos_origen:r});if(!member)newIssues.push({campana_id:current.id,tipo:'socio_no_localizado',gravedad:'alta',descripcion:`No se encontró socio para ${name||dni||'fila sin identificar'}`});}
- const {error}=await sb.from('campanas_registros').upsert(rows,{onConflict:'campana_id,socio_id',ignoreDuplicates:false});if(error){$('#confirmImport').disabled=false;return msg(error.message);}if(newIssues.length)await sb.from('campanas_incidencias').insert(newIssues);msg(`Importación completada: ${rows.length} filas, ${newIssues.length} incidencias.`);previewRows=[];$('#importPreview').innerHTML='';await loadAll();}
+function renderImportPreview(){
+ const pageSize=50,total=previewRows.length,pages=Math.max(1,Math.ceil(total/pageSize));
+ previewPage=Math.min(Math.max(1,previewPage),pages);
+ const start=(previewPage-1)*pageSize,shown=previewRows.slice(start,start+pageSize),headers=Object.keys(previewRows[0]||{});
+ $('#importPreview').innerHTML=`<p><strong>${total}</strong> filas detectadas. Mostrando ${start+1}-${Math.min(start+pageSize,total)}.</p><div style="overflow:auto;max-height:560px"><table class="c28-table"><thead><tr>${headers.map(k=>`<th>${esc(k)}</th>`).join('')}</tr></thead><tbody>${shown.map(r=>`<tr>${headers.map(k=>`<td>${esc(r[k])}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+ $('#importPager').innerHTML=pages>1?`<button type="button" class="btn btn-secondary" id="previewPrev" ${previewPage===1?'disabled':''}>← Anteriores</button><strong>Página ${previewPage} de ${pages}</strong><button type="button" class="btn btn-secondary" id="previewNext" ${previewPage===pages?'disabled':''}>Siguientes →</button>`:'';
+ if($('#previewPrev')) $('#previewPrev').onclick=()=>{previewPage--;renderImportPreview();};
+ if($('#previewNext')) $('#previewNext').onclick=()=>{previewPage++;renderImportPreview();};
+}
+async function previewExcel(){
+ try{
+  const file=$('#excelFile').files[0];if(!file)return importMsg('Selecciona un archivo.','error');
+  importMsg('Analizando el archivo…');
+  const buf=await file.arrayBuffer();const wb=XLSX.read(buf,{type:'array',cellDates:true});
+  previewRows=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{defval:''});
+  if(!previewRows.length)return importMsg('El archivo no contiene filas.','error');
+  previewPage=1;renderImportPreview();$('#confirmImport').disabled=false;
+  importMsg(`Archivo preparado: ${previewRows.length} filas. Revísalas y pulsa Confirmar importación.`);
+ }catch(e){console.error(e);importMsg(`No se pudo analizar el archivo: ${e.message}`,'error');}
+}
+async function confirmImport(){
+ if(!previewRows.length)return importMsg('Primero analiza un archivo.','error');
+ const button=$('#confirmImport');button.disabled=true;button.textContent='Importando…';
+ importMsg(`Importando ${previewRows.length} filas. No cierres esta página…`);
+ try{
+  const {data:members,error:merr}=await sb.from('socios').select('id,numero_socio,nombre,apellidos,dni,fecha_nacimiento');
+  if(merr)throw merr;
+  const byDni=new Map((members||[]).filter(m=>m.dni).map(m=>[normalizeKey(m.dni),m]));
+  const origin=$('#importOrigin').value,matchedByMember=new Map(),unmatched=[],newIssues=[],duplicateMembers=[];
+  for(const [index,r] of previewRows.entries()){
+   const dni=String(pick(r,['dni','nif','n.i.f.','dni/nif','documento'])||'').trim();
+   const name=String(pick(r,['nombre','nombre y apellidos','abonado','socio'])||'').trim();
+   const member=byDni.get(normalizeKey(dni));
+   const price=Number(pick(r,['cuota de abono con descuento (euros)','precio final','importe final','precio abono','importe abono','total abono'])||0);
+   const original=Number(pick(r,['cuota de abono euros','precio original','precio'])||price);
+   const discount=Number(pick(r,['descuento','descuentos','cesion','cesión'])||0);
+   const fee=Number(pick(r,['cuota pena','cuota peña','cuota socio'])||0);
+   const paid=Number(pick(r,['importe pagado','pagado','total cobrado'])||0);
+   const gestion=normalizeKey(pick(r,['gestion abono','renovacion','tramitado por'])||'').includes('club')?'club':'pena';
+   const row={campana_id:current.id,socio_id:member?.id||null,origen:origin,dni_club:dni||null,nombre_club:name||null,zona_club:pick(r,['nombre zona del abono','zona','sector']),categoria_club:pick(r,['tipo de abono','tipo abono','categoria','categoría']),precio_original:original,descuento_club:discount,precio_abono:price,categoria_pena:pick(r,['categoria pena','categoría peña']),cuota_base:fee,cuota_final:fee,gestion_abono:gestion,estado:paid>0?'pagado':(member?'pendiente_revision':'incidencia'),forma_pago:pick(r,['forma pago','metodo pago','método pago'])||null,importe_pagado:paid,datos_origen:r};
+   if(member){
+    if(matchedByMember.has(member.id)){duplicateMembers.push(name||dni||`fila ${index+2}`);newIssues.push({campana_id:current.id,tipo:'duplicado_en_excel',gravedad:'alta',descripcion:`El socio ${name||dni} aparece más de una vez en el Excel. Se ha conservado la última fila.`});}
+    matchedByMember.set(member.id,row);
+   }else{
+    unmatched.push(row);newIssues.push({campana_id:current.id,tipo:'socio_no_localizado',gravedad:'alta',descripcion:`No se encontró socio para ${name||dni||`fila ${index+2}`}`});
+   }
+  }
+  const matched=[...matchedByMember.values()];
+  if(matched.length){const {error}=await sb.from('campanas_registros').upsert(matched,{onConflict:'campana_id,socio_id',ignoreDuplicates:false});if(error)throw error;}
+  if(unmatched.length){const {error}=await sb.from('campanas_registros').insert(unmatched);if(error)throw error;}
+  if(newIssues.length){const {error}=await sb.from('campanas_incidencias').insert(newIssues);if(error)throw error;}
+  const total=matched.length+unmatched.length;
+  importMsg(`Importación completada: ${total} registros guardados, ${unmatched.length} sin vincular y ${duplicateMembers.length} duplicados detectados.`);
+  previewRows=[];previewPage=1;$('#importPreview').innerHTML='';$('#importPager').innerHTML='';button.textContent='Importación completada';
+  await loadAll();
+ }catch(e){
+  console.error(e);button.disabled=false;button.textContent='Confirmar importación';
+  importMsg(`No se pudo completar la importación: ${e.message}`,'error');
+ }
+}
 function renderRecords(){const q=normalizeKey($('#recordSearch').value);const list=records.filter(r=>!q||normalizeKey(`${r.socios?.numero_socio} ${r.socios?.nombre} ${r.socios?.apellidos} ${r.nombre_club}`).includes(q));$('#recordsBody').innerHTML=list.map(r=>`<tr><td>${esc(r.socios?`${r.socios.numero_socio||''} ${r.socios.nombre||''} ${r.socios.apellidos||''}`:r.nombre_club||'No vinculado')}</td><td>${esc(r.gestion_abono)}</td><td>${euro(r.precio_abono)}</td><td>${euro(r.cuota_final)}${r.es_directivo?' <span class="c28-badge ok">Directivo</span>':''}</td><td>${euro(r.importe_total)}</td><td>${euro(r.importe_pagado)}</td><td><span class="c28-badge">${esc(r.estado)}</span></td><td><button class="btn btn-secondary" data-edit="${r.id}">Editar</button></td></tr>`).join('');$$('[data-edit]').forEach(b=>b.onclick=()=>openRecord(b.dataset.edit));}
 function openRecord(id){const r=records.find(x=>x.id===id),f=$('#recordForm');for(const k of ['id','gestion_abono','estado','precio_abono','descuento_club','cuota_final','importe_pagado','forma_pago','observaciones'])f[k].value=r[k]??'';f.es_directivo.value=String(r.es_directivo);$('#editRecordModal').classList.add('open');}
 async function saveRecord(e){e.preventDefault();const o=Object.fromEntries(new FormData(e.target));const id=o.id;delete o.id;for(const k of ['precio_abono','descuento_club','cuota_final','importe_pagado'])o[k]=Number(o[k]||0);o.es_directivo=o.es_directivo==='true';if(o.es_directivo)o.cuota_final=0;if(!o.forma_pago)o.forma_pago=null;if(o.estado==='pagado'&&!o.fecha_pago)o.fecha_pago=new Date().toISOString();const {error}=await sb.from('campanas_registros').update(o).eq('id',id);if(error)return msg(error.message);$('#editRecordModal').classList.remove('open');await loadAll();}
