@@ -1,0 +1,10 @@
+COMMIT 34.1 - CORRECCIÓN DE ESTABILIDAD
+
+- Recupera el borrador guardado por Commit 34.0 y usa una clave permanente para futuros commits.
+- Guarda también ediciones manuales de fichas y el resultado final de la importación.
+- Guarda el progreso después de cada lote de 50 socios.
+- La importación termina aunque falle la creación de alguna relación familiar; esa incidencia queda informada.
+- Excluye a los bloqueados de la importación y de las relaciones familiares.
+- Permite reintentar una importación interrumpida sin duplicar socios.
+
+No necesita SQL adicional si ya ejecutaste PASO_COMMIT_34_EJECUTAR_EN_SUPABASE.sql.

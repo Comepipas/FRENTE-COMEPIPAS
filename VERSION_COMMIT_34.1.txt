@@ -1,0 +1,2 @@
+COMMIT 34.1
+Persistencia estable y cierre fiable de la migración
