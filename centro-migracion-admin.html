@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="es"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Centro de migración | Frente Comepipas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/variables.css"><link rel="stylesheet" href="assets/css/style.css"><link rel="stylesheet" href="assets/css/responsive.css">
+<link rel="stylesheet" href="assets/css/migration-center-v33.css?v=33.0">
+</head><body>
+<main class="mig33-shell">
+<header class="mig33-header"><div><span class="mig33-kicker">COMMIT 33.0 · DATOS REALES</span><h1>Centro de Migración Oficial</h1><p>Une el listado oficial del Málaga CF con los datos propios de la Peña, revisa conflictos y crea un registro maestro antes de tocar Supabase.</p></div><div class="mig33-header-actions"><a class="btn btn-dark-outline" href="admin.html">Volver al panel</a><a class="btn btn-dark-outline" href="socios-admin.html">Gestión de socios</a></div></header>
+<section class="mig33-safety"><strong>Importación segura:</strong> el sistema no borra nada automáticamente. Primero analiza, después descarga una copia de seguridad y solo importa cuando confirmas expresamente.</section>
+<nav class="mig33-steps" aria-label="Pasos de migración">
+<button class="active" data-step="1"><span>1</span><b>Archivos</b><small>Cargar los dos Excel</small></button>
+<button data-step="2"><span>2</span><b>Auditoría</b><small>Coincidencias y conflictos</small></button>
+<button data-step="3"><span>3</span><b>Familias</b><small>Menores y tutores</small></button>
+<button data-step="4"><span>4</span><b>Registro maestro</b><small>Revisión final</small></button>
+<button data-step="5"><span>5</span><b>Supabase</b><small>Copia e importación</small></button>
+</nav>
+<section class="mig33-panel active" data-panel="1">
+<div class="mig33-upload-grid">
+<article class="mig33-upload" id="clubDrop"><div class="mig33-upload-icon">⚽</div><h2>Listado oficial del Málaga CF</h2><p>Datos oficiales del abono y de la temporada anterior.</p><input id="clubFile" type="file" accept=".xlsx,.xls" hidden><button class="btn btn-primary" data-choose="club">Seleccionar Excel del club</button><div id="clubInfo" class="mig33-file-info">Ningún archivo seleccionado</div></article>
+<article class="mig33-upload" id="penaDrop"><div class="mig33-upload-icon">🌻</div><h2>Excel propio de la Peña</h2><p>DNI, nacimiento, teléfonos, correos, dirección y gestión interna.</p><input id="penaFile" type="file" accept=".xlsx,.xls" hidden><button class="btn btn-primary" data-choose="pena">Seleccionar Excel de la peña</button><div id="penaInfo" class="mig33-file-info">Ningún archivo seleccionado</div></article>
+</div>
+<div class="mig33-source-rules"><h3>Reglas de prioridad</h3><div><span>Datos personales</span><strong>Peña</strong></div><div><span>Datos oficiales del abono</span><strong>Málaga CF</strong></div><div><span>Conflictos sensibles</span><strong>Revisión manual</strong></div><div><span>Relaciones familiares</span><strong>Nunca automáticas</strong></div></div>
+<div class="mig33-actions"><span></span><button id="analyzeFiles" class="btn btn-primary" disabled>Analizar los dos Excel</button></div>
+</section>
+<section class="mig33-panel" data-panel="2">
+<div class="mig33-kpis"><article><span>Club</span><strong id="kClub">0</strong></article><article><span>Peña</span><strong id="kPena">0</strong></article><article class="ok"><span>Unificados</span><strong id="kMerged">0</strong></article><article class="warn"><span>Conflictos</span><strong id="kConflicts">0</strong></article><article class="danger"><span>Errores críticos</span><strong id="kCritical">0</strong></article></div>
+<div class="mig33-toolbar"><input id="auditSearch" type="search" placeholder="Buscar por nombre, DNI o nº abonado"><select id="auditFilter"><option value="">Todos</option><option value="conflict">Con conflictos</option><option value="critical">Errores críticos</option><option value="club-only">Solo club</option><option value="pena-only">Solo peña</option><option value="ok">Correctos</option></select><button id="downloadAudit" class="btn btn-dark-outline">Descargar informe</button></div>
+<div class="mig33-table-wrap"><table><thead><tr><th>Estado</th><th>Persona</th><th>DNI</th><th>Nº abonado</th><th>Origen</th><th>Detalle</th><th></th></tr></thead><tbody id="auditBody"></tbody></table></div>
+<div class="mig33-actions"><button class="btn btn-dark-outline" data-back="1">Atrás</button><button id="toFamilies" class="btn btn-primary">Revisar familias</button></div>
+</section>
+<section class="mig33-panel" data-panel="3">
+<div class="mig33-family-intro"><h2>Menores y responsables familiares</h2><p>El correo o teléfono compartido solo genera una propuesta. Debes confirmar quién es el padre, madre o tutor que gestionará la renovación del menor.</p></div>
+<div class="mig33-kpis"><article><span>Menores detectados</span><strong id="kMinors">0</strong></article><article class="warn"><span>Sin tutor confirmado</span><strong id="kNoGuardian">0</strong></article><article class="ok"><span>Vínculos confirmados</span><strong id="kConfirmed">0</strong></article></div>
+<div id="familyList" class="mig33-family-list"></div>
+<div class="mig33-actions"><button class="btn btn-dark-outline" data-back="2">Atrás</button><button id="toMaster" class="btn btn-primary">Crear registro maestro</button></div>
+</section>
+<section class="mig33-panel" data-panel="4">
+<div class="mig33-kpis"><article><span>Registros preparados</span><strong id="mTotal">0</strong></article><article class="ok"><span>Listos</span><strong id="mReady">0</strong></article><article class="warn"><span>Revisar</span><strong id="mReview">0</strong></article><article class="danger"><span>Bloqueados</span><strong id="mBlocked">0</strong></article></div>
+<div class="mig33-toolbar"><input id="masterSearch" type="search" placeholder="Buscar en el registro maestro"><button id="downloadMaster" class="btn btn-gold">Descargar Excel Maestro</button></div>
+<div class="mig33-table-wrap"><table><thead><tr><th>Nº socio</th><th>Nombre</th><th>DNI</th><th>Nacimiento</th><th>Contacto</th><th>Nº abonado</th><th>Abono</th><th>Validación</th></tr></thead><tbody id="masterBody"></tbody></table></div>
+<div class="mig33-actions"><button class="btn btn-dark-outline" data-back="3">Atrás</button><button id="toImport" class="btn btn-primary">Preparar importación segura</button></div>
+</section>
+<section class="mig33-panel" data-panel="5">
+<div class="mig33-import-card"><h2>Importación segura en Supabase</h2><ol><li>Comprueba la conexión y ejecuta el SQL del Commit 33.0.</li><li>Descarga una copia de seguridad de los socios actuales.</li><li>Decide si deseas conservarlos y actualizar coincidencias, o sustituir únicamente los datos de prueba.</li><li>Confirma la importación. Los menores se vincularán solo a los tutores que hayas confirmado.</li></ol>
+<div id="dbStatus" class="mig33-db-status">Conexión pendiente de comprobar.</div>
+<div class="mig33-import-options"><label><input id="updateExisting" type="checkbox" checked> Actualizar socios coincidentes y crear los que falten</label><label><input id="allowBlocked" type="checkbox"> Permitir registros marcados para revisión (no recomendado)</label><label class="danger-check"><input id="replaceTests" type="checkbox"> Antes de importar, dar de baja lógica a los registros identificados expresamente como pruebas</label></div>
+<div class="mig33-progress"><div id="progressBar"></div></div><p id="progressText">Todavía no se ha importado nada.</p>
+<div class="mig33-final-actions"><button id="checkDb" class="btn btn-dark-outline">Comprobar Supabase</button><button id="backupDb" class="btn btn-dark-outline" disabled>Descargar copia actual</button><button id="runImport" class="btn btn-primary" disabled>Importar registro maestro</button></div></div>
+<div id="importResult" class="mig33-result" hidden></div>
+<div class="mig33-actions"><button class="btn btn-dark-outline" data-back="4">Atrás</button><a class="btn btn-gold" href="centro-incidencias-admin.html">Abrir Centro de Incidencias</a></div>
+</section>
+</main>
+<dialog id="conflictDialog" class="mig33-dialog"><form method="dialog"><header><div><span>Revisión manual</span><h2 id="dialogTitle">Resolver conflicto</h2></div><button value="cancel" aria-label="Cerrar">×</button></header><div id="dialogFields"></div><footer><button value="cancel" class="btn btn-dark-outline">Cancelar</button><button id="saveConflict" value="default" class="btn btn-primary">Guardar decisión</button></footer></form></dialog>
+<div id="migToast" class="mig33-toast" hidden></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/supabase-config.js"></script><script src="assets/js/supabase-client.js?v=33.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script><script src="assets/js/migration-center-v33.js?v=33.0"></script>
+</body></html>
