@@ -1,0 +1,27 @@
+FRENTE COMEPIPAS · COMMIT 28.4 LOCAL
+
+VERSIÓN PARA PRUEBAS EN VISUAL STUDIO CODE / LIVE SERVER.
+NO PUBLICAR HASTA AUTORIZACIÓN EXPRESA.
+
+CAMBIO PRINCIPAL
+- Las cuotas dejan de asignarse por edad mínima y máxima.
+- Cada categoría se configura con dos fechas concretas:
+  · Nacidos desde
+  · Nacidos hasta
+- Las dos fechas son inclusivas.
+- El panel impide guardar fechas invertidas.
+- El panel detecta rangos solapados entre categorías activas.
+- La zona del socio calcula la cuota comparando directamente su fecha de nacimiento.
+- Los directivos continúan exentos automáticamente.
+
+SQL NUEVO
+Ejecutar una sola vez PASO_COMMIT_28_4_EJECUTAR_EN_SUPABASE.sql.
+No volver a ejecutar PASO_COMMIT_28_EJECUTAR_EN_SUPABASE.sql.
+
+PRUEBA LOCAL
+1. Ejecutar el SQL incremental 28.4 en Supabase.
+2. Abrir campanas-admin.html con Live Server.
+3. Seleccionar una campaña.
+4. Entrar en «Categorías y cuotas».
+5. Revisar y guardar las fechas exactas de cada categoría.
+6. Comprobar que no permite rangos solapados.

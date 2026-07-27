@@ -1,0 +1,28 @@
+FRENTE COMEPIPAS · COMMIT 29.0
+
+CAMBIO PRINCIPAL
+Las cuotas de socio se configuran con fechas concretas de nacimiento, no con edades.
+
+ANTES DE PROBAR
+1. Abre PASO_COMMIT_29_EJECUTAR_EN_SUPABASE.sql.
+2. Copia TODO su contenido en Supabase > SQL Editor.
+3. Pulsa Run.
+4. Abre campanas-admin.html con Live Server.
+5. Entra en “Categorías y cuotas”.
+
+EN LA PANTALLA VERÁS
+- Nombre de categoría.
+- Nacidos desde.
+- Nacidos hasta.
+- Cuota.
+- Número de socios incluidos.
+- Estado activa/inactiva.
+
+VALIDACIONES
+- Las dos fechas son obligatorias para una categoría activa.
+- No se permiten fechas invertidas.
+- No se permiten rangos solapados.
+- Las fechas inicial y final están incluidas.
+
+IMPORTANTE
+Este commit no borra socios, campañas, pagos ni administradores.

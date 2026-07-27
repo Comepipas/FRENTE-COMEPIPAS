@@ -1,0 +1,21 @@
+FRENTE COMEPIPAS · COMMIT 30.0
+
+NOVEDADES
+- Nueva pestaña «Motor 30» en Campañas de abonados.
+- Diagnóstico automático de categorías sin fechas, rangos solapados, socios sin nacimiento, socios sin categoría, abonos sin precio y registros sin sector.
+- Simulación económica por categoría, cuotas, abonos, descuentos, ajustes y total previsto.
+- Vista previa por socio y exportación CSV.
+- Botón «Aplicar cálculo a registros» para guardar categoría y cuota calculadas por fecha de nacimiento.
+- Nuevos campos de Supabase para ajustes y comparación de precios.
+
+PASOS
+1. Sustituye la carpeta publicada por esta versión.
+2. Abre Supabase > SQL Editor.
+3. Copia todo el archivo PASO_COMMIT_30_EJECUTAR_EN_SUPABASE.sql.
+4. Pulsa Run.
+5. Entra en Campañas de abonados > Motor 30.
+
+IMPORTANTE
+- El diagnóstico y la simulación no modifican datos.
+- Solo el botón «Aplicar cálculo a registros» actualiza categoría y cuota.
+- El SQL no borra socios, campañas, cobros ni documentos.
