@@ -1,2 +1,3 @@
-COMMIT 34.1
-Persistencia estable y cierre fiable de la migración
+FRENTE COMEPIPAS - COMMIT 34.1
+Persistencia recuperable e importación parcial estable
+Fecha: 27/07/2026
