@@ -5,11 +5,12 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/variables.css"><link rel="stylesheet" href="assets/css/style.css"><link rel="stylesheet" href="assets/css/responsive.css">
-<link rel="stylesheet" href="assets/css/migration-center-v33.css?v=33.1">
+<link rel="stylesheet" href="assets/css/migration-center-v33.css?v=33.2">
 </head><body>
 <main class="mig33-shell">
-<header class="mig33-header"><div><span class="mig33-kicker">COMMIT 33.1 · MIGRACIÓN PROFESIONAL</span><h1>Centro de Migración Oficial</h1><p>Une el listado oficial del Málaga CF con los datos propios de la Peña, explica cada diferencia y permite simular el resultado antes de modificar Supabase.</p></div><div class="mig33-header-actions"><a class="btn btn-dark-outline" href="admin.html">Volver al panel</a><a class="btn btn-dark-outline" href="socios-admin.html">Gestión de socios</a></div></header>
+<header class="mig33-header"><div><span class="mig33-kicker">COMMIT 33.2 · MIGRACIÓN CON GUARDADO AUTOMÁTICO</span><h1>Centro de Migración Oficial</h1><p>Une el listado oficial del Málaga CF con los datos propios de la Peña, explica cada diferencia y permite simular el resultado antes de modificar Supabase.</p></div><div class="mig33-header-actions"><a class="btn btn-dark-outline" href="admin.html">Volver al panel</a><a class="btn btn-dark-outline" href="socios-admin.html">Gestión de socios</a></div></header>
 <section class="mig33-safety"><strong>Modo seguro:</strong> analizar, revisar, confirmar familias y simular no modifica Supabase. La importación definitiva exige una confirmación expresa.</section>
+<div class="mig33-persistence"><div><strong>Guardado automático activo</strong><span id="migrationSaveStatus" data-kind="saved">La migración se conserva aunque salgas al Centro de Incidencias, cierres la pestaña o recargues.</span></div><button id="clearMigrationDraft" class="btn btn-dark-outline" type="button">Empezar una migración nueva</button></div>
 <nav class="mig33-steps" aria-label="Pasos de migración">
 <button class="active" data-step="1"><span>1</span><b>Archivos</b><small>Cargar los dos Excel</small></button>
 <button data-step="2"><span>2</span><b>Auditoría</b><small>Coincidencias y conflictos</small></button>
@@ -63,8 +64,8 @@
 <dialog id="conflictDialog" class="mig33-dialog"><form method="dialog"><header><div><span>Revisión manual</span><h2 id="dialogTitle">Resolver conflicto</h2></div><button value="cancel" aria-label="Cerrar">×</button></header><div id="dialogFields"></div><footer><button value="cancel" class="btn btn-dark-outline">Cancelar</button><button id="saveConflict" value="default" class="btn btn-primary">Guardar decisión</button></footer></form></dialog>
 <dialog id="previewDialog" class="mig33-dialog mig33-preview-dialog"><form method="dialog"><header><div><span>Vista previa del Registro Maestro</span><h2 id="previewTitle">Ficha definitiva</h2></div><button value="cancel" aria-label="Cerrar">×</button></header><div id="previewBody"></div><footer><button value="cancel" class="btn btn-primary">Cerrar</button></footer></form></dialog>
 <div id="migToast" class="mig33-toast" hidden></div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/supabase-config.js"></script><script src="assets/js/supabase-client.js?v=33.1"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/supabase-config.js"></script><script src="assets/js/supabase-client.js?v=33.2"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
-<script src="assets/js/migration-center-v33.js?v=33.1"></script>
+<script src="assets/js/migration-center-v33.js?v=33.2"></script>
 </body></html>

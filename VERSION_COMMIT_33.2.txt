@@ -1,0 +1,2 @@
+FRENTE COMEPIPAS - COMMIT 33.2
+Persistencia segura y recuperación automática del Centro de Migración

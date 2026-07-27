@@ -1,0 +1,11 @@
+COMMIT 33.2 - Guardado automático de la migración
+
+CORRECCIÓN PRINCIPAL
+- El progreso del Centro de Migración se guarda automáticamente en IndexedDB.
+- Se conservan los Excel ya procesados, conflictos resueltos, familias confirmadas o rechazadas, paso actual, simulación y estado de la copia de seguridad.
+- Al volver desde el Centro de Incidencias, recargar o cerrar/abrir la pestaña, el trabajo se recupera automáticamente.
+- Botón “Empezar una migración nueva” para borrar expresamente el borrador.
+- No necesita SQL adicional.
+
+IMPORTANTE
+El borrador permanece únicamente en ese navegador y equipo hasta que se borre o se finalice la migración.
