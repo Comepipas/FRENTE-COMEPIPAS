@@ -23,16 +23,13 @@ document.addEventListener('DOMContentLoaded',()=>{
     firstName:form.firstName.value.trim(),
     lastName:form.lastName.value.trim(),
     email:form.email.value.trim(),
-    password:form.password.value,
-    antiquityYear:form.antiquityYear.value,
-    consecutiveSeasons:form.consecutiveSeasons.value,
-    antiquityNotes:form.antiquityNotes.value.trim()
+    password:form.password.value
    });
    if(result.confirmationRequired){
-    out.textContent='Cuenta creada, ficha localizada y antigüedad registrada como pendiente de validar. Revisa tu correo y pulsa el enlace de confirmación.';
+    out.textContent='Cuenta creada y ficha localizada. Revisa tu correo y pulsa el enlace de confirmación.';
     resend.style.display='block';
    }else{
-    out.textContent='Cuenta activada correctamente. Tu antigüedad queda pendiente de validación por la directiva. Ya puedes entrar.';
+    out.textContent='Cuenta activada correctamente. Ya puedes entrar.';
     setTimeout(()=>location.href='area-socio.html',900);
    }
   }catch(err){out.textContent=friendlyError(err);}
