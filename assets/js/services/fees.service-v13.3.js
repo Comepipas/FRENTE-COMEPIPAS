@@ -12,7 +12,7 @@ window.FrenteFeesService = (() => {
       ...row,
       numeroSocio: String(member.numero_socio ?? "").padStart(4, "0"),
       socioNombre: `${member.nombre || ""} ${member.apellidos || ""}`.trim() || "Socio no encontrado",
-      socioCategoria: member.categoria || category.nombre || "Sin categoría",
+      socioCategoria: String(member.categoria || category.nombre || "Sin categoría").trim().toLowerCase(),
       temporada: season.nombre || "Sin temporada",
       categoriaCuota: category.nombre || member.categoria || "Sin categoría",
       importe: Number(row.importe || 0),
@@ -20,7 +20,8 @@ window.FrenteFeesService = (() => {
       fechaPago: row.fecha_pago || null,
       metodoPago: row.metodo_pago || null,
       referencia: row.referencia || null,
-      observaciones: row.observaciones || null
+      observaciones: row.observaciones || null,
+      socioEstado: member.estado || null
     };
   }
 
@@ -55,7 +56,7 @@ window.FrenteFeesService = (() => {
 
   async function options() {
     const [membersResult, seasonsResult, categoriesResult] = await Promise.all([
-      db().from("socios").select("id,numero_socio,nombre,apellidos,categoria,estado").order("numero_socio"),
+      db().from("socios").select("id,numero_socio,nombre,apellidos,categoria,estado").order("apellidos"),
       db().from("temporadas").select("id,nombre,activa").order("nombre", { ascending: false }),
       db().from("categorias_cuota").select("id,temporada_id,nombre,codigo,importe,exenta,activa,orden").eq("activa", true).order("orden")
     ]);
@@ -133,5 +134,21 @@ window.FrenteFeesService = (() => {
     return data;
   }
 
-  return { list, options, markPaid, save, annul, reactivate };
+  async function summary() {
+    const [membersResult, activeSeasonResult] = await Promise.all([
+      db().from("socios").select("id", { count: "exact", head: true }).eq("estado", "activo").or("es_registro_prueba.is.false,es_registro_prueba.is.null"),
+      db().from("temporadas").select("id,nombre,activa").eq("activa", true).limit(1).maybeSingle()
+    ]);
+    if (membersResult.error) throw membersResult.error;
+    if (activeSeasonResult.error) throw activeSeasonResult.error;
+    return { activeMembers: membersResult.count || 0, activeSeason: activeSeasonResult.data || null };
+  }
+
+  async function syncSeason(seasonId = null) {
+    const { data, error } = await db().rpc("commit344_sync_cuotas_temporada", { p_temporada_id: seasonId || null });
+    if (error) throw error;
+    return Array.isArray(data) ? data[0] : data;
+  }
+
+  return { list, options, summary, syncSeason, markPaid, save, annul, reactivate };
 })();
