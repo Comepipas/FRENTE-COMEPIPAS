@@ -26,10 +26,10 @@ document.addEventListener('DOMContentLoaded',()=>{
     password:form.password.value
    });
    if(result.confirmationRequired){
-    out.textContent='Cuenta creada y ficha localizada. Revisa tu correo y pulsa el enlace de confirmación.';
+    out.innerHTML='<strong>✅ Cuenta creada correctamente.</strong><br>Te hemos enviado un correo para confirmar tu cuenta. Si no lo recibes en unos minutos, revisa también la carpeta de <strong>spam o correo no deseado</strong>.';
     resend.style.display='block';
    }else{
-    out.textContent='Cuenta activada correctamente. Ya puedes entrar.';
+    out.innerHTML='<strong>✅ Cuenta activada correctamente.</strong><br>Ya puedes entrar en tu Área de Socio.';
     setTimeout(()=>location.href='area-socio.html',900);
    }
   }catch(err){out.textContent=friendlyError(err);}
