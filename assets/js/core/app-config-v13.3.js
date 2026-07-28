@@ -1,5 +1,5 @@
 window.FrenteAppConfig = Object.freeze({
-  version: "34.2.0",
+  version: "34.5.0",
   dataSource: "supabase",
   members: Object.freeze({
     table: "socios",

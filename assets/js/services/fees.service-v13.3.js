@@ -10,7 +10,7 @@ window.FrenteFeesService = (() => {
     const category = categories.get(row.categoria_cuota_id) || {};
     return {
       ...row,
-      numeroSocio: String(member.numero_socio ?? "").padStart(4, "0"),
+      numeroSocio: member.numero_socio ? String(member.numero_socio).padStart(4, "0") : "Pendiente",
       socioNombre: `${member.apellidos || ""}, ${member.nombre || ""}`.replace(/^,\s*/, "").trim() || "Socio no encontrado",
       socioCategoria: String(member.categoria || category.nombre || "Sin categoría").trim().toLowerCase(),
       temporada: season.nombre || "Sin temporada",
