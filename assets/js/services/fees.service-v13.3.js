@@ -11,8 +11,8 @@ window.FrenteFeesService = (() => {
     return {
       ...row,
       numeroSocio: String(member.numero_socio ?? "").padStart(4, "0"),
-      socioNombre: `${member.nombre || ""} ${member.apellidos || ""}`.trim() || "Socio no encontrado",
-      socioCategoria: member.categoria || category.nombre || "Sin categoría",
+      socioNombre: `${member.apellidos || ""}, ${member.nombre || ""}`.replace(/^,\s*/, "").trim() || "Socio no encontrado",
+      socioCategoria: String(member.categoria || category.nombre || "Sin categoría").trim().toLowerCase(),
       temporada: season.nombre || "Sin temporada",
       categoriaCuota: category.nombre || member.categoria || "Sin categoría",
       importe: Number(row.importe || 0),
@@ -20,7 +20,10 @@ window.FrenteFeesService = (() => {
       fechaPago: row.fecha_pago || null,
       metodoPago: row.metodo_pago || null,
       referencia: row.referencia || null,
-      observaciones: row.observaciones || null
+      observaciones: row.observaciones || null,
+      socioEstado: member.estado || null,
+      esDirectivo: Boolean(member.es_directivo),
+      cargoDirectiva: member.cargo_directiva || null
     };
   }
 
@@ -42,7 +45,7 @@ window.FrenteFeesService = (() => {
 
     const rows = fees || [];
     const [membersRows, seasonRows, categoryRows] = await Promise.all([
-      fetchByIds("socios", "id,numero_socio,nombre,apellidos,categoria,estado", rows.map(x => x.socio_id)),
+      fetchByIds("socios", "id,numero_socio,nombre,apellidos,categoria,estado,es_directivo,cargo_directiva", rows.map(x => x.socio_id)),
       fetchByIds("temporadas", "id,nombre,activa", rows.map(x => x.temporada_id)),
       fetchByIds("categorias_cuota", "id,nombre,codigo,importe,exenta,temporada_id,activa", rows.map(x => x.categoria_cuota_id))
     ]);
@@ -50,12 +53,12 @@ window.FrenteFeesService = (() => {
     const members = new Map(membersRows.map(x => [x.id, x]));
     const seasons = new Map(seasonRows.map(x => [x.id, x]));
     const categories = new Map(categoryRows.map(x => [x.id, x]));
-    return rows.map(row => normalize(row, members, seasons, categories));
+    return rows.map(row => normalize(row, members, seasons, categories)).sort((a,b) => a.socioNombre.localeCompare(b.socioNombre, "es", { sensitivity: "base" }));
   }
 
   async function options() {
     const [membersResult, seasonsResult, categoriesResult] = await Promise.all([
-      db().from("socios").select("id,numero_socio,nombre,apellidos,categoria,estado").order("numero_socio"),
+      db().from("socios").select("id,numero_socio,nombre,apellidos,categoria,estado,es_directivo,cargo_directiva").order("apellidos", { ascending: true }).order("nombre", { ascending: true }),
       db().from("temporadas").select("id,nombre,activa").order("nombre", { ascending: false }),
       db().from("categorias_cuota").select("id,temporada_id,nombre,codigo,importe,exenta,activa,orden").eq("activa", true).order("orden")
     ]);
@@ -133,5 +136,27 @@ window.FrenteFeesService = (() => {
     return data;
   }
 
-  return { list, options, markPaid, save, annul, reactivate };
+  async function summary() {
+    const [membersResult, activeSeasonResult] = await Promise.all([
+      db().from("socios").select("id", { count: "exact", head: true }).eq("estado", "activo").or("es_registro_prueba.is.false,es_registro_prueba.is.null"),
+      db().from("temporadas").select("id,nombre,activa").eq("activa", true).limit(1).maybeSingle()
+    ]);
+    if (membersResult.error) throw membersResult.error;
+    if (activeSeasonResult.error) throw activeSeasonResult.error;
+    return { activeMembers: membersResult.count || 0, activeSeason: activeSeasonResult.data || null };
+  }
+
+  async function syncSeason(seasonId = null) {
+    const { data, error } = await db().rpc("commit344_sync_cuotas_temporada", { p_temporada_id: seasonId || null });
+    if (error) throw error;
+    return Array.isArray(data) ? data[0] : data;
+  }
+
+  async function markAllPaid(seasonId, method = "Regularización inicial") {
+    const { data, error } = await db().rpc("commit344_mark_all_paid", { p_temporada_id: seasonId, p_metodo: method });
+    if (error) throw error;
+    return Number(data || 0);
+  }
+
+  return { list, options, summary, syncSeason, markAllPaid, markPaid, save, annul, reactivate };
 })();

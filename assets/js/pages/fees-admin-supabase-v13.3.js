@@ -2,7 +2,7 @@ window.addEventListener("DOMContentLoaded", async () => {
   "use strict";
 
   const $ = id => document.getElementById(id);
-  const state = { rows: [], options: { members: [], seasons: [], categories: [] }, payingId: null, editingId: null };
+  const state = { rows: [], options: { members: [], seasons: [], categories: [] }, summary: { activeMembers: 0, activeSeason: null }, payingId: null, editingId: null };
   const money = value => new Intl.NumberFormat("es-ES", { style: "currency", currency: "EUR" }).format(Number(value || 0));
   const esc = value => String(value ?? "").replace(/[&<>'"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" }[c]));
   const labelState = value => ({ pagada: "Pagada", pendiente: "Pendiente", anulada: "Anulada" }[value] || value || "Pendiente");
@@ -24,17 +24,26 @@ window.addEventListener("DOMContentLoaded", async () => {
     const term = ($("feesSearch")?.value || "").trim().toLowerCase();
     const status = $("feesStatus")?.value || "";
     const season = $("feesSeason")?.value || "";
+    const category = $("feesCategory")?.value || "";
     return state.rows.filter(row => {
       const haystack = `${row.numeroSocio} ${row.socioNombre} ${row.socioCategoria} ${row.temporada} ${row.referencia || ""}`.toLowerCase();
-      return (!term || haystack.includes(term)) && (!status || row.estado === status) && (!season || row.temporada === season);
+      return (!term || haystack.includes(term)) && (!status || row.estado === status) && (!season || row.temporada === season) && (!category || (category === "directivo" ? row.esDirectivo : String(row.socioCategoria || "").toLowerCase() === category));
     });
   }
 
   function renderStats() {
-    const paid = state.rows.filter(x => x.estado === "pagada");
-    $("feesTotal").textContent = state.rows.length;
+    const activeSeasonName = state.summary.activeSeason?.nombre || "";
+    const base = activeSeasonName ? state.rows.filter(x => x.temporada === activeSeasonName) : state.rows;
+    const paid = base.filter(x => x.estado === "pagada");
+    const exempt = paid.filter(x => Number(x.importe || 0) === 0);
+    const activeMembers = Number(state.summary.activeMembers || 0);
+    $("feesMembers").textContent = activeMembers;
+    $("feesTotal").textContent = base.length;
     $("feesPaid").textContent = paid.length;
-    $("feesPending").textContent = state.rows.filter(x => x.estado === "pendiente").length;
+    $("feesPending").textContent = base.filter(x => x.estado === "pendiente").length;
+    $("feesMissing").textContent = Math.max(0, activeMembers - base.length);
+    $("feesExempt").textContent = exempt.length;
+    $("feesDirectors").textContent = base.filter(x => x.esDirectivo).length;
     $("feesIncome").textContent = money(paid.reduce((sum, x) => sum + x.importe, 0));
   }
 
@@ -54,15 +63,16 @@ window.addEventListener("DOMContentLoaded", async () => {
     body.innerHTML = rows.length ? rows.map(row => `
       <tr>
         <td>${esc(row.numeroSocio || "-")}</td>
-        <td><strong>${esc(row.socioNombre)}</strong><small style="display:block">${esc(row.socioCategoria)}</small></td>
+        <td><strong>${esc(row.socioNombre)}</strong><small style="display:block">${esc(row.esDirectivo ? `Directiva${row.cargoDirectiva ? " · " + row.cargoDirectiva : ""}` : row.socioCategoria)}</small></td>
         <td>${esc(row.temporada)}</td>
         <td>${esc(money(row.importe))}</td>
-        <td><span class="status-pill ${row.estado === "pagada" ? "fee-ok" : "fee-pending"}">${esc(labelState(row.estado))}</span></td>
+        <td><span class="status-pill ${row.estado === "anulada" ? "fee-annulled" : (row.estado === "pagada" && Number(row.importe) === 0 ? "fee-exempt" : (row.estado === "pagada" ? "fee-ok" : "fee-pending"))}">${esc(row.estado === "pagada" && Number(row.importe) === 0 ? "Exenta" : labelState(row.estado))}</span></td>
         <td>${esc(row.fechaPago || "-")}</td>
         <td>${esc(row.metodoPago || "-")}</td>
         <td class="members-actions-cell">
           ${row.estado === "pendiente" ? `<button data-pay="${esc(row.id)}">Cobrar</button>` : ""}
           <button data-edit="${esc(row.id)}">Editar</button>
+          <a class="btn btn-dark-outline" href="ficha-socio-admin.html?id=${esc(row.socio_id)}">Abrir ficha</a>
           ${row.estado !== "anulada" ? `<button class="danger" data-annul="${esc(row.id)}">Anular</button>` : `<button data-reactivate="${esc(row.id)}">Reactivar</button>`}
         </td>
       </tr>`).join("") : '<tr><td colspan="8" class="members-empty">No hay cuotas visibles en Supabase.</td></tr>';
@@ -126,7 +136,7 @@ window.addEventListener("DOMContentLoaded", async () => {
   }
 
   function fillFeeFormOptions(selected = {}) {
-    $("feeMember").innerHTML = state.options.members.map(m => `<option value="${esc(m.id)}">${esc(String(m.numero_socio).padStart(4, "0"))} · ${esc(`${m.nombre || ""} ${m.apellidos || ""}`.trim())}</option>`).join("");
+    $("feeMember").innerHTML = state.options.members.map(m => `<option value="${esc(m.id)}">${esc(String(m.numero_socio).padStart(4, "0"))} · ${esc(`${m.apellidos || ""}, ${m.nombre || ""}`.replace(/^,\s*/, "").trim())}</option>`).join("");
     $("feeSeason").innerHTML = state.options.seasons.map(s => `<option value="${esc(s.id)}">${esc(s.nombre)}${s.activa ? " · Activa" : ""}</option>`).join("");
     if (selected.socioId) $("feeMember").value = selected.socioId;
     if (selected.temporadaId) $("feeSeason").value = selected.temporadaId;
@@ -233,7 +243,7 @@ window.addEventListener("DOMContentLoaded", async () => {
     if (body) body.innerHTML = '<tr><td colspan="8" class="members-empty">Cargando cuotas…</td></tr>';
     try {
       await window.FrenteDatabase.init();
-      [state.rows, state.options] = await Promise.all([window.FrenteFeesService.list(), window.FrenteFeesService.options()]);
+      [state.rows, state.options, state.summary] = await Promise.all([window.FrenteFeesService.list(), window.FrenteFeesService.options(), window.FrenteFeesService.summary()]);
       renderAll();
       setConnection(`Conectado a Supabase · ${state.rows.length} cuotas`, "online");
     } catch (error) {
@@ -245,8 +255,36 @@ window.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
-  ["feesSearch", "feesStatus", "feesSeason"].forEach(id => $(id)?.addEventListener(id === "feesSearch" ? "input" : "change", renderTable));
+  ["feesSearch", "feesStatus", "feesSeason", "feesCategory"].forEach(id => $(id)?.addEventListener(id === "feesSearch" ? "input" : "change", renderTable));
   $("retryFees")?.addEventListener("click", load);
+  $("syncFees")?.addEventListener("click", async () => {
+    const button = $("syncFees");
+    button.disabled = true;
+    button.textContent = "Sincronizando…";
+    try {
+      const result = await window.FrenteFeesService.syncSeason(state.summary.activeSeason?.id || null);
+      await load();
+      notify(`Temporada sincronizada. Cuotas nuevas: ${Number(result?.generadas || 0)}.`);
+    } catch (error) {
+      console.error(error);
+      notify(`No se pudo sincronizar: ${error?.message || error}`, "error");
+    } finally {
+      button.disabled = false;
+      button.textContent = "Sincronizar temporada";
+    }
+  });
+
+  $("markAllPaid")?.addEventListener("click", async () => {
+    const season = state.summary.activeSeason;
+    if (!season?.id) return notify("No hay temporada activa.", "error");
+    const pending = state.rows.filter(x => x.temporada_id === season.id && x.estado === "pendiente").length;
+    if (!pending) return notify("Todos los socios ya están al día en la temporada activa.", "info");
+    if (!confirm(`Se marcarán como pagadas ${pending} cuotas pendientes de ${season.nombre}. Los infantiles y directivos ya figuran como exentos a 0 €. ¿Continuar?`)) return;
+    const button = $("markAllPaid"); button.disabled = true; button.textContent = "Actualizando…";
+    try { const count = await window.FrenteFeesService.markAllPaid(season.id); await load(); notify(`${count} cuotas marcadas como pagadas.`); }
+    catch (error) { notify(`No se pudo completar la operación: ${error?.message || error}`, "error"); }
+    finally { button.disabled = false; button.textContent = "Poner todos al día"; }
+  });
   $("exportFees")?.addEventListener("click", exportCSV);
   $("newFeeButton")?.addEventListener("click", () => openFeeForm());
   $("resetFees")?.addEventListener("click", () => notify("Este módulo no utiliza datos locales.", "info"));
@@ -268,5 +306,7 @@ window.addEventListener("DOMContentLoaded", async () => {
     if (paid && !$("feeDate").value) $("feeDate").value = today();
   });
 
+  const query = new URLSearchParams(location.search);
+  if (query.get("socio")) $("feesSearch").value = query.get("socio");
   await load();
 });
