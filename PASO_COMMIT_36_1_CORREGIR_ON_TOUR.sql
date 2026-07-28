@@ -1,20 +1,8 @@
--- FRENTE COMEPIPAS · COMMIT 36.0
--- Ejecutar una sola vez en Supabase > SQL Editor.
+-- FRENTE COMEPIPAS · COMMIT 36.1
+-- Corrige el error: column reference "id" is ambiguous.
+-- Ejecutar completo en Supabase > SQL Editor.
 
 begin;
-
--- Completa las columnas usadas por la vinculación segura de cuentas.
-alter table public.socios add column if not exists activated_at timestamptz;
-alter table public.socios add column if not exists last_access_at timestamptz;
-alter table public.socios add column if not exists access_status text default 'pendiente';
-
-update public.socios
-set access_status=case when auth_user_id is not null then 'activo' else 'pendiente' end
-where access_status is null;
-
--- Una solicitud ON TOUR admite al solicitante + hasta 4 acompañantes (5 personas).
-alter table public.travel_events alter column max_plazas_por_socio set default 5;
-update public.travel_events set max_plazas_por_socio=5 where max_plazas_por_socio is distinct from 5;
 
 create or replace function public.create_on_tour_request(
   p_travel_id uuid,
@@ -105,7 +93,6 @@ begin
   end;
   return rec;
 end $$;
-
 
 
 grant execute on function public.create_on_tour_request(uuid,jsonb,jsonb,text,boolean) to authenticated;
