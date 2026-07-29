@@ -1,4 +1,4 @@
-const labels={hero:'Hero',intro:'Presentación',counters:'Contadores',quickLinks:'Accesos rápidos',featuredTrip:'Próximo viaje',match:'Próximos partidos',news:'Noticias',gallery:'Galería',sponsors:'Patrocinadores',socials:'Redes sociales'};
+const labels={hero:'Hero',intro:'Presentación',counters:'Contadores',quickLinks:'Accesos rápidos',featuredTrip:'Próximo viaje',match:'Próximos partidos',news:'Noticias',gallery:'Galería',sponsors:'Patrocinadores',socials:'Redes sociales',material:'Material de la Peña',join:'Hazte socio'};
 function homeMessage(text,error=false){const element=document.getElementById('homeEditorMessage');if(element){element.textContent=text;element.style.color=error?'#b42318':''}}
 function fillHomeEditor(settings){
   const form=document.getElementById('homeEditorForm');

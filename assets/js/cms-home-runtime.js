@@ -10,6 +10,7 @@ function cmsImage(value,folder){return !value?'':(/^(data:|https?:|blob:)/.test(
 function applyCmsHome(c=getCmsHomeData()){
  if(c.images){const hero=document.querySelector('.v10-hero');if(hero&&c.images.hero)hero.style.backgroundImage=`url("${cmsImage(c.images.hero,'hero')}")`;document.querySelectorAll('img[src*="escudo-transparente.png"]').forEach(image=>{if(c.images.crest)image.src=cmsImage(c.images.crest,'brand')})}
  const sponsors=document.getElementById('v10SponsorsTrack');if(sponsors&&Array.isArray(c.sponsors)){const active=c.sponsors.filter(item=>item.active).sort((a,b)=>(+a.order||0)-(+b.order||0));sponsors.innerHTML=[...active,...active].map(item=>`<a class="v10-sponsor-logo" href="${item.url||'#'}" target="_blank" rel="noopener"><img src="${cmsImage(item.image,'patrocinadores')}" alt="${item.name||'Patrocinador'}"></a>`).join('')}
- document.querySelectorAll('[data-social]').forEach(link=>{const url=c.socials?.[link.dataset.social];link.hidden=!url;if(url)link.href=url});
+ const general=typeof getSiteSettings==='function'?getSiteSettings():{};document.querySelectorAll('[data-social]').forEach(link=>{const key=link.dataset.social,raw=c.socials?.[key]||general?.[key]||'',url=typeof normalizeSocialUrl==='function'?normalizeSocialUrl(key,raw):raw;link.hidden=!url;if(url){link.href=url;link.target='_blank';link.rel='noopener noreferrer'}});
 }
-document.addEventListener('DOMContentLoaded',async()=>{const result=await loadCmsHomeData();applyCmsHome(result.value)});
+document.addEventListener('DOMContentLoaded',async()=>{if(document.querySelector('.cms-admin')){const script=document.createElement('script');script.src='assets/js/cms-enterprise-v40.15.js';document.head.appendChild(script)}const result=await loadCmsHomeData();applyCmsHome(result.value)});
+document.addEventListener('frente:site-settings-loaded',()=>applyCmsHome());

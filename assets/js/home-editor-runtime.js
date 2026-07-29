@@ -23,7 +23,7 @@ async function saveHomeEditorSettings(value){
   return saved;
 }
 function applyHomeEditor(S=getHomeEditorSettings()){
-  const map={hero:'.v10-hero',intro:'.v10-intro, .v115-home-intro',counters:'.v10-stats-section',quickLinks:'.v10-quick-section',featuredTrip:'.v10-trip-section',match:'.v10-match-section, .v115-late-football',news:'.v10-news-section',gallery:'.v10-gallery-section',sponsors:'.v10-sponsors-section',socials:'.v10-social-section'};
+  const map={hero:'.v10-hero',intro:'.v10-intro, .v115-home-intro',counters:'.v10-stats-section',quickLinks:'.v10-quick-section',featuredTrip:'.v10-trip-section',match:'.v10-match-section, .v115-late-football',news:'.v10-news-section',gallery:'.v10-gallery-section',sponsors:'.v10-sponsors-section',socials:'.v10-social-section',material:'.v115-shop-section',join:'.v115-join-section'};
   const main=document.querySelector('main'),ordered=[];
   Object.entries(map).forEach(([key,selector])=>{
     const element=document.querySelector(selector);if(!element)return;
@@ -37,9 +37,9 @@ function applyHomeEditor(S=getHomeEditorSettings()){
     heroElement.style.backgroundImage=`url("${image}")`;heroElement.style.backgroundPosition=hero.imagePosition||'center center';
     const set=(selector,value)=>{const element=document.querySelector(selector);if(element&&value!==undefined)element.textContent=value||''};
     set('.v10-hero-badge',hero.badge);set('.v10-hero h1',hero.title);set('.v10-hero-kicker',hero.subtitle);set('.v10-hero-slogan',hero.slogan);
-    const buttons=document.querySelectorAll('.v10-hero-actions a');
-    if(buttons[0]&&hero.primaryButtonText!==undefined){buttons[0].textContent=hero.primaryButtonText;buttons[0].href=hero.primaryButtonUrl||'#'}
-    if(buttons[1]&&hero.secondaryButtonText!==undefined){buttons[1].textContent=hero.secondaryButtonText;buttons[1].href=hero.secondaryButtonUrl||'#'}
+    const primaryButton=document.querySelector('[data-home-primary]'),secondaryButton=document.querySelector('[data-home-secondary]');
+    if(primaryButton&&hero.primaryButtonText!==undefined){primaryButton.textContent=hero.primaryButtonText;primaryButton.href=hero.primaryButtonUrl||'#'}
+    if(secondaryButton&&hero.secondaryButtonText!==undefined){secondaryButton.textContent=hero.secondaryButtonText;secondaryButton.href=hero.secondaryButtonUrl||'#'}
   }
   const intro=S.intro||{},introElement=document.querySelector('.v10-intro, .v115-home-intro');
   if(introElement){const set=(selector,value)=>{const element=introElement.querySelector(selector);if(element&&value!==undefined)element.textContent=value||''};set('.v10-eyebrow',intro.eyebrow);set('h2',intro.title);set('p',intro.text)}
