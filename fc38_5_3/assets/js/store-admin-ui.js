@@ -1,1 +1,0 @@
-window.StoreAdminUI={version:"10.5-a.3"};

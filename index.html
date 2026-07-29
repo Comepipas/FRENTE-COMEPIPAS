@@ -22,6 +22,19 @@
   
     .v27-next-matches{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}.v27-match{background:#fff;border:1px solid #dcebf5;border-radius:22px;padding:24px;box-shadow:0 14px 35px rgba(0,35,73,.08)}.v27-match h3{font-size:1.55rem;margin:8px 0}.v27-match-teams{display:grid;gap:7px;margin:18px 0;font-weight:900}.v27-match-meta{color:#526579;line-height:1.6}.v27-home-link{display:inline-flex;margin-top:16px;font-weight:900;color:#0068a8}.v27-home-empty{grid-column:1/-1;text-align:center;padding:28px;background:#fff;border-radius:22px}.v27-loading{grid-column:1/-1;text-align:center;padding:24px}.v10-news-grid .v27-news-card img,.v10-gallery-grid .v27-gallery-card img{width:100%;height:220px;object-fit:cover}.v27-news-card,.v27-gallery-card{overflow:hidden;border-radius:22px;background:#fff;box-shadow:0 14px 35px rgba(0,35,73,.08)}.v27-card-body{padding:20px}.v27-card-body h3{margin:6px 0 10px}.v27-gallery-card{position:relative}.v27-gallery-card .v27-card-body{position:absolute;left:0;right:0;bottom:0;color:#fff;background:linear-gradient(transparent,rgba(0,25,50,.92));padding-top:70px}
     @media(max-width:850px){.v27-next-matches{grid-template-columns:1fr}}
+
+    .v115-calendar-download{appearance:none;border:0;border-radius:999px;background:#004b87;color:#fff;padding:15px 26px;font:900 1rem Montserrat,sans-serif;cursor:pointer;box-shadow:0 12px 28px rgba(0,75,135,.24)}
+    .v115-calendar-download:hover{transform:translateY(-2px)}
+    .v27-match{position:relative;overflow:hidden;padding:0;min-height:420px;display:flex;flex-direction:column;justify-content:flex-end;color:#fff;background:#002d59}
+    .v27-match-stadium{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+    .v27-match::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,24,49,.08) 5%,rgba(0,24,49,.42) 42%,rgba(0,24,49,.96) 100%);z-index:1}
+    .v27-match-content{position:relative;z-index:2;padding:22px}
+    .v27-match .v10-eyebrow{color:#8ed8ff}
+    .v27-match h3{color:#fff;margin:8px 0 14px}
+    .v27-team-line{display:flex;align-items:center;gap:10px;font-weight:900;font-size:1rem}
+    .v27-team-line img{width:38px;height:38px;object-fit:contain;background:rgba(255,255,255,.95);border-radius:50%;padding:4px;box-shadow:0 4px 14px rgba(0,0,0,.18)}
+    .v27-match-teams{margin:10px 0 14px}.v27-vs{margin-left:48px;font-size:.72rem;opacity:.75}
+    .v27-match-meta{color:#eaf7ff}.v27-home-link{color:#fff}
   </style>
 </head>
 <body class="v10-home">
@@ -61,14 +74,13 @@
   </section>
 
   <section class="v10-news-section v10-reveal"><div class="v10-container"><div class="v10-section-heading"><span class="v10-eyebrow">Actualidad</span><h2>Noticias destacadas</h2></div><div id="v10NewsGrid" class="v10-news-grid"></div></div></section>
+  <section class="v115-late-football v10-reveal"><div class="v10-container"><div class="v10-section-heading"><span class="v10-eyebrow">Información deportiva</span><h2>Próximos 3 partidos</h2><p>Los tres siguientes encuentros oficiales del Málaga CF.</p></div><div id="v27NextMatches" class="v27-next-matches"></div><div class="v115-calendar-cta"><button type="button" id="downloadMalagaCalendar" class="v115-calendar-download">Descargar calendario en imagen</button></div></div></section>
   <section class="v10-gallery-section v10-reveal"><div class="v10-container"><div class="v10-section-heading"><span class="v10-eyebrow">Momentos</span><h2>La peña en imágenes</h2></div><div id="v10Gallery" class="v10-gallery-grid"></div></div></section>
 
   <section class="v115-shop-section v10-reveal"><div class="v10-container"><div class="v115-shop-card"><img src="assets/images/home/tienda.jpg" alt="Material de la Peña"><div class="v115-shop-content"><span class="v10-eyebrow">Material de la Peña</span><h2>Lleva contigo los colores de la peña</h2><p>Consulta los productos disponibles. El descuento de socio se aplicará al iniciar sesión y la directiva gestionará cada pedido desde su panel.</p><a class="v10-btn v10-btn-primary" href="tienda.html">Ver material de la Peña</a></div></div></div></section>
 
   <section class="v115-join-section v10-reveal"><div class="v10-container v115-join-wrap"><div><span class="v10-eyebrow">Forma parte de la familia</span><h2>Hazte socio</h2><p>Envía tu solicitud de alta y la directiva se pondrá en contacto contigo. Los socios actuales no deben registrarse de nuevo: pueden activar su cuenta existente.</p></div><div class="v115-join-actions"><a class="v10-btn v10-btn-primary" href="alta-socio.html">Solicitar alta</a><a class="v10-btn v10-btn-ghost" href="activar-cuenta.html">Ya soy socio</a></div></div></section>
 
-  <!-- FÚTBOL Y CALENDARIO, INTENCIONADAMENTE EN LA PARTE BAJA -->
-  <section class="v115-late-football v10-reveal"><div class="v10-container"><div class="v10-section-heading"><span class="v10-eyebrow">Información deportiva</span><h2>Próximos 3 partidos</h2><p>Este bloque aparece después de la presentación, noticias, galería y material de la Peña.</p></div><div id="v27NextMatches" class="v27-next-matches"></div><div class="v115-calendar-cta"><button type="button" id="downloadMalagaCalendar" class="v115-calendar-download">Descargar calendario del Málaga CF</button></div></div></section>
 
   <section class="v10-sponsors-section v10-reveal"><div class="v10-container"><div class="v10-section-heading v10-section-heading-center"><span class="v10-eyebrow">Colaboradores</span><h2>Patrocinadores</h2></div><div class="v10-sponsors-marquee"><div id="v10SponsorsTrack" class="v10-sponsors-track"></div></div></div></section>
   <section class="v10-social-section v10-reveal"><div class="v10-container"><div><span class="v10-eyebrow">Síguenos</span><h2>La peña también se vive en redes</h2></div><div class="v10-social-grid"><a data-social="instagram" href="#">Instagram</a><a data-social="facebook" href="#">Facebook</a><a data-social="x" href="#">X</a><a data-social="tiktok" href="#">TikTok</a><a data-social="whatsapp" href="#">WhatsApp</a></div></div></section>

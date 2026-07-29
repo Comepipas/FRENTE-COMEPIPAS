@@ -1,8 +1,0 @@
-COMMIT 34.0
-
-1. Ejecuta PASO_COMMIT_34_EJECUTAR_EN_SUPABASE.sql.
-2. El Excel de la Peña es el único censo oficial: el Excel del Málaga no crea socios.
-3. El número de abonado del Málaga es un dato anual y no se usa como identidad permanente.
-4. Todos los números de socio de la Peña quedan pendientes. La antigüedad se recogerá en el primer acceso y la numeración se asignará más adelante.
-5. Los bloqueos son manuales. Puedes imprimirlos y la importación definitiva los excluye.
-6. Ninguna relación familiar se importa si el menor o el tutor está bloqueado.

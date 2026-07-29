@@ -1,8 +1,0 @@
-FRENTE COMEPIPAS · COMMIT 31.5.1
-
-Corrección de acceso a la ficha del socio:
-- Botón visible "Abrir ficha del socio" dentro de la columna Socio.
-- Toda la fila abre la ficha con un clic, salvo botones y enlaces.
-- Se mantiene el acceso desde la columna Acciones.
-- Versionado de CSS y JavaScript actualizado para evitar caché del navegador/Vercel.
-- No requiere SQL.

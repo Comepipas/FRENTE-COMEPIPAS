@@ -1,7 +1,0 @@
-COMMIT 34.4 CORREGIDO
-
-1. Sustituye el proyecto por este contenido.
-2. Ejecuta PASO_COMMIT_34_4_EJECUTAR_EN_SUPABASE.sql.
-3. Publica y recarga con Ctrl+F5.
-
-Incluye: orden por apellidos, directivos exentos a 0 €, infantiles exentos a 0 €, cuotas normales solo para adultos y jóvenes activos, botón para poner toda la temporada al día y corrección de c.created_at.

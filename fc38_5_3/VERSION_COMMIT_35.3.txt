@@ -1,2 +1,0 @@
-FRENTE COMEPIPAS · COMMIT 35.3
-Corrección de ficha de socio: campos de Junta Directiva y protección frente a controles ausentes.

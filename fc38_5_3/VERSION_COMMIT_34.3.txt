@@ -1,3 +1,0 @@
-FRENTE COMEPIPAS
-COMMIT 34.3
-Activación por identidad del censo + categorías completas + preparación SMTP
