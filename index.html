@@ -35,7 +35,17 @@
     .v27-team-line img{width:38px;height:38px;object-fit:contain;background:rgba(255,255,255,.95);border-radius:50%;padding:4px;box-shadow:0 4px 14px rgba(0,0,0,.18)}
     .v27-match-teams{margin:10px 0 14px}.v27-vs{margin-left:48px;font-size:.72rem;opacity:.75}
     .v27-match-meta{color:#eaf7ff}.v27-home-link{color:#fff}
-  </style>
+  
+    /* Commit 38.6.1: escudos oficiales y estadios visibles */
+    .v386-match{min-height:430px;background:#03284d}
+    .v386-stadium{filter:saturate(1.06) contrast(1.02);object-position:center}
+    .v386-shade{background:linear-gradient(180deg,rgba(1,22,43,.08) 0%,rgba(1,22,43,.20) 32%,rgba(1,22,43,.88) 73%,rgba(1,22,43,.98) 100%)}
+    .v386-content{padding:24px}
+    .v386-team{display:flex;align-items:center;gap:12px}
+    .v386-crest{width:48px;height:48px;display:grid;place-items:center;flex:0 0 48px;background:rgba(255,255,255,.96);border-radius:50%;padding:6px;box-shadow:0 4px 14px rgba(0,0,0,.22)}
+    .v386-crest img{width:100%;height:100%;object-fit:contain;display:block}
+    .v386-team>span:last-child{font-weight:900;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.55)}
+</style>
 
 <style id="v386-styles">
 .v386-match{position:relative;overflow:hidden;min-height:430px;border-radius:24px;background:#003b70;color:#fff;box-shadow:0 18px 42px rgba(0,35,73,.18)}
@@ -96,7 +106,7 @@
 <script src="assets/js/config.js"></script>
 <script src="assets/js/supabase-config.js"></script>
 <script src="assets/js/supabase-client.js"></script>
-<script src="assets/js/site-settings.js"></script><script src="assets/js/site-settings-runtime.js"></script><script src="assets/js/features.js"></script><script src="assets/js/app.js"></script><script src="assets/js/home-config.js"></script><script src="assets/js/home-v10.js"></script><script src="assets/js/home-v10b.js"></script><script src="assets/js/home-v10c-config.js"></script><script src="assets/js/home-v10c.js"></script><script src="assets/js/matches-config.js?v=38.6"></script><script src="assets/js/matches-service.js?v=38.6"></script><script src="assets/js/gallery-service-v26.js"></script><script src="assets/js/home-v38.6.js?v=38.6"></script>
+<script src="assets/js/site-settings.js"></script><script src="assets/js/site-settings-runtime.js"></script><script src="assets/js/features.js"></script><script src="assets/js/app.js"></script><script src="assets/js/home-config.js"></script><script src="assets/js/home-v10.js"></script><script src="assets/js/home-v10b.js"></script><script src="assets/js/home-v10c-config.js"></script><script src="assets/js/home-v10c.js"></script><script src="assets/js/matches-config.js?v=38.6.1"></script><script src="assets/js/matches-service.js?v=38.6.1"></script><script src="assets/js/gallery-service-v26.js"></script><script src="assets/js/home-v38.6.js?v=38.6.1"></script>
 <div id="v386CalendarModal" class="v386-modal" hidden role="dialog" aria-modal="true" aria-label="Calendario completo del Málaga CF"><div class="v386-modal-backdrop" data-close-calendar></div><div class="v386-modal-panel"><button type="button" class="v386-modal-close" data-close-calendar aria-label="Cerrar calendario">×</button><img id="v386CalendarImage" alt="Calendario completo del Málaga CF 2026/27"></div></div>
 <div id="v10Lightbox" class="v10-lightbox"><button data-close-lightbox>×</button><img src="" alt="Imagen ampliada"></div>
 </body></html>
