@@ -45,6 +45,18 @@
   let activeTab = 'home';
   let lastTrigger = null;
 
+  function setLoading(isLoading) {
+    document.body.classList.toggle('member-area-loading', isLoading);
+    document.querySelector('.member-area-page')?.setAttribute('aria-busy', String(isLoading));
+  }
+
+  function friendlyError(error) {
+    const message = String(error?.message || error || '').toLowerCase();
+    if (message.includes('network') || message.includes('fetch')) return 'No hay conexión con el servidor. Comprueba Internet y vuelve a intentarlo.';
+    if (message.includes('jwt') || message.includes('session')) return 'Tu sesión ha caducado. Vuelve a iniciar sesión.';
+    return error?.message || 'Se ha producido un error inesperado.';
+  }
+
   function normalizeTab(tab) {
     if (!tab || tab === 'home') return 'home';
     return VALID_TABS.has(tab) ? tab : 'home';
@@ -94,7 +106,7 @@
         </article>
       `).join('');
     } catch (error) {
-      console.warn('[Commit 38.3] Menores vinculados:', error.message || error);
+      console.warn('[Commit 38.4] Menores vinculados:', error.message || error);
       section.hidden = true;
     }
   }
@@ -140,7 +152,7 @@
       if (box) box.hidden = false;
       if (empty) empty.hidden = true;
     } catch (error) {
-      console.warn('[Commit 38.3] Pago real no disponible:', error.message || error);
+      console.warn('[Commit 38.4] Pago real no disponible:', error.message || error);
       set('renewalStatus', 'No disponible');
       set('memberRenewalSummary', 'Pendiente de sincronización');
       if (box) box.hidden = true;
@@ -189,35 +201,52 @@
       const photo = profile.foto_url || 'assets/images/socios/socio-demo.jpg';
       ['memberPhoto', 'memberCardPhoto'].forEach(id => {
         const element = document.getElementById(id);
-        if (element) element.src = photo;
+        if (!element) return;
+        element.src = photo;
+        element.addEventListener('error', () => {
+          element.src = 'assets/images/socios/socio-demo.jpg';
+        }, { once: true });
       });
 
       const form = document.getElementById('memberContactForm');
       if (form) {
         form.telefono.value = profile.telefono || '';
         form.direccion.value = profile.direccion || '';
-        form.addEventListener('submit', async event => {
-          event.preventDefault();
-          const output = document.getElementById('memberContactMessage');
-          if (output) output.textContent = 'Guardando…';
-          try {
-            const updated = await MemberAuth.updateContact({
-              telefono: form.telefono.value,
-              direccion: form.direccion.value
-            });
-            set('memberPhone', updated.telefono);
-            set('memberAddress', updated.direccion);
-            if (output) output.textContent = 'Datos de contacto actualizados.';
-          } catch (error) {
-            if (output) output.textContent = error.message;
-          }
-        }, { once: true });
+        if (!form.dataset.bound) {
+          form.dataset.bound = 'true';
+          form.addEventListener('submit', async event => {
+            event.preventDefault();
+            const output = document.getElementById('memberContactMessage');
+            const submit = form.querySelector('[type="submit"]');
+            const telefono = form.telefono.value.trim();
+            const direccion = form.direccion.value.trim();
+            if (telefono && !/^[+()0-9 .-]{7,20}$/.test(telefono)) {
+              if (output) output.textContent = 'Revisa el formato del teléfono.';
+              form.telefono.focus();
+              return;
+            }
+            if (output) output.textContent = 'Guardando…';
+            if (submit) submit.disabled = true;
+            try {
+              const updated = await MemberAuth.updateContact({ telefono, direccion });
+              set('memberPhone', updated.telefono || '—');
+              set('memberAddress', updated.direccion || '—');
+              if (output) output.textContent = 'Datos de contacto actualizados correctamente.';
+            } catch (error) {
+              if (output) output.textContent = friendlyError(error);
+            } finally {
+              if (submit) submit.disabled = false;
+            }
+          });
+        }
       }
 
       await Promise.allSettled([loadFamily(), loadRealPayment(profile)]);
       status?.remove();
+      setLoading(false);
     } catch (error) {
-      if (status) status.textContent = `No se pudo cargar el área privada: ${error.message}`;
+      setLoading(false);
+      if (status) status.textContent = `No se pudo cargar el área privada: ${friendlyError(error)}`;
     }
   }
 
@@ -266,7 +295,7 @@
 
     document.querySelectorAll('[data-open-member-tab], [data-menu-tab]').forEach(control => {
       const controlTab = control.dataset.openMemberTab || control.dataset.menuTab;
-      const selected = !isHome && controlTab === tab;
+      const selected = (isHome && controlTab === 'home') || (!isHome && controlTab === tab);
       control.classList.toggle('active', selected);
       if (selected) control.setAttribute('aria-current', 'page');
       else control.removeAttribute('aria-current');
@@ -342,6 +371,21 @@
         event.preventDefault();
         activateControl(control);
         return;
+      }
+
+      if (event.key === 'Tab' && document.body.classList.contains('menu-open')) {
+        const drawer = document.getElementById('webMenuDrawer');
+        const focusables = [...(drawer?.querySelectorAll('button:not([disabled]), a[href]') || [])]
+          .filter(element => !element.hasAttribute('hidden'));
+        if (focusables.length) {
+          const first = focusables[0];
+          const last = focusables[focusables.length - 1];
+          if (event.shiftKey && document.activeElement === first) {
+            event.preventDefault(); last.focus();
+          } else if (!event.shiftKey && document.activeElement === last) {
+            event.preventDefault(); first.focus();
+          }
+        }
       }
 
       if (event.key === 'Escape' && document.body.classList.contains('menu-open')) {

@@ -231,3 +231,38 @@
  .member-dashboard-heading h2{font-size:1.35rem}.member-action-summary{grid-template-columns:1fr}
  .member-profile-grid{grid-template-columns:1fr}.member-card{padding:18px}
 }
+
+
+/* Commit 38.4 · estabilidad, accesibilidad y acabado responsive */
+.member-area-loading .member-action-summary,
+.member-area-loading .member-dashboard-spotlight,
+.member-area-loading .member-dashboard-heading{opacity:.56;pointer-events:none}
+.member-load-status{position:relative;overflow:hidden}
+.member-area-loading .member-load-status::after{content:"";position:absolute;inset:auto 0 0;height:3px;background:linear-gradient(90deg,transparent,#0a67bd,transparent);animation:member-loading 1.2s linear infinite}
+@keyframes member-loading{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+.member-app-links button.active,.member-app-nav-footer button.active{background:#fff;color:#073d78;box-shadow:0 8px 20px rgba(0,25,60,.2)}
+.member-app-links button:focus-visible,.member-app-nav-footer button:focus-visible,.member-action-card:focus-visible,.member-spotlight-card:focus-visible,.web-menu-panel a:focus-visible,.web-menu-panel button:focus-visible{outline:3px solid #f5c542;outline-offset:3px}
+.member-card form button[disabled]{opacity:.65;cursor:wait;transform:none}
+.member-table{min-width:620px}
+.member-workspace-panel{overflow-x:auto;scrollbar-width:thin}
+.member-workspace-panel>.member-card{min-width:0}
+.member-workspace-bar{position:sticky;top:8px;z-index:20;box-shadow:0 10px 28px rgba(0,36,80,.13)}
+.web-menu-panel{overscroll-behavior:contain}
+body.menu-open{overflow:hidden}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+@media(max-width:800px){
+ .member-workspace-bar{top:6px}
+ .member-workspace-panel{overflow:visible}
+ .member-card{overflow-x:auto}
+ .member-table{min-width:560px}
+ .member-app-links{scrollbar-width:none}
+ .member-app-links::-webkit-scrollbar{display:none}
+}
+@media(max-width:560px){
+ .member-dashboard-heading{padding:0 14px}
+ .member-dashboard-heading p{display:none}
+ .member-action-card{min-height:88px}
+ .member-action-card>div>span{font-size:.78rem}
+ .member-workspace-bar{border-radius:16px;padding:10px}
+ .member-workspace-bar button{font-size:.82rem;padding:9px 10px}
+}
