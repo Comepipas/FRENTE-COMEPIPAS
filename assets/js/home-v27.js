@@ -14,7 +14,12 @@ document.addEventListener("DOMContentLoaded",()=>{news();gallery();matches()});}
     const button=document.getElementById('downloadMalagaCalendar'); if(!button)return;
     const old=button.textContent; button.disabled=true; button.textContent='Preparando calendario…';
     try{
-      const payload=await loadMatches(true); const rows=(payload.matches||[]).sort((a,b)=>new Date(a.date)-new Date(b.date));
+      const configured=(window.FRENTE_MATCHES_CONFIG?.manualMatches||[]).map(normalizeMatch);
+      const payload=await loadMatches(true);
+      const overrides=payload.matches||[];
+      const byFixture=new Map(configured.map(m=>[fixtureKey(m),m]));
+      overrides.forEach(m=>byFixture.set(fixtureKey(m),m));
+      const rows=[...byFixture.values()].sort((a,b)=>new Date(a.date)-new Date(b.date));
       const events=rows.map((m,i)=>{
         const start=new Date(m.date); const end=new Date(start.getTime()+2*60*60*1000);
         const provisional=m.timeConfirmed===false||m.confirmed===false;
@@ -24,5 +29,10 @@ document.addEventListener("DOMContentLoaded",()=>{news();gallery();matches()});}
       const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([ics],{type:'text/calendar;charset=utf-8'})); a.download='calendario-malaga-cf-2026-27.ics'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),1000);
     }catch(e){alert(`No se ha podido preparar el calendario: ${e.message||e}`)}finally{button.disabled=false;button.textContent=old}
   }
-  document.addEventListener('DOMContentLoaded',()=>document.getElementById('downloadMalagaCalendar')?.addEventListener('click',downloadCalendar));
+  document.addEventListener('DOMContentLoaded',()=>{
+    const button=document.getElementById('downloadMalagaCalendar');
+    if(!button)return;
+    button.textContent='Descargar calendario del Málaga CF';
+    button.addEventListener('click',downloadCalendar);
+  });
 })();

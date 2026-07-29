@@ -1,4 +1,4 @@
-const MATCHES_CACHE_KEY="frente_matches_cache_v11";
+const MATCHES_CACHE_KEY="frente_matches_cache_v12";
 function getMatchesConfig(){return window.FRENTE_MATCHES_CONFIG||{mode:"manual",manualMatches:[]}}
 function readMatchesCache(){try{return JSON.parse(localStorage.getItem(MATCHES_CACHE_KEY))}catch{return null}}
 function saveMatchesCache(v){localStorage.setItem(MATCHES_CACHE_KEY,JSON.stringify(v))}
@@ -9,7 +9,20 @@ function normalizeDbMatch(m,i=0){
   const isHome=local==='local'||local==='casa'||/málaga\s*cf\s*(vs|v|-)/i.test(title);
   return normalizeMatch({id:m.id,competition:m.competicion||'Partido',home:isHome?'Málaga CF':rival,away:isHome?rival:'Málaga CF',date:m.fecha_partido,stadium:m.estadio,status:m.estado,confirmed:true,source:'Partidos administrados'},i);
 }
-function manualMatches(){try{return (JSON.parse(localStorage.getItem("frente_matches_manual_v11"))||getMatchesConfig().manualMatches||[]).map(normalizeMatch)}catch{return (getMatchesConfig().manualMatches||[]).map(normalizeMatch)}}
+function fixtureKey(m){
+  const names=[String(m.home||'').trim().toLowerCase(),String(m.away||'').trim().toLowerCase()].sort();
+  return names.join('|');
+}
+function manualMatches(){
+  const configured=(getMatchesConfig().manualMatches||[]).map(normalizeMatch);
+  let saved=[];
+  try{saved=(JSON.parse(localStorage.getItem("frente_matches_manual_v11"))||[]).map(normalizeMatch)}catch{}
+  // El calendario completo configurado nunca desaparece por tener datos antiguos en localStorage.
+  // Los partidos editados manualmente sustituyen su mismo enfrentamiento.
+  const byFixture=new Map(configured.map(m=>[fixtureKey(m),m]));
+  saved.forEach(m=>byFixture.set(fixtureKey(m),m));
+  return [...byFixture.values()].sort((a,b)=>new Date(a.date)-new Date(b.date));
+}
 async function fetchSupabaseMatches(){
   if(!window.FrenteSupabase?.init) return [];
   const db=(await window.FrenteSupabase.init()).client;
@@ -22,8 +35,10 @@ async function loadMatches(force=false){
   if(!force&&cache?.updatedAt&&Date.now()-new Date(cache.updatedAt).getTime()<ttl&&Array.isArray(cache.matches)&&cache.matches.length>1)return cache;
   try{const shared=await fetchSupabaseMatches();if(shared.length){
     const fallback=manualMatches();
-    const byKey=new Map(fallback.map(m=>[`${String(m.home).toLowerCase()}|${String(m.away).toLowerCase()}|${String(m.date).slice(0,10)}`,m]));
-    shared.forEach(m=>byKey.set(`${String(m.home).toLowerCase()}|${String(m.away).toLowerCase()}|${String(m.date).slice(0,10)}`,m));
+    // Se agrupa por enfrentamiento, no por fecha, para evitar duplicados cuando
+    // el administrador corrige día u hora de un partido ya presente en el calendario base.
+    const byKey=new Map(fallback.map(m=>[fixtureKey(m),m]));
+    shared.forEach(m=>byKey.set(fixtureKey(m),m));
     const merged=[...byKey.values()].sort((a,b)=>new Date(a.date)-new Date(b.date));
     const p={matches:merged,updatedAt:new Date().toISOString(),mode:'supabase+calendar',error:null};saveMatchesCache(p);return p
   }}catch(e){console.warn('[38.5.2] Calendario compartido no disponible:',e.message||e)}
