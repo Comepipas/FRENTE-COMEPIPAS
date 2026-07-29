@@ -1,0 +1,17 @@
+FRENTE COMEPIPAS · COMMIT 37.0
+
+OBJETIVO
+Rediseño y corrección prioritaria del Área del Socio.
+
+CAMBIOS
+- Menú completo de la web desplegable desde cualquier parte del área privada.
+- Botón Menú visible en cabecera y navegación inferior móvil.
+- Navegación rápida entre web pública y apartados privados.
+- Nueva pantalla de pago 2026/27 basada exclusivamente en campanas_registros.
+- Eliminados del área del socio los importes ficticios/de demostración de abono.
+- Si no existe un registro real importado, se muestra "Importe no disponible".
+- Accesos rápidos a ON TOUR, material, familia/datos, avisos y pago registrado.
+- Mejoras responsive y experiencia móvil.
+
+SUPABASE
+No requiere ejecutar SQL nuevo. La lectura del pago depende de las políticas RLS existentes sobre campanas_registros.

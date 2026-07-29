@@ -1,0 +1,4 @@
+document.addEventListener('DOMContentLoaded',()=>{
+ const form=document.getElementById('activationForm'), out=document.getElementById('activationMessage');
+ form?.addEventListener('submit',async e=>{e.preventDefault();const btn=form.querySelector('button');btn.disabled=true;out.textContent='Creando la cuenta segura…';try{const r=await MemberAuth.activate({memberNumber:form.memberNumber.value,verification:form.verification.value,email:form.email.value.trim(),password:form.password.value});if(r.confirmationRequired){out.textContent='Revisa tu correo y confirma la cuenta. Después vuelve a esta pantalla e inicia sesión para completar la vinculación.';}else{out.textContent=`Cuenta activada correctamente para ${r.profile.nombre}. Ya puedes entrar.`;setTimeout(()=>location.href='socios.html',1200);}}catch(err){out.textContent=err.message||'No se pudo activar la cuenta.';}finally{btn.disabled=false;}});
+});

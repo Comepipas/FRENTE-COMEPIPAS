@@ -1,0 +1,2 @@
+FRENTE COMEPIPAS - COMMIT 38.4
+Área del Socio: estabilización, accesibilidad y responsive.

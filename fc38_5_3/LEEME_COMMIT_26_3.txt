@@ -1,0 +1,22 @@
+COMMIT 26.3 - CORRECCIÓN IMPORTACIÓN EXCEL
+
+ARCHIVOS A COPIAR
+- importacion-socios.html
+- assets/js/importacion-socios-v13.1.js
+- assets/css/importacion-socios-v13.css
+
+INSTALACIÓN
+1. Copia el contenido de esta carpeta dentro de tu repositorio FRENTE-COMEPIPAS.
+2. Acepta reemplazar los 3 archivos.
+3. En GitHub Desktop usa el resumen: Commit 26.3 - Corregir fechas y contraste importación Excel
+4. Pulsa Commit to main y después Push origin.
+5. Espera a Vercel y recarga con Ctrl+F5.
+
+PRUEBA
+- Abre importacion-socios.html.
+- Sube Formulario_Renovación_Abonados_26_27_1.xlsx.
+- Revisa la asignación de columnas.
+- La fecha de nacimiento admite fechas reales de Excel, DD/MM/AAAA, DD-MM-AAAA y AAAA-MM-DD.
+- El panel lateral ahora se muestra con texto oscuro y legible.
+
+No requiere ejecutar SQL.

@@ -1,0 +1,15 @@
+COMMIT 35.3 · FICHA DE SOCIO / JUNTA DIRECTIVA
+
+CORRECCIÓN
+- La ficha intentaba marcar el control es_directivo, pero ese checkbox no existía en el HTML.
+- Esto provocaba: Cannot set properties of undefined (setting checked).
+
+CAMBIOS
+- Añadido checkbox «Miembro de la Junta Directiva».
+- Añadido campo «Cargo en la directiva».
+- La carga y el guardado ya no se rompen si falta algún control opcional.
+- No requiere ejecutar SQL si las columnas es_directivo y cargo_directiva ya existen.
+
+INSTALACIÓN
+Sustituye el proyecto publicado por este commit y vuelve a desplegar en Vercel.
+Después abre la ficha, pulsa Editar ficha, marca Junta Directiva, indica el cargo y guarda.

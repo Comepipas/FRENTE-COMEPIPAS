@@ -1,0 +1,24 @@
+FRENTE COMEPIPAS · COMMIT 20
+CATÁLOGO DE MATERIAL Y SOLICITUDES EN SUPABASE
+
+NO ES UNA TIENDA ONLINE:
+- Sin carrito.
+- Sin pago virtual.
+- Sin Stripe.
+- Sin facturas online.
+- Sin compra automática.
+
+FUNCIONAMIENTO:
+1. La directiva publica material disponible.
+2. La persona pulsa “Me interesa” y envía una solicitud sin compromiso.
+3. La directiva responde por WhatsApp o correo confirmando disponibilidad.
+4. El material se entrega habitualmente en la previa del partido.
+5. El pago se realiza en efectivo.
+
+INSTALACIÓN:
+1. Ejecutar PASO_COMMIT_20_EJECUTAR_EN_SUPABASE.sql.
+2. Sustituir en el proyecto los archivos por los incluidos en este ZIP.
+3. Publicar un nuevo despliegue en Vercel.
+4. Probar tienda-admin.html y tienda.html.
+
+El catálogo, solicitudes, estados e imágenes quedan almacenados en Supabase.

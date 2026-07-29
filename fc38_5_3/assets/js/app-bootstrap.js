@@ -1,0 +1,1 @@
+window.FRENTE_APP={version:'10.9',env:'production-ready'};

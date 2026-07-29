@@ -1,0 +1,13 @@
+FRENTE COMEPIPAS · V22 COMMIT 14
+
+GESTIÓN VISUAL GLOBAL Y CONFIGURACIÓN
+
+- Hero seleccionable directamente desde el PC.
+- Escudo, logo/mascota y favicon seleccionables desde el PC.
+- Vista previa de todas las imágenes.
+- Optimización automática; se conserva transparencia en logos y escudos.
+- Las imágenes se aplican automáticamente en toda la web mediante la configuración general.
+- Añadido campo ciudad/provincia independiente.
+- Corregido el tratamiento de imágenes locales y data URL en el runtime.
+
+NOTA: En modo local las imágenes se guardan en el navegador. La publicación multi-dispositivo requerirá Supabase Storage.

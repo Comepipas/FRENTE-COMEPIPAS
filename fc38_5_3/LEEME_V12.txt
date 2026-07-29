@@ -1,0 +1,12 @@
+FRENTE COMEPIPAS V12 - EDICIÓN PROFESIONAL
+
+PRUEBA VISUAL:
+1. Abre la carpeta en Visual Studio Code.
+2. Abre renovaciones-admin.html.
+3. Pulsa Go Live.
+4. Inicia sesión como administrador/directivo.
+
+La página funciona en modo demostración si Supabase no está configurado.
+Para datos reales, rellena assets/js/supabase-config.js con URL y anonKey y activa enabled:true.
+
+La Home aprobada no se ha modificado.

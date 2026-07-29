@@ -1,0 +1,13 @@
+FRENTE COMEPIPAS · COMMIT 37.1
+
+CAMBIOS:
+- Eliminada la barra lateral duplicada del Área del Socio.
+- Menú completo accesible desde el botón superior ☰.
+- Nueva cabecera malaguista con escudo y fondo de La Rosaleda.
+- Los módulos se abren en el mismo espacio del panel principal, sin obligar a bajar haciendo scroll.
+- Botón «Volver al inicio» en cada módulo.
+- Material integrado dentro del Área del Socio.
+- Eliminado el carnet digital e imprimible.
+- Se mantienen los importes reales procedentes del Excel, sin precios teóricos.
+
+NO REQUIERE SQL.

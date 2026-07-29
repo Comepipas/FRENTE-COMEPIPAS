@@ -1,0 +1,14 @@
+COMMIT 34.1 - CORRECCIÓN DE ESTABILIDAD
+
+Correcciones principales:
+- El arranque del Centro de Migración ya no se interrumpe por un filtro inexistente.
+- Recuperación automática del borrador guardado en IndexedDB.
+- Compatibilidad con claves de borrador de versiones 33.1, 33.2 y 34.0.
+- Conservación de los Excel procesados, decisiones, familias, bloqueos, simulación y resultado final.
+- Importación por lotes de 50 registros, con guardado tras cada lote.
+- Importación definitiva excluyendo socios bloqueados.
+- Relaciones familiares omitidas cuando tutor o menor están bloqueados.
+- Los fallos al crear relaciones familiares no anulan los socios ya importados.
+- Cabecera y recursos identificados correctamente como Commit 34.1.
+
+No requiere SQL adicional si ya se ejecutó PASO_COMMIT_34_EJECUTAR_EN_SUPABASE.sql.

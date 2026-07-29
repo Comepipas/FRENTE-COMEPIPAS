@@ -1,0 +1,16 @@
+FRENTE COMEPIPAS · COMMIT 31.1
+
+Corrección funcional del Centro de Incidencias.
+
+CAMBIOS
+- Corregido el falso error «No se pudo iniciar Supabase».
+- El Centro de Incidencias utiliza ahora FrenteSupabase.init(), igual que el resto del panel.
+- Se mantiene el análisis de socios, campañas, categorías, sectores, tarifas y renovaciones.
+- Los errores muestran el motivo real cuando el análisis no puede completarse.
+- No requiere ejecutar SQL en Supabase.
+
+PRUEBA
+1. Publica los archivos del commit.
+2. Accede a centro-incidencias-admin.html.
+3. Pulsa «Analizar sistema».
+4. Comprueba que no aparece el falso error de conexión y que se muestran las incidencias reales.

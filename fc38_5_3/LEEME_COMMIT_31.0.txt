@@ -1,0 +1,16 @@
+FRENTE COMEPIPAS · COMMIT 31.0
+
+NUEVO: CENTRO DE INCIDENCIAS
+- Nuevo acceso en el menú de administración.
+- Análisis en tiempo real, sin guardar incidencias en Supabase.
+- Revisa socios, campañas, categorías, sectores, tarifas y renovaciones.
+- Clasifica errores críticos, advertencias y avisos.
+- Cada incidencia incluye el registro afectado y el botón «Ir a resolver».
+- El resumen del último análisis aparece en el panel principal.
+- No necesita ejecutar SQL: este commit no añade tablas ni columnas.
+
+PRUEBA RECOMENDADA
+1. Abrir centro-incidencias-admin.html con una sesión de administrador.
+2. Pulsar «Analizar sistema».
+3. Probar los filtros y los botones «Ir a resolver».
+4. Corregir un dato, volver al centro y repetir el análisis.

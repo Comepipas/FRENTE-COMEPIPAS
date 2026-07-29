@@ -1,0 +1,2 @@
+FRENTE COMEPIPAS · COMMIT 35.2
+Vinculación automática verificable en el primer inicio de sesión.

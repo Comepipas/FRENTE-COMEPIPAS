@@ -1,0 +1,10 @@
+COMMIT 33.3
+
+1. Ejecuta PASO_COMMIT_33_3_EJECUTAR_EN_SUPABASE.sql.
+2. Recarga la aplicación con Ctrl+F5.
+3. Simula la migración.
+4. Abre el Centro de Registros Bloqueados.
+5. Repara cada ficha, asigna tutor/hijo o desbloquea individualmente indicando un motivo.
+6. Descarga la copia de seguridad e importa.
+
+Los desbloqueos quedan guardados en el borrador local de la migración.

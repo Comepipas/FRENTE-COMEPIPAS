@@ -1,0 +1,14 @@
+FRENTE COMEPIPAS · COMMIT 38.0
+
+Bloque 1 del rediseño real del Área del Socio.
+
+- Corrige la ruta real de la imagen de La Rosaleda.
+- Integra el escudo oficial existente en el proyecto.
+- Reorganiza la cabecera y evita textos cortados.
+- Mantiene un único menú completo desplegable.
+- Las tarjetas abren cada módulo en la zona principal.
+- Compacta la cabecera al abrir un módulo.
+- El pago solo toma registros reales de la temporada 2026/27.
+- Nunca usa como sustituto una campaña 2027/28 u otra temporada.
+- Elimina textos internos de commits visibles para los socios.
+- No requiere SQL.

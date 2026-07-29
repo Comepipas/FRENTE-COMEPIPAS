@@ -1,0 +1,13 @@
+FRENTE COMEPIPAS - CUOTAS SUPABASE - FASE 1 (SOLO LECTURA)
+
+1. Abre PASO_1_EJECUTAR_EN_SUPABASE.sql.
+2. Copia todo y ejecútalo en Supabase > SQL Editor.
+3. Abre esta carpeta completa con Visual Studio Code.
+4. Pulsa Go Live.
+5. Inicia sesión y abre cuotas-admin.html.
+
+Resultado esperado:
+- Señor Bigote, Adulto, 20,00 €, pendiente.
+- Joselu, Infantil, 0,00 €, pendiente.
+
+Esta fase no permite todavía editar, pagar ni borrar cuotas.

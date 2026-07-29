@@ -1,0 +1,20 @@
+FRENTE COMEPIPAS · COMMIT 25 · ON TOUR
+
+1. Ejecuta en Supabase SQL Editor:
+   PASO_COMMIT_25_EJECUTAR_EN_SUPABASE.sql
+
+2. Sube todos los archivos de este ZIP a GitHub, sustituyendo los existentes.
+
+3. En Supabase, la tabla on_tour_stadiums permite guardar equipo, estadio, ciudad,
+   kilómetros desde La Rosaleda, duración y escudo. Al seleccionar un partido ya
+   creado en el módulo Entradas, ON TOUR completa automáticamente sus datos.
+
+4. Cada solicitante puede pedir su entrada y hasta 3 acompañantes.
+   Todos deben coincidir con socios registrados y abonados del Málaga CF.
+
+5. Los duplicados se bloquean por DNI y número de abonado para cada partido.
+   El usuario nunca ve datos de otros socios.
+
+6. La solicitud NO garantiza entrada. El aviso debe aceptarse antes del envío.
+
+7. Cuando no haya ON TOUR publicado, aparece la pantalla divertida de preparación.
