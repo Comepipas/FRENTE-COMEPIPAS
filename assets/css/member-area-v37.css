@@ -54,3 +54,34 @@
  .member-area-page{padding:0 0 24px;background:#edf4fa}.member-main{gap:12px}.member-header{border-radius:0;min-height:245px;padding:18px;grid-template-columns:auto auto 1fr;gap:12px}.member-season{display:none}.member-brand-mark{width:58px;height:58px;border-radius:16px}.member-brand-mark img{width:48px;height:48px}.member-welcome-copy{grid-column:1/4;align-self:end}.member-header h1{font-size:3.5rem}.member-profile-chip{grid-column:1/4;justify-self:stretch;justify-content:flex-start;align-self:end}.member-profile-chip .member-status{margin-left:auto}.member-action-summary{grid-template-columns:1fr 1fr;padding:0 12px}.member-action-card{min-height:96px;padding:13px}.member-main.module-open .member-header{min-height:98px;grid-template-columns:auto 1fr auto;padding:14px}.member-main.module-open .member-brand-mark,.member-main.module-open .member-profile-chip,.member-main.module-open .member-season{display:none}.member-main.module-open .member-welcome-copy{grid-column:auto;align-self:center}.member-main.module-open .member-header h1{font-size:2rem}.member-workspace-bar{margin:0 12px}.member-panel{margin:0 12px}.member-real-payment{grid-template-columns:1fr 1fr}
 }
 @media(max-width:560px){.member-action-summary{grid-template-columns:1fr}.member-header h1{font-size:3rem}.member-profile-chip{padding:9px 10px}.member-real-payment{grid-template-columns:1fr}.member-workspace-bar{align-items:stretch}.member-workspace-bar button{white-space:nowrap}.member-workspace-bar div{justify-content:center}}
+
+
+/* Commit 38.2 */
+.member-hero{
+background:linear-gradient(135deg,#0056b8 0%,#0a2f66 100%);
+border-radius:24px;
+padding:28px;
+color:#fff;
+box-shadow:0 18px 40px rgba(0,31,70,.25);
+margin-bottom:24px}
+.member-dashboard-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:18px}
+.member-card{
+background:#fff;
+border-radius:18px;
+padding:20px;
+border:1px solid #e6eef7;
+transition:.25s ease;
+box-shadow:0 8px 22px rgba(0,31,70,.08)}
+.member-card:hover{
+transform:translateY(-6px);
+box-shadow:0 18px 36px rgba(0,31,70,.16)}
+.member-card h3{margin:0 0 8px;font-size:1.05rem;color:#003d8f}
+.member-card p{margin:0;color:#5d6b7b}
+.member-nav button.active{background:#0056b8;color:#fff;border-radius:12px}
+@media(max-width:768px){
+.member-action-summary{grid-template-columns:1fr}
+.member-hero{padding:20px;border-radius:18px}
+}
