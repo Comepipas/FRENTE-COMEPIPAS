@@ -24,7 +24,7 @@
         <input data-i="${index}" data-k="year" value="${escapeAttr(item.year)}" placeholder="Año">
         <input data-i="${index}" data-k="title" value="${escapeAttr(item.title)}" placeholder="Título">
         <textarea data-i="${index}" data-k="text" placeholder="Texto">${escapeAttr(item.text)}</textarea>
-        <button type="button" data-remove="${index}">Eliminar</button>
+        <div class="history-row-actions"><button type="button" data-up="${index}" title="Subir etapa">↑</button><button type="button" data-down="${index}" title="Bajar etapa">↓</button><button type="button" data-remove="${index}">Eliminar</button></div>
       </div>`).join('');
 
     container.querySelectorAll('[data-i]').forEach(element=>{
@@ -38,6 +38,8 @@
         renderTimeline();
       });
     });
+    container.querySelectorAll('[data-up]').forEach(button=>button.addEventListener('click',()=>{const index=Number(button.dataset.up);if(index>0){[timeline[index-1],timeline[index]]=[timeline[index],timeline[index-1]];renderTimeline()}}));
+    container.querySelectorAll('[data-down]').forEach(button=>button.addEventListener('click',()=>{const index=Number(button.dataset.down);if(index<timeline.length-1){[timeline[index+1],timeline[index]]=[timeline[index],timeline[index+1]];renderTimeline()}}));
   }
 
   async function connectAuthenticatedAdmin(){
@@ -145,7 +147,10 @@
   }
 
   document.addEventListener('DOMContentLoaded',async()=>{
+    if(!document.querySelector('link[href*="pena-history-v40.11.css"]')){const style=document.createElement('link');style.rel='stylesheet';style.href='assets/css/pena-history-v40.11.css';document.head.appendChild(style)}
     const form=document.getElementById('historyForm');
+    const help=document.createElement('div');help.className='history-admin-help';help.innerHTML='<strong>Consejo de diseño:</strong> separa los párrafos de la introducción dejando una línea en blanco. En Valores, escribe cada valor separado por comas para convertirlos en etiquetas visuales.';form.prepend(help);
+    const heading=document.querySelector('.history-heading');const templates=document.createElement('div');templates.className='history-template-actions';templates.innerHTML='<button id="completeHistoryTemplate" type="button" class="btn btn-dark-outline">Usar cronología sugerida</button>';heading?.appendChild(templates);
     const submitButton=form.querySelector('button[type="submit"]');
 
     submitButton.disabled=true;
@@ -176,6 +181,10 @@
     document.getElementById('addHistoryRow').addEventListener('click',()=>{
       timeline.push({year:'',title:'',text:''});
       renderTimeline();
+    });
+    document.getElementById('completeHistoryTemplate')?.addEventListener('click',()=>{
+      if(timeline.length&& !confirm('¿Sustituir las etapas actuales por una cronología sugerida? Podrás editarla antes de guardar.'))return;
+      timeline=JSON.parse(JSON.stringify(window.FRENTE_PENA_DEFAULTS.timeline));renderTimeline();showMessage('Cronología sugerida preparada. Revísala y pulsa Guardar cambios para publicarla.');
     });
 
     form.addEventListener('submit',async event=>{
