@@ -1,0 +1,16 @@
+FRENTE COMEPIPAS · COMMIT 40.2
+
+Módulo Socios Enterprise
+
+- Diseño visual completamente integrado con el Dashboard Enterprise.
+- Menú lateral unificado y responsive.
+- Cabecera limpia, sin versiones ni información técnica.
+- KPIs homogéneos con distribución secundaria por categorías.
+- Buscador y filtros reorganizados.
+- Tabla con cabecera fija, zebra, hover y mejor alineación.
+- Formulario dividido en secciones, más limpio y responsive.
+- Botones y colores normalizados.
+- Se conservan altas, edición, bajas, fichas, exportación, plantilla y paginación.
+- Se mantiene la integración existente con Supabase sin cambios de esquema.
+
+No requiere ejecutar migraciones SQL.
