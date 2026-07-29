@@ -1,0 +1,3 @@
+.v115-calendar-download{border:0;border-radius:999px;background:#00529b;color:#fff;font:inherit;font-weight:800;padding:15px 26px;cursor:pointer;box-shadow:0 12px 28px rgba(0,82,155,.18)}
+.v115-calendar-download:hover{transform:translateY(-1px)}
+.v115-calendar-download:disabled{opacity:.65;cursor:wait;transform:none}
