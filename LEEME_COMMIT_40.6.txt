@@ -1,0 +1,3 @@
+COMMIT 40.6 · NOTICIAS ENTERPRISE
+
+Noticias, KPIs, filtros, tabla, editor y vista previa integrados en Administración Enterprise. Se conservan borradores, programación, publicación, destacadas, exportación y Supabase.
