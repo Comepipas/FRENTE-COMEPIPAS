@@ -50,13 +50,27 @@
  }
  function closeMenus(){document.getElementById('webMenuDrawer')?.setAttribute('hidden','');document.body.classList.remove('menu-open');}
  function openMenu(){document.getElementById('webMenuDrawer')?.removeAttribute('hidden');document.body.classList.add('menu-open');}
- function openTab(tab){document.querySelectorAll('[data-member-tab]').forEach(x=>x.classList.toggle('active',x.dataset.memberTab===tab));document.querySelectorAll('[data-member-panel]').forEach(x=>x.classList.toggle('active',x.dataset.memberPanel===tab));closeMenus();window.scrollTo({top:0,behavior:'smooth'});}
+ const tabTitles={overview:'Mi familia y datos',trips:'ON TOUR',tickets:'Entradas',renewal:'Mi pago registrado',fees:'Mis cuotas',purchases:'Mis compras',documents:'Documentos',notifications:'Notificaciones',agenda:'Agenda',material:'Material de la Peña'};
+ function openTab(tab){
+  const main=document.querySelector('.member-main');
+  const toolbar=document.getElementById('memberWorkspaceBar');
+  const title=document.getElementById('memberWorkspaceTitle');
+  const isHome=!tab||tab==='home';
+  document.querySelectorAll('[data-member-tab]').forEach(x=>x.classList.toggle('active',!isHome&&x.dataset.memberTab===tab));
+  document.querySelectorAll('[data-member-panel]').forEach(x=>x.classList.toggle('active',!isHome&&x.dataset.memberPanel===tab));
+  main?.classList.toggle('module-open',!isHome);
+  if(toolbar)toolbar.hidden=isHome;
+  if(title&&!isHome)title.textContent=tabTitles[tab]||'Área del socio';
+  closeMenus();
+  const anchor=isHome?document.querySelector('.member-action-summary'):toolbar;
+  if(anchor&&anchor.getBoundingClientRect().top<0)anchor.scrollIntoView({block:'start'});
+ }
  async function logout(){await MemberAuth.signOut();location.href='socios.html';}
  document.addEventListener('DOMContentLoaded',()=>{
   load();document.querySelectorAll('[data-member-tab]').forEach(b=>b.onclick=()=>openTab(b.dataset.memberTab));document.querySelectorAll('[data-open-member-tab]').forEach(b=>b.onclick=()=>openTab(b.dataset.openMemberTab));
   document.querySelectorAll('[data-menu-tab]').forEach(b=>b.onclick=()=>openTab(b.dataset.menuTab));document.querySelectorAll('[data-close-web-menu]').forEach(b=>b.onclick=closeMenus);
-  document.getElementById('webMenuButton')?.addEventListener('click',openMenu);document.getElementById('memberMoreButton')?.addEventListener('click',openMenu);
-  document.querySelectorAll('[data-scroll-material]').forEach(b=>b.onclick=()=>document.getElementById('mis-solicitudes-material')?.scrollIntoView({behavior:'smooth'}));
+  document.getElementById('webMenuButton')?.addEventListener('click',openMenu);document.getElementById('memberMoreButton')?.addEventListener('click',openMenu);document.getElementById('memberBackHome')?.addEventListener('click',()=>openTab('home'));
+  
   ['memberLogout','memberLogoutMore','memberLogoutDrawer'].forEach(id=>document.getElementById(id)?.addEventListener('click',logout));
   document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenus();});
  });
