@@ -1,0 +1,3 @@
+COMMIT 40.5 · MATERIAL ENTERPRISE
+
+Catálogo, solicitudes, KPIs, filtros, tarjetas, tabla y formularios integrados en la interfaz Enterprise. Se conservan fotografías, disponibilidad, estados, exportación y Supabase. No requiere SQL.
