@@ -1,0 +1,19 @@
+FRENTE COMEPIPAS · COMMIT 40.2
+
+Módulo Socios Enterprise
+
+- Diseño visual completamente integrado con el Dashboard Enterprise.
+- Menú lateral unificado y responsive.
+- Cabecera limpia, sin versiones ni información técnica.
+- KPIs homogéneos con distribución secundaria por categorías.
+- Buscador y filtros reorganizados.
+- Tabla con cabecera fija, zebra, hover y mejor alineación.
+- Formulario dividido en secciones, más limpio y responsive.
+- Botones y colores normalizados.
+- Se conservan altas, edición, bajas, fichas, exportación, plantilla y paginación.
+- Se mantiene la integración existente con Supabase sin cambios de esquema.
+- Corrección 40.2.1: el buscador admite nombre completo, varias palabras y búsquedas sin distinguir tildes.
+- Corrección 40.2.2: búsqueda por palabras directamente en Supabase, mensajes vacíos claros y ocultación definitiva del estado técnico.
+- Corrección 40.2.3: archivos con nombres nuevos para impedir que GitHub Pages reutilice versiones antiguas en caché.
+
+No requiere ejecutar migraciones SQL.

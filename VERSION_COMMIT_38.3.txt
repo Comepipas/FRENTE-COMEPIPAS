@@ -1,0 +1,11 @@
+FRENTE COMEPIPAS · COMMIT 38.3
+
+Área del Socio convertida en una interfaz real tipo aplicación:
+- navegación lateral de módulos en escritorio;
+- barra rápida horizontal en móvil;
+- panel central sin scroll entre módulos;
+- bloque destacado con próximo partido, ON TOUR y avisos;
+- menú general de la web accesible desde la navegación del socio;
+- se mantienen los datos y servicios reales ya conectados;
+- pago mostrado únicamente desde el registro importado 2026/27;
+- sin cambios SQL.
