@@ -94,7 +94,7 @@
         </article>
       `).join('');
     } catch (error) {
-      console.warn('[Commit 38.1] Menores vinculados:', error.message || error);
+      console.warn('[Commit 38.3] Menores vinculados:', error.message || error);
       section.hidden = true;
     }
   }
@@ -140,7 +140,7 @@
       if (box) box.hidden = false;
       if (empty) empty.hidden = true;
     } catch (error) {
-      console.warn('[Commit 38.1] Pago real no disponible:', error.message || error);
+      console.warn('[Commit 38.3] Pago real no disponible:', error.message || error);
       set('renewalStatus', 'No disponible');
       set('memberRenewalSummary', 'Pendiente de sincronización');
       if (box) box.hidden = true;
@@ -177,6 +177,8 @@
       set('memberType', profile.categoria || 'Sin categoría');
       set('memberFee', profile.cuota_al_dia ? 'Al día' : 'Pendiente');
       set('memberFeeSummary', profile.cuota_al_dia ? 'Todo al día' : 'Tienes una cuota pendiente');
+      set('memberMainNotice', profile.cuota_al_dia ? 'Tu ficha está al día' : 'Tienes una gestión pendiente');
+      set('memberMainNoticeMeta', profile.cuota_al_dia ? 'Consulta avisos y novedades de la Peña' : 'Revisa tus cuotas y comunicaciones');
       set('memberEmail', profile.email);
       set('memberPhone', profile.telefono);
       set('memberAddress', profile.direccion);
@@ -348,6 +350,7 @@
     });
 
     document.getElementById('webMenuButton')?.addEventListener('click', openMenu);
+    document.getElementById('memberOpenWebMenu')?.addEventListener('click', openMenu);
     document.getElementById('memberBackHome')?.addEventListener('click', () => openTab('home'));
 
     ['memberLogout', 'memberLogoutMore', 'memberLogoutDrawer'].forEach(id => {
