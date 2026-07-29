@@ -20,7 +20,13 @@ async function fetchRemoteMatches(){const c=getMatchesConfig();if(!c.remoteUrl)t
 async function loadMatches(force=false){
   const c=getMatchesConfig(),cache=readMatchesCache(),ttl=Number(c.refreshMinutes||15)*60000;
   if(!force&&cache?.updatedAt&&Date.now()-new Date(cache.updatedAt).getTime()<ttl&&Array.isArray(cache.matches)&&cache.matches.length>1)return cache;
-  try{const shared=await fetchSupabaseMatches();if(shared.length){const p={matches:shared,updatedAt:new Date().toISOString(),mode:'supabase',error:null};saveMatchesCache(p);return p}}catch(e){console.warn('[38.5] Calendario compartido no disponible:',e.message||e)}
+  try{const shared=await fetchSupabaseMatches();if(shared.length){
+    const fallback=manualMatches();
+    const byKey=new Map(fallback.map(m=>[`${String(m.home).toLowerCase()}|${String(m.away).toLowerCase()}|${String(m.date).slice(0,10)}`,m]));
+    shared.forEach(m=>byKey.set(`${String(m.home).toLowerCase()}|${String(m.away).toLowerCase()}|${String(m.date).slice(0,10)}`,m));
+    const merged=[...byKey.values()].sort((a,b)=>new Date(a.date)-new Date(b.date));
+    const p={matches:merged,updatedAt:new Date().toISOString(),mode:'supabase+calendar',error:null};saveMatchesCache(p);return p
+  }}catch(e){console.warn('[38.5.2] Calendario compartido no disponible:',e.message||e)}
   if(c.mode==="remote"){try{const p={matches:await fetchRemoteMatches(),updatedAt:new Date().toISOString(),mode:"remote",error:null};saveMatchesCache(p);return p}catch(e){const p={matches:manualMatches(),updatedAt:new Date().toISOString(),mode:"manual-fallback",error:e.message};saveMatchesCache(p);return p}}
   const p={matches:manualMatches(),updatedAt:new Date().toISOString(),mode:"manual",error:null};saveMatchesCache(p);return p;
 }
