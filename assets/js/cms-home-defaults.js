@@ -11,5 +11,5 @@ window.FRENTE_CMS_DEFAULTS={
  {id:"sponsor-4",name:"Patrocinador 4",image:"patrocinador-4.png",url:"#",active:true,order:4}
  ],
  socials:{instagram:"",facebook:"",x:"",tiktok:"",whatsapp:"",youtube:""},
- images:{hero:"hero.jpg",quickTrips:"viajes.jpg",quickStore:"tienda.jpg",quickMembers:"socios.jpg",featuredTrip:"proximo-viaje.jpg",crest:"escudo-transparente.png"}
+ images:{hero:"hero.jpg",quickTrips:"viajes.jpg",quickStore:"tienda.jpg",material:"assets/images/home/tienda.jpg",quickMembers:"socios.jpg",featuredTrip:"proximo-viaje.jpg",crest:"escudo-transparente.png"}
 };
