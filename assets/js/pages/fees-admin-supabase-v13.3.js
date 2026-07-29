@@ -23,8 +23,8 @@ window.addEventListener("DOMContentLoaded", async () => {
   function filteredRows() {
     const term = ($("feesSearch")?.value || "").trim().toLowerCase();
     const status = $("feesStatus")?.value || "";
-    const season = $("feesSeason")?.value || "";
-    const category = $("feesCategory")?.value || "";
+    const season = $("feesFilterSeason")?.value || "";
+    const category = $("feesFilterCategory")?.value || "";
     return state.rows.filter(row => {
       const haystack = `${row.numeroSocio} ${row.socioNombre} ${row.socioCategoria} ${row.temporada} ${row.referencia || ""}`.toLowerCase();
       return (!term || haystack.includes(term)) && (!status || row.estado === status) && (!season || row.temporada === season) && (!category || (category === "directivo" ? row.esDirectivo : String(row.socioCategoria || "").toLowerCase() === category));
@@ -43,12 +43,13 @@ window.addEventListener("DOMContentLoaded", async () => {
     $("feesPending").textContent = base.filter(x => x.estado === "pendiente").length;
     $("feesMissing").textContent = Math.max(0, activeMembers - base.length);
     $("feesExempt").textContent = exempt.length;
-    $("feesDirectors").textContent = base.filter(x => x.esDirectivo).length;
+    const directors = $("feesDirectors");
+    if (directors) directors.textContent = base.filter(x => x.esDirectivo).length;
     $("feesIncome").textContent = money(paid.reduce((sum, x) => sum + x.importe, 0));
   }
 
   function renderSeasons() {
-    const select = $("feesSeason");
+    const select = $("feesFilterSeason");
     if (!select) return;
     const current = select.value;
     const seasons = [...new Set(state.rows.map(x => x.temporada).filter(Boolean))].sort().reverse();
@@ -255,7 +256,7 @@ window.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
-  ["feesSearch", "feesStatus", "feesSeason", "feesCategory"].forEach(id => $(id)?.addEventListener(id === "feesSearch" ? "input" : "change", renderTable));
+  ["feesSearch", "feesStatus", "feesFilterSeason", "feesFilterCategory"].forEach(id => $(id)?.addEventListener(id === "feesSearch" ? "input" : "change", renderTable));
   $("retryFees")?.addEventListener("click", load);
   $("syncFees")?.addEventListener("click", async () => {
     const button = $("syncFees");
