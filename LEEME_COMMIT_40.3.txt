@@ -1,0 +1,10 @@
+FRENTE COMEPIPAS · COMMIT 40.3 · CUOTAS ENTERPRISE
+
+- Diseño integrado con Dashboard y Socios Enterprise.
+- Cabecera limpia, KPIs homogéneos y filtros profesionales.
+- Tabla con cabecera fija, zebra y hover.
+- Formularios de cuota y cobro reorganizados.
+- Recuperados los indicadores de directivos y la operación masiva ya existente.
+- Responsive mejorado y navegación unificada.
+- Se conservan cobros, edición, anulación, reactivación, sincronización y exportación.
+- Compatible con Supabase. No requiere migraciones SQL.
