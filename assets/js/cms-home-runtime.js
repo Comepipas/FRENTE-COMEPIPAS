@@ -1,8 +1,15 @@
-const CMS_HOME_KEY="frente_cms_home_v1";
-function getCmsHomeData(){try{return JSON.parse(localStorage.getItem(CMS_HOME_KEY))||window.FRENTE_CMS_DEFAULTS||{}}catch{return window.FRENTE_CMS_DEFAULTS||{}}}
-function saveCmsHomeData(v){localStorage.setItem(CMS_HOME_KEY,JSON.stringify(v))}
-function applyCmsHome(){const c=getCmsHomeData();if(c.images){const hero=document.querySelector('.v10-hero');if(hero&&c.images.hero)hero.style.backgroundImage=`url("assets/images/hero/${c.images.hero}")`;document.querySelectorAll('img[src*="escudo-transparente.png"]').forEach(i=>{if(c.images.crest)i.src=`assets/images/brand/${c.images.crest}`})}
-const n=document.getElementById('v10NewsGrid');if(n&&Array.isArray(c.news)){const rows=c.news.filter(x=>x.status==='Publicado'&&x.featured).sort((a,b)=>String(b.date).localeCompare(String(a.date))).slice(0,3);n.innerHTML=rows.map(x=>`<article class="v10-news-card"><a href="${x.url||'noticias.html'}" class="v10-news-image" style="background-image:url('assets/images/noticias/${x.image}')"></a><div class="v10-news-body"><div class="v10-news-meta"><span>${x.category||'Peña'}</span><time>${new Intl.DateTimeFormat('es-ES',{day:'2-digit',month:'short',year:'numeric'}).format(new Date(x.date))}</time></div><h3><a href="${x.url||'noticias.html'}">${x.title}</a></h3><p>${x.summary||''}</p><a class="v10-news-link" href="${x.url||'noticias.html'}">Leer noticia →</a></div></article>`).join('')}
-const s=document.getElementById('v10SponsorsTrack');if(s&&Array.isArray(c.sponsors)){const a=c.sponsors.filter(x=>x.active).sort((x,y)=>(+x.order||0)-(+y.order||0));s.innerHTML=[...a,...a].map(x=>`<a class="v10-sponsor-logo" href="${x.url||'#'}" target="_blank" rel="noopener"><img src="assets/images/patrocinadores/${x.image}" alt="${x.name}"></a>`).join('')}
-document.querySelectorAll('[data-social]').forEach(a=>{const u=c.socials?.[a.dataset.social];a.hidden=!u;if(u)a.href=u})}
-document.addEventListener('DOMContentLoaded',()=>setTimeout(applyCmsHome,80));
+const CMS_HOME_KEY='frente_cms_home_v1';
+const CMS_HOME_CONTENT_ID='home_cms';
+let CMS_HOME_CACHE=null,CMS_SHARED_PROMISE=null;
+function ensureCmsShared(){if(window.FrenteSharedContent)return Promise.resolve(window.FrenteSharedContent);if(!CMS_SHARED_PROMISE)CMS_SHARED_PROMISE=new Promise((resolve,reject)=>{const script=document.createElement('script');script.src='assets/js/shared-site-content-v40.10.js';script.onload=()=>resolve(window.FrenteSharedContent);script.onerror=()=>reject(new Error('No se pudo cargar el servicio de publicación compartida.'));document.head.appendChild(script)});return CMS_SHARED_PROMISE}
+function cmsDefaults(){return window.FrenteSharedContent?.merge(window.FRENTE_CMS_DEFAULTS||{}, {})||JSON.parse(JSON.stringify(window.FRENTE_CMS_DEFAULTS||{}))}
+function getCmsHomeData(){return CMS_HOME_CACHE||cmsDefaults()}
+async function loadCmsHomeData(){await ensureCmsShared();const result=await FrenteSharedContent.load(CMS_HOME_CONTENT_ID,cmsDefaults(),CMS_HOME_KEY);CMS_HOME_CACHE=result.value;document.dispatchEvent(new CustomEvent('frente:cms-loaded',{detail:result}));if(typeof window.render==='function')window.render();return result}
+async function saveCmsHomeData(value){await ensureCmsShared();CMS_HOME_CACHE=value;try{return await FrenteSharedContent.save(CMS_HOME_CONTENT_ID,value,CMS_HOME_KEY)}catch(error){console.error('No se pudo publicar el CMS:',error);alert(error.message||'No se pudo publicar en Supabase.');throw error}}
+function cmsImage(value,folder){return !value?'':(/^(data:|https?:|blob:)/.test(value)?value:`assets/images/${folder}/${value}`)}
+function applyCmsHome(c=getCmsHomeData()){
+ if(c.images){const hero=document.querySelector('.v10-hero');if(hero&&c.images.hero)hero.style.backgroundImage=`url("${cmsImage(c.images.hero,'hero')}")`;document.querySelectorAll('img[src*="escudo-transparente.png"]').forEach(image=>{if(c.images.crest)image.src=cmsImage(c.images.crest,'brand')})}
+ const sponsors=document.getElementById('v10SponsorsTrack');if(sponsors&&Array.isArray(c.sponsors)){const active=c.sponsors.filter(item=>item.active).sort((a,b)=>(+a.order||0)-(+b.order||0));sponsors.innerHTML=[...active,...active].map(item=>`<a class="v10-sponsor-logo" href="${item.url||'#'}" target="_blank" rel="noopener"><img src="${cmsImage(item.image,'patrocinadores')}" alt="${item.name||'Patrocinador'}"></a>`).join('')}
+ document.querySelectorAll('[data-social]').forEach(link=>{const url=c.socials?.[link.dataset.social];link.hidden=!url;if(url)link.href=url});
+}
+document.addEventListener('DOMContentLoaded',async()=>{const result=await loadCmsHomeData();applyCmsHome(result.value)});

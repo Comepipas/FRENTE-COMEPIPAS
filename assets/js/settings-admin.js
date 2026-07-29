@@ -1,8 +1,8 @@
-document.addEventListener("DOMContentLoaded",()=>{
+document.addEventListener("DOMContentLoaded",async()=>{
   if(!protectAdminPage("dashboard")) return;
 
   const form=document.getElementById("siteSettingsForm");
-  const settings=getSiteSettings();
+  const settings=(await loadSiteSettings()).value;
   Object.entries(settings).forEach(([key,value])=>{if(form?.elements[key]) form.elements[key].value=value??""});
 
   const imageFields=[
@@ -34,10 +34,10 @@ document.addEventListener("DOMContentLoaded",()=>{
 
   refreshImagePreviews(); updateSettingsPreview();
   form?.addEventListener("input",updateSettingsPreview);
-  form?.addEventListener("submit",event=>{
+  form?.addEventListener("submit",async event=>{
     event.preventDefault();
     const data=Object.fromEntries(new FormData(form).entries());
-    saveSiteSettings(data); applySiteSettings(); refreshImagePreviews(); updateSettingsPreview();
+    await saveSiteSettings(data); applySiteSettings(data); refreshImagePreviews(); updateSettingsPreview();
     const msg=document.getElementById("settingsSaved"); msg.textContent="Configuración e imágenes guardadas correctamente.";
     setTimeout(()=>msg.textContent="",2500);
   });
