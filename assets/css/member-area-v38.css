@@ -115,3 +115,29 @@
   .member-header h1{font-size:2.8rem}
   .member-header-subtitle{font-size:.9rem}
 }
+
+/* Commit 38.1 · navegación interna funcional y accesible */
+.member-action-card:focus-visible,
+.web-menu-panel nav button:focus-visible,
+.member-workspace-bar button:focus-visible,
+.member-web-menu-button:focus-visible{
+  outline:3px solid #ffd247;
+  outline-offset:3px;
+}
+.member-action-card.active{
+  border-color:#0b65b1;
+  box-shadow:0 0 0 3px rgba(11,101,177,.12),0 12px 30px rgba(0,31,70,.12);
+}
+.member-panel[hidden]{display:none!important}
+.member-workspace-bar:focus{outline:none}
+.member-main.module-open .member-action-summary{display:none!important}
+.member-main.module-open #memberAreaStatus{display:none}
+.web-menu-panel nav button[aria-current="page"]{
+  background:#e3f2ff;
+  border-color:#72b8e7;
+  color:#004c87;
+}
+@media (prefers-reduced-motion:reduce){
+  .member-action-card,.member-panel.active{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto!important}
+}
