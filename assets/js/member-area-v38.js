@@ -106,40 +106,54 @@
         </article>
       `).join('');
     } catch (error) {
-      console.warn('[Commit 38.4] Menores vinculados:', error.message || error);
+      console.warn('[Commit 38.5] Menores vinculados:', error.message || error);
       section.hidden = true;
     }
+  }
+
+  function seasonLabel(record) {
+    return String(record.campanas?.temporada || record.temporada || '').trim() || 'Sin temporada';
+  }
+
+  async function loadCampaignRecords(profile) {
+    const client = await MemberAuth.client();
+    const { data, error } = await client
+      .from('campanas_registros')
+      .select('importe_pagado,precio_abono,cuota_final,forma_pago,estado,zona_club,fecha_pago,created_at,campanas(temporada)')
+      .eq('socio_id', profile.id)
+      .order('created_at', { ascending: false });
+    if (error) throw error;
+    return data || [];
+  }
+
+  function renderFees(rows) {
+    const body = document.getElementById('memberFeesBody');
+    if (!body) return;
+    const withFee = rows.filter(r => r.cuota_final != null || r.importe_pagado != null);
+    body.innerHTML = withFee.length ? withFee.map(record => `
+      <tr>
+        <td>${escapeHtml(seasonLabel(record))}</td>
+        <td>${record.cuota_final != null ? euro(record.cuota_final) : 'No desglosada'}</td>
+        <td>${escapeHtml(String(record.estado || 'Registrado').replaceAll('_', ' '))}</td>
+        <td>${escapeHtml(fmtDate(String(record.fecha_pago || record.created_at || '').slice(0, 10)))}</td>
+      </tr>`).join('') : '<tr><td colspan="4">Todavía no hay cuotas importadas y vinculadas a tu ficha.</td></tr>';
   }
 
   async function loadRealPayment(profile) {
     const box = document.getElementById('memberRealPayment');
     const empty = document.getElementById('memberNoRealPayment');
-
     try {
-      const client = await MemberAuth.client();
-      const { data, error } = await client
-        .from('campanas_registros')
-        .select('importe_pagado,precio_abono,cuota_final,forma_pago,estado,zona_club,created_at,campanas(temporada)')
-        .eq('socio_id', profile.id)
-        .order('created_at', { ascending: false })
-        .limit(10);
-
-      if (error) throw error;
-
-      const rows = (data || []).filter(record => {
-        const season = String(record.campanas?.temporada || '').trim().toLowerCase();
+      const rows = await loadCampaignRecords(profile);
+      renderFees(rows);
+      const record = rows.find(item => {
+        const season = seasonLabel(item).toLowerCase();
         return season === '2026/27' || season === '26/27' || season.includes('2026-2027');
       });
-
-      const record = rows[0];
       if (!record) {
-        set('renewalStatus', 'Sin registro');
-        set('memberRenewalSummary', 'Pendiente de sincronización');
-        if (box) box.hidden = true;
-        if (empty) empty.hidden = false;
-        return;
+        set('renewalStatus', 'Sin registro'); set('memberRenewalSummary', 'Pendiente de sincronización');
+        set('memberFeeSummary', rows.length ? 'Consulta tu historial' : 'Sin cuotas sincronizadas');
+        if (box) box.hidden = true; if (empty) empty.hidden = false; return;
       }
-
       set('realSeasonTicket', record.precio_abono != null ? euro(record.precio_abono) : 'No desglosado');
       set('realPeñaFee', record.cuota_final != null ? euro(record.cuota_final) : 'No desglosada');
       set('realPaidTotal', record.importe_pagado != null ? euro(record.importe_pagado) : 'No disponible');
@@ -148,15 +162,13 @@
       set('realPaymentSector', record.zona_club || profile.sector || 'No indicado');
       set('renewalStatus', String(record.estado || 'Registrado').replaceAll('_', ' '));
       set('memberRenewalSummary', record.importe_pagado != null ? `${euro(record.importe_pagado)} registrado` : 'Registro encontrado');
-
-      if (box) box.hidden = false;
-      if (empty) empty.hidden = true;
+      set('memberFeeSummary', record.cuota_final != null ? `${euro(record.cuota_final)} · ${String(record.estado || 'registrada').replaceAll('_',' ')}` : 'Cuota incluida en el registro');
+      set('memberFee', record.estado === 'pagado' ? 'Al día' : String(record.estado || 'Registrada').replaceAll('_',' '));
+      if (box) box.hidden = false; if (empty) empty.hidden = true;
     } catch (error) {
-      console.warn('[Commit 38.4] Pago real no disponible:', error.message || error);
-      set('renewalStatus', 'No disponible');
-      set('memberRenewalSummary', 'Pendiente de sincronización');
-      if (box) box.hidden = true;
-      if (empty) empty.hidden = false;
+      console.warn('[Commit 38.5] Pago y cuotas no disponibles:', error.message || error);
+      renderFees([]); set('renewalStatus', 'No disponible'); set('memberRenewalSummary', 'Pendiente de sincronización'); set('memberFeeSummary', 'No se pudo consultar');
+      if (box) box.hidden = true; if (empty) empty.hidden = false;
     }
   }
 

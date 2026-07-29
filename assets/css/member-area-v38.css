@@ -266,3 +266,8 @@ body.menu-open{overflow:hidden}
  .member-workspace-bar{border-radius:16px;padding:10px}
  .member-workspace-bar button{font-size:.82rem;padding:9px 10px}
 }
+
+/* Commit 38.5 · se retira la falsa imagen “La Rosaleda · Día de partido”.
+   Hasta disponer de una fotografía real, la cabecera usa un fondo institucional limpio. */
+.member-area-page{background:linear-gradient(145deg,#eaf3fa 0%,#f7fbfe 55%,#e4f0f8 100%)}
+.member-header{background:radial-gradient(circle at 82% 18%,rgba(255,210,71,.24),transparent 23%),linear-gradient(115deg,#001f46 0%,#005998 58%,#0785c8 100%)}
