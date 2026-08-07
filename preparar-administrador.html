@@ -3,7 +3,7 @@
 <title>Preparar administrador | Frente Comepipas</title>
 <link rel="stylesheet" href="assets/css/variables.css"><link rel="stylesheet" href="assets/css/style.css">
 <style>body{background:#eef4fa}.setup{max-width:850px;margin:40px auto;background:#fff;padding:28px;border-radius:20px}.step{border-top:1px solid #dde5ee;padding:18px 0}.step:first-of-type{border-top:0}.code{background:#f5f7fa;border-radius:10px;padding:13px;overflow:auto}.ok{color:#087f5b}.bad{color:#c92a2a}</style>
-<link rel="stylesheet" href="assets/css/admin-cleanup-v28.2.css"></head><body><main class="setup">
+<link rel="stylesheet" href="assets/css/admin-cleanup-v28.2.css"><link rel="stylesheet" href="assets/css/admin-enterprise-v40.css?v=40.0"></head><body><main class="setup">
 <span class="kicker">V13.3.0 R5</span><h1>Preparar el primer administrador</h1>
 <div class="step"><h2>1. Crear usuario en Supabase</h2><p>Supabase → Authentication → Users → Add user. Escribe el correo y una contraseña segura. Activa la confirmación automática del correo si aparece esa opción.</p></div>
 <div class="step"><h2>2. Asociar el rol</h2><p>Copia el UUID del usuario y ejecuta en SQL Editor:</p>
@@ -33,4 +33,4 @@ document.getElementById("checkBtn").onclick=async()=>{
   out.className="ok";out.textContent="Configuración correcta. Ya puedes crear el usuario y entrar.";
  }catch(e){out.className="bad";out.textContent=e.message||String(e)}
 };
-</script><script src="assets/js/admin-cleanup-v28.2.js"></script></body></html>
+</script><script src="assets/js/admin-cleanup-v28.2.js"></script><script src="assets/js/admin-enterprise-v40.js?v=40.0"></script></body></html>

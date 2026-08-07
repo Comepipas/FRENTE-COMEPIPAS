@@ -1,8 +1,8 @@
-document.addEventListener("DOMContentLoaded",async()=>{
+document.addEventListener("DOMContentLoaded",()=>{
   if(!protectAdminPage("dashboard")) return;
 
   const form=document.getElementById("siteSettingsForm");
-  const settings=(await loadSiteSettings()).value;
+  const settings=getSiteSettings();
   Object.entries(settings).forEach(([key,value])=>{if(form?.elements[key]) form.elements[key].value=value??""});
 
   const imageFields=[
@@ -34,10 +34,10 @@ document.addEventListener("DOMContentLoaded",async()=>{
 
   refreshImagePreviews(); updateSettingsPreview();
   form?.addEventListener("input",updateSettingsPreview);
-  form?.addEventListener("submit",async event=>{
+  form?.addEventListener("submit",event=>{
     event.preventDefault();
     const data=Object.fromEntries(new FormData(form).entries());
-    await saveSiteSettings(data); applySiteSettings(data); refreshImagePreviews(); updateSettingsPreview();
+    saveSiteSettings(data); applySiteSettings(); refreshImagePreviews(); updateSettingsPreview();
     const msg=document.getElementById("settingsSaved"); msg.textContent="Configuración e imágenes guardadas correctamente.";
     setTimeout(()=>msg.textContent="",2500);
   });
@@ -60,4 +60,3 @@ function updateSettingsPreview(){
   document.getElementById("previewHero").style.setProperty("--preview-primary",data.colorPrimario||"#0057B8");
   document.getElementById("previewHero").style.setProperty("--preview-accent",data.colorAcento||"#FFD447");
 }
-(()=>{const links=[['admin.html','▦','Dashboard'],['socios-admin.html','♙','Socios'],['cuotas-admin.html','€','Cuotas'],['tienda-admin.html','◇','Material'],['viajes-admin.html','➜','ON TOUR'],['noticias-admin.html','▤','Noticias'],['multimedia-admin.html','▧','Galería'],['calendario-admin.html','□','Calendario'],['documentos-admin.html','▱','Documentos'],['comunicaciones-admin.html','✉','Comunicaciones'],['configuracion-admin.html','⚙','Configuración'],['auditoria-admin.html','◎','Auditoría']];document.addEventListener('DOMContentLoaded',()=>{document.body.classList.add('settings-enterprise-page');document.body.insertAdjacentHTML('afterbegin',`<aside class="enterprise-sidebar" id="enterpriseSidebar"><div class="enterprise-brand"><img src="assets/images/brand/escudo-transparente.png"><div><strong>Frente Comepipas</strong><span>Administración Enterprise</span></div><button class="sidebar-close" id="sidebarClose">×</button></div><nav class="enterprise-nav">${links.map(x=>`<a class="${x[0]==='configuracion-admin.html'?'active':''}" href="${x[0]}"><span class="nav-icon">${x[1]}</span>${x[2]}</a>`).join('')}</nav><div class="enterprise-sidebar-footer"><a href="index.html">Ver web pública ↗</a><button data-auth-logout>Cerrar sesión</button></div></aside><header class="enterprise-topbar"><button class="sidebar-open" id="sidebarOpen">☰</button><div class="topbar-search"><span>⌕</span><input placeholder="Buscar un módulo…"></div><div class="topbar-meta"><div class="avatar">FC</div></div></header>`);document.querySelector('#sidebarOpen').onclick=()=>document.querySelector('#enterpriseSidebar').classList.add('open');document.querySelector('#sidebarClose').onclick=()=>document.querySelector('#enterpriseSidebar').classList.remove('open')})})();

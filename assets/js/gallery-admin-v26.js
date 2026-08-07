@@ -1,15 +1,151 @@
-document.head.insertAdjacentHTML('beforeend','<link rel="stylesheet" href="assets/css/gallery-enterprise-v40.16.css">');
 document.addEventListener('DOMContentLoaded',()=>{
-const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-const grid=$('#galleryAdminGrid'),form=$('#albumForm'),modal=$('#albumModal'),photos=$('#albumPhotosAdmin'),uploadForm=$('#photoUploadForm'),files=$('#photoFiles'),status=$('#photoUploadStatus');let current=null;
-const busy=(button,value,label)=>{button.disabled=value;button.textContent=value?(label||button.textContent):(button.dataset.label||button.textContent)};
-async function load(){grid.innerHTML='<p class="gallery-loading">Cargando álbumes…</p>';try{const rows=await GalleryV26.albums(true);grid.innerHTML=rows.length?rows.map(a=>`<article class="gallery-admin-card">${a.portada_url?`<img src="${esc(a.portada_url)}" alt="${esc(a.titulo)}">`:'<div class="gallery-card-placeholder">Sin portada</div>'}<h3>${esc(a.titulo)}</h3><p><span class="gallery-state ${a.publicado?'published':'draft'}">${a.publicado?'Publicado':'Borrador'}</span> · ${a.gallery_photos?.[0]?.count||0} fotos</p><div class="gallery-admin-actions"><button type="button" class="btn btn-primary" data-edit="${a.id}">Editar álbum</button><button type="button" class="btn btn-dark-outline" data-photos="${a.id}">Gestionar fotos</button><button type="button" class="btn btn-outline" data-del="${a.id}">Eliminar</button></div></article>`).join(''):'<div class="gallery-empty-admin"><strong>No hay álbumes todavía</strong><span>Crea el primero y sube las fotos desde tu ordenador.</span></div>';bindCards()}catch(e){grid.innerHTML=`<p class="gallery-error">${esc(e.message)}</p>`}}
-function bindCards(){grid.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>editAlbum(b.dataset.edit));grid.querySelectorAll('[data-photos]').forEach(b=>b.onclick=()=>managePhotos(b.dataset.photos));grid.querySelectorAll('[data-del]').forEach(b=>b.onclick=async()=>{if(!confirm('¿Eliminar este álbum y todas sus fotos?'))return;try{await GalleryV26.deleteAlbum(b.dataset.del);await load()}catch(e){alert(e.message)}})}
-async function editAlbum(id){try{const album=await GalleryV26.album(id);current=album;form.reset();for(const [key,value] of Object.entries(album)){const field=form.elements[key];if(field)field.type==='checkbox'?field.checked=!!value:field.value=value??''}$('#albumModalTitle').textContent='Editar álbum';modal.classList.add('open')}catch(e){alert(`No se pudo abrir el álbum: ${e.message}`)}}
-async function managePhotos(id){try{current=await GalleryV26.album(id);$('#photoAlbumTitle').textContent=current.titulo;renderPhotos();files.value='';status.textContent='';$('#photoSelection').innerHTML='';$('#photosModal').classList.add('open')}catch(e){alert(`No se pudieron cargar las fotos: ${e.message}`)}}
-function renderPhotos(){photos.innerHTML=current.photos.length?current.photos.map(x=>`<article class="photo-admin-item"><img src="${esc(x.imagen_url)}" alt="${esc(x.titulo||'Fotografía')}"><div><span>${current.portada_url===x.imagen_url?'Portada actual':''}</span><button type="button" class="btn btn-dark-outline" data-cover="${x.id}">Usar de portada</button><button type="button" class="btn btn-outline" data-pdel="${x.id}">Eliminar</button></div></article>`).join(''):'<div class="gallery-empty-admin"><strong>Este álbum aún no tiene fotos</strong><span>Selecciónalas arriba directamente desde tu ordenador.</span></div>';photos.querySelectorAll('[data-cover]').forEach(b=>b.onclick=async()=>{const photo=current.photos.find(x=>x.id===b.dataset.cover);try{await GalleryV26.setCover(current.id,photo.imagen_url);current.portada_url=photo.imagen_url;renderPhotos();await load()}catch(e){alert(e.message)}});photos.querySelectorAll('[data-pdel]').forEach(b=>b.onclick=async()=>{const photo=current.photos.find(x=>x.id===b.dataset.pdel);if(!confirm('¿Eliminar esta fotografía?'))return;try{await GalleryV26.deletePhoto(photo);await managePhotos(current.id);await load()}catch(e){alert(e.message)}})}
-$('#newAlbum').onclick=()=>{current=null;form.reset();form.elements.id.value='';form.elements.orden.value='0';$('#albumModalTitle').textContent='Nuevo álbum';modal.classList.add('open')};document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>b.closest('.store-modal').classList.remove('open'));
-form.onsubmit=async e=>{e.preventDefault();const button=form.querySelector('[type="submit"]');button.dataset.label=button.textContent;busy(button,true,'Guardando…');try{const values=Object.fromEntries(new FormData(form));values.publicado=form.elements.publicado.checked;current=await GalleryV26.saveAlbum(values);modal.classList.remove('open');await load()}catch(err){alert(`No se pudo guardar el álbum: ${err.message}`)}finally{busy(button,false)}};
-files.onchange=()=>{const selected=[...files.files];$('#photoSelection').innerHTML=selected.length?selected.map(f=>`<span>${esc(f.name)}</span>`).join(''):''};
-uploadForm.onsubmit=async e=>{e.preventDefault();const selected=[...files.files];if(!current?.id||!selected.length)return;const button=uploadForm.querySelector('[type="submit"]');button.dataset.label=button.textContent;busy(button,true,`Subiendo 0 de ${selected.length}…`);try{for(let i=0;i<selected.length;i++){button.textContent=`Subiendo ${i+1} de ${selected.length}…`;status.textContent=`Procesando ${selected[i].name}`;const uploaded=await GalleryV26.upload(current.id,selected[i]);const photo=await GalleryV26.addPhoto({album_id:current.id,imagen_url:uploaded.url,titulo:selected[i].name,orden:current.photos.length+i});if(!current.portada_url&&i===0){await GalleryV26.setCover(current.id,photo.imagen_url);current.portada_url=photo.imagen_url}}status.textContent=`${selected.length} fotografía${selected.length===1?'':'s'} subida${selected.length===1?'':'s'} correctamente.`;await managePhotos(current.id);await load()}catch(err){status.textContent='';alert(`No se pudieron subir las fotografías: ${err.message}`)}finally{busy(button,false)}};load();
+  const grid=document.querySelector('#galleryAdminGrid');
+  const form=document.querySelector('#albumForm');
+  const modal=document.querySelector('#albumModal');
+  const photos=document.querySelector('#albumPhotosAdmin');
+  const uploadForm=document.querySelector('#photoUploadForm');
+  const filesInput=document.querySelector('#photoFiles');
+  const albumFiles=document.querySelector('#albumFiles');
+  const albumFilePreview=document.querySelector('#albumFilePreview');
+  let current=null;
+  let pendingFiles=[];
+  let pendingCoverIndex=0;
+  const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+
+  function showError(error, fallback='No se pudo completar la operación.'){
+    console.error(error);
+    alert(error?.message||fallback);
+  }
+
+  function resetPendingFiles(){
+    pendingFiles=[];
+    pendingCoverIndex=0;
+    if(albumFiles) albumFiles.value='';
+    if(albumFilePreview) albumFilePreview.innerHTML='';
+  }
+
+  function renderPendingFiles(){
+    if(!albumFilePreview)return;
+    if(!pendingFiles.length){albumFilePreview.innerHTML='';return;}
+    albumFilePreview.innerHTML=pendingFiles.map((file,index)=>{
+      const selected=index===pendingCoverIndex;
+      return `<button type="button" class="album-preview-item ${selected?'is-cover':''}" data-preview-cover="${index}" aria-label="${selected?'Portada seleccionada':'Usar como portada'}">
+        <img src="${URL.createObjectURL(file)}" alt="${esc(file.name)}">
+        <span>${selected?'Portada':'Elegir portada'}</span>
+      </button>`;
+    }).join('');
+    albumFilePreview.querySelectorAll('[data-preview-cover]').forEach(button=>{
+      button.onclick=()=>{pendingCoverIndex=Number(button.dataset.previewCover);renderPendingFiles();};
+    });
+  }
+
+  async function load(){
+    const rows=await GalleryV26.albums(true);
+    grid.innerHTML=rows.map(a=>`<article class="gallery-admin-card">
+      <img src="${esc(a.portada_url||'assets/images/gallery/celebracion.jpg')}" alt="Portada de ${esc(a.titulo)}">
+      <h3>${esc(a.titulo)}</h3>
+      <p>${a.publicado?'Publicado':'Borrador'} · ${a.gallery_photos?.[0]?.count||0} fotos</p>
+      <div class="gallery-admin-actions">
+        <button class="btn btn-primary" data-edit="${a.id}">Editar</button>
+        <button class="btn btn-dark-outline" data-photos="${a.id}">Fotos y portada</button>
+        <button class="btn btn-outline" data-del="${a.id}">Eliminar</button>
+      </div></article>`).join('')||'<p>No hay álbumes creados.</p>';
+    grid.querySelectorAll('[data-edit]').forEach(b=>b.onclick=async()=>{
+      try{
+        const a=await GalleryV26.album(b.dataset.edit); current=a; resetPendingFiles();
+        Object.keys(a).forEach(k=>{if(form.elements[k]) form.elements[k].type==='checkbox'?form.elements[k].checked=!!a[k]:form.elements[k].value=a[k]??''});
+        modal.classList.add('open');
+      }catch(error){showError(error)}
+    });
+    grid.querySelectorAll('[data-photos]').forEach(b=>b.onclick=()=>managePhotos(b.dataset.photos));
+    grid.querySelectorAll('[data-del]').forEach(b=>b.onclick=async()=>{if(confirm('¿Eliminar este álbum y todas sus fotos?')){try{await GalleryV26.deleteAlbum(b.dataset.del);await load()}catch(error){showError(error)}}});
+  }
+
+  async function managePhotos(id){
+    try{
+      current=await GalleryV26.album(id);
+      document.querySelector('#photoAlbumTitle').textContent=`Fotografías · ${current.titulo}`;
+      photos.innerHTML=current.photos.length?current.photos.map(x=>{
+        const cover=current.portada_url===x.imagen_url;
+        return `<div class="photo-admin-item ${cover?'is-cover':''}">
+          <div class="photo-admin-image"><img src="${esc(x.imagen_url)}" alt="${esc(x.titulo||'Fotografía')}">${cover?'<span class="photo-cover-badge">Portada</span>':''}</div>
+          <div class="photo-admin-actions">
+            <button class="btn btn-primary" data-cover="${x.id}" ${cover?'disabled':''}>${cover?'Portada actual':'Usar como portada'}</button>
+            <button class="btn btn-outline" data-pdel="${x.id}">Eliminar</button>
+          </div>
+        </div>`;
+      }).join(''):'<p class="cms-note">Todavía no has subido fotografías.</p>';
+      photos.querySelectorAll('[data-cover]').forEach(b=>b.onclick=async()=>{
+        const photo=current.photos.find(x=>x.id===b.dataset.cover); if(!photo)return;
+        b.disabled=true; b.textContent='Guardando…';
+        try{await GalleryV26.setCover(current.id,photo.imagen_url);await managePhotos(current.id);await load()}catch(error){showError(error);b.disabled=false;b.textContent='Usar como portada'}
+      });
+      photos.querySelectorAll('[data-pdel]').forEach(b=>b.onclick=async()=>{
+        const photo=current.photos.find(x=>x.id===b.dataset.pdel);
+        if(!confirm('¿Eliminar esta fotografía?'))return;
+        try{
+          await GalleryV26.deletePhoto(b.dataset.pdel);
+          if(photo&&current.portada_url===photo.imagen_url){
+            const remaining=current.photos.filter(x=>x.id!==photo.id);
+            await GalleryV26.setCover(current.id,remaining[0]?.imagen_url||'');
+          }
+          await managePhotos(id);await load();
+        }catch(error){showError(error)}
+      });
+      document.querySelector('#photosModal').classList.add('open');
+    }catch(error){showError(error)}
+  }
+
+  document.querySelector('#newAlbum').onclick=()=>{current=null;form.reset();form.elements.id.value='';resetPendingFiles();modal.classList.add('open')};
+  document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>b.closest('.store-modal').classList.remove('open'));
+  albumFiles?.addEventListener('change',()=>{
+    pendingFiles=[...albumFiles.files];
+    pendingCoverIndex=0;
+    renderPendingFiles();
+  });
+
+  form.onsubmit=async e=>{
+    e.preventDefault();
+    const button=form.querySelector('button[type="submit"],button:not([type])');
+    const original=button.textContent;
+    button.disabled=true;button.textContent='Guardando…';
+    try{
+      const o=Object.fromEntries(new FormData(form));
+      o.publicado=form.elements.publicado.checked;
+      const saved=await GalleryV26.saveAlbum(o);
+      const albumId=saved.id;
+      const uploaded=[];
+      for(let index=0;index<pendingFiles.length;index++){
+        button.textContent=`Subiendo ${index+1} de ${pendingFiles.length}…`;
+        const file=pendingFiles[index];
+        const url=await GalleryV26.upload(albumId,file);
+        await GalleryV26.addPhoto({album_id:albumId,imagen_url:url,titulo:file.name,orden:index});
+        uploaded.push(url);
+      }
+      if(uploaded.length){
+        const coverUrl=uploaded[Math.min(pendingCoverIndex,uploaded.length-1)];
+        await GalleryV26.setCover(albumId,coverUrl);
+      }
+      modal.classList.remove('open');resetPendingFiles();await load();
+      if(uploaded.length) await managePhotos(albumId);
+    }catch(error){showError(error,'No se pudo guardar el álbum o subir las fotografías.')}
+    finally{button.disabled=false;button.textContent=original;}
+  };
+
+  uploadForm.onsubmit=async e=>{
+    e.preventDefault(); const fs=[...filesInput.files]; if(!current||!fs.length)return;
+    const button=uploadForm.querySelector('button'); const original=button.textContent; button.disabled=true;
+    try{
+      for(let i=0;i<fs.length;i++){
+        button.textContent=`Subiendo ${i+1} de ${fs.length}…`;
+        const f=fs[i];
+        const url=await GalleryV26.upload(current.id,f);
+        await GalleryV26.addPhoto({album_id:current.id,imagen_url:url,titulo:f.name,orden:current.photos.length+i});
+        if(!current.portada_url){await GalleryV26.setCover(current.id,url);current.portada_url=url;}
+      }
+      uploadForm.reset();await managePhotos(current.id);await load();
+    }catch(error){showError(error,'No se pudieron subir las fotografías.')}
+    finally{button.disabled=false;button.textContent=original;}
+  };
+  load().catch(showError);
 });

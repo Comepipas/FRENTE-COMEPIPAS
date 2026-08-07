@@ -31,8 +31,7 @@ async function load(){
     render();
     setConnection("online",`Conectado a Supabase · ${state.count} socios`);
     if(state.count===0){
-      const searching=Boolean($("membersSearch").value.trim()||$("membersStatus").value||$("membersAccount").value||$("membersCategory").value||$("membersFee").value);
-      $("membersTableBody").innerHTML=searching?'<tr><td colspan="8" class="members-empty"><strong>No hay socios que coincidan con la búsqueda.</strong><br>Prueba con menos palabras o revisa los filtros seleccionados.</td></tr>':'<tr><td colspan="8" class="members-empty"><strong>Todavía no hay socios registrados.</strong></td></tr>';
+      $("membersTableBody").innerHTML='<tr><td colspan="8" class="members-empty"><strong>Conexión correcta, pero no se reciben socios.</strong><br>Puede que la tabla esté vacía o que las políticas RLS no permitan leerla con el usuario actual.</td></tr>';
     }
   }catch(e){
     console.error("Error cargando socios:",e);

@@ -4,36 +4,17 @@ window.FrenteMembersService=(()=>{
  const db=()=>window.FrenteDatabase.getClient();
  function cleanText(v){const x=String(v??"").trim();return x||null}
  function norm(v){return String(v??"").trim().toLowerCase()}
- function searchNorm(v){return norm(v).normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/\s+/g," ")}
- function accentVariants(word){
-  const choices={a:["a","á"],e:["e","é"],i:["i","í"],o:["o","ó"],u:["u","ú","ü"]};
-  let variants=[""];
-  for(const char of searchNorm(word))variants=variants.flatMap(base=>(choices[char]||[char]).map(x=>base+x)).slice(0,64);
-  return [...new Set(variants)];
- }
  function canonicalCategory(v){const x=norm(v);return ["adulto","joven","infantil"].includes(x)?x:(x||null)}
  function ageAt(birth,reference=new Date()){if(!birth)return null;const b=new Date(`${birth}T00:00:00`);if(Number.isNaN(b.getTime()))return null;let age=reference.getFullYear()-b.getFullYear();const m=reference.getMonth()-b.getMonth();if(m<0||(m===0&&reference.getDate()<b.getDate()))age--;return age>=0?age:null}
  function map(row){const pending=!row.numero_socio||norm(row.numero_socio_estado)!=="asignado";return {...row,numero:pending?"Pendiente":String(row.numero_socio).padStart(4,"0"),numeroSocioPendiente:pending,nombreCompleto:`${row.nombre||""} ${row.apellidos||""}`.trim(),cuenta:row.cuenta_activada?"Activada":"Pendiente de activar",cuota:row.cuota_al_dia?"Al día":"Pendiente",nacimiento:row.fecha_nacimiento,edadActual:ageAt(row.fecha_nacimiento),alta:row.fecha_alta,precioAbono:Number(row.precio_abono||0),observaciones:row.observaciones_internas}}
  async function list({search="",status="",category="",account="",fee="",page=1,pageSize=cfg().pageSize}={}){
+   let query=db().from(cfg().table).select(cfg().select,{count:"exact"});
    const term=String(search||"").trim().replace(/[,%()]/g," ");
-   const filteredQuery=()=>{
-    let q=db().from(cfg().table).select(cfg().select,{count:"exact"});
-    if(status)q=q.eq("estado",status);
-    if(category)q=q.ilike("categoria",String(category).trim());
-    if(account!=="")q=q.eq("cuenta_activada",account==="true");
-    if(fee!=="")q=q.eq("cuota_al_dia",fee==="true");
-    return q;
-   };
-   let query=filteredQuery();
-   if(term){
-    const columns=["nombre","apellidos","dni","email","telefono","numero_abonado_malaga"];
-    for(const word of searchNorm(term).split(" ").filter(Boolean)){
-     const clauses=[];
-     for(const variant of accentVariants(word))for(const column of columns)clauses.push(`${column}.ilike.%${variant}%`);
-     if(/^\d+$/.test(word))clauses.push(`numero_socio.eq.${Number(word)}`);
-     query=query.or(clauses.join(","));
-    }
-   }
+   if(term){const numeric=Number(term);const clauses=[`nombre.ilike.%${term}%`,`apellidos.ilike.%${term}%`,`dni.ilike.%${term}%`,`email.ilike.%${term}%`,`telefono.ilike.%${term}%`,`numero_abonado_malaga.ilike.%${term}%`];if(Number.isInteger(numeric))clauses.push(`numero_socio.eq.${numeric}`);query=query.or(clauses.join(","))}
+   if(status)query=query.eq("estado",status);
+   if(category)query=query.ilike("categoria",String(category).trim());
+   if(account!=="")query=query.eq("cuenta_activada",account==="true");
+   if(fee!=="")query=query.eq("cuota_al_dia",fee==="true");
    const from=(page-1)*pageSize,to=from+pageSize-1;
    const {data,error,count}=await query.order("nombre",{ascending:true}).order("apellidos",{ascending:true}).range(from,to);
    if(error)throw error;
