@@ -1,0 +1,12 @@
+AVISOS POR CORREO DE SOLICITUDES DE MATERIAL
+
+La web funciona aunque el correo no esté configurado.
+
+En Supabase despliega la función material-request-notification y configura estos secretos:
+- RESEND_API_KEY: clave de Resend.
+- MATERIAL_NOTIFICATION_EMAIL: correo de la Peña que recibirá los avisos.
+- MATERIAL_NOTIFICATION_FROM: remitente verificado, por ejemplo Frente Comepipas <avisos@tudominio.es>.
+
+Comando orientativo con Supabase CLI:
+supabase functions deploy material-request-notification --no-verify-jwt
+supabase secrets set RESEND_API_KEY=... MATERIAL_NOTIFICATION_EMAIL=... MATERIAL_NOTIFICATION_FROM=...

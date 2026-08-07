@@ -426,3 +426,6 @@
     });
   });
 })();
+
+/* Commit 40.2 · módulo familiar privado */
+(function(){var css=document.createElement('link');css.rel='stylesheet';css.href='assets/css/family-v40.2.css?v=40.2';document.head.appendChild(css);var js=document.createElement('script');js.src='assets/js/family-member-v40.2.js?v=40.2';document.body.appendChild(js)})();

@@ -1,0 +1,8 @@
+FRENTE COMEPIPAS · COMMIT 40.4 · ON TOUR ENTERPRISE
+
+- Módulo integrado en la navegación Enterprise.
+- Cabecera, KPIs, desplazamientos y solicitudes rediseñados.
+- Formularios y modales más claros y responsive.
+- Tabla de solicitudes con cabecera fija, zebra y hover.
+- Se conservan creación, edición, eliminación, estados, acompañantes y exportación.
+- Compatible con Supabase. No requiere migraciones SQL.

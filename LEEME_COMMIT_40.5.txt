@@ -1,0 +1,5 @@
+COMMIT 40.5 · MATERIAL ENTERPRISE
+
+Catálogo, solicitudes, KPIs, filtros, tarjetas, tabla y formularios integrados en la interfaz Enterprise. Se conservan fotografías, disponibilidad, estados, exportación y Supabase. No requiere SQL.
+
+Corrección 40.5.1: solo las solicitudes Pendientes generan aviso; se muestran teléfono y correo con accesos a llamada, WhatsApp y email; se incluye función Supabase opcional para avisar por correo a la Peña.
