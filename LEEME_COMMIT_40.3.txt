@@ -1,11 +1,15 @@
-FRENTE COMEPIPAS · COMMIT 40.3 · CUOTAS ENTERPRISE
+COMMIT 40.3 · CONSISTENCIA DE SOCIOS, CUOTAS Y ABONOS
 
-- Diseño integrado con Dashboard y Socios Enterprise.
-- Cabecera limpia, KPIs homogéneos y filtros profesionales.
-- Tabla con cabecera fija, zebra y hover.
-- Formularios de cuota y cobro reorganizados.
-- Recuperados los indicadores de directivos y la operación masiva ya existente.
-- Responsive mejorado y navegación unificada.
-- Se conservan cobros, edición, anulación, reactivación, sincronización y exportación.
-- Compatible con Supabase. No requiere migraciones SQL.
-- Corrección 40.3.1: búsqueda de cuotas por todas las palabras, sin importar orden, comas, mayúsculas o tildes.
+ANTES DE PROBAR LA WEB
+1. Abra Supabase > SQL Editor.
+2. Ejecute completo: supabase/migrations/040_3_member_data_consistency.sql
+3. Publique después el contenido de este ZIP en la raíz del repositorio.
+
+CAMBIOS
+- La antigüedad declarada queda visible en la ficha.
+- Se genera un número provisional interno P-#### sin ocupar el definitivo.
+- La cuota de la ficha es un indicador calculado y ya no una casilla editable falsa.
+- Los pagos manuales se registran en cuotas_socios para la temporada activa.
+- Se distinguen sector pendiente e importe de abono sin informar.
+- Se retiran de Socios los accesos de migración, plantilla y conexión.
+- Importación y sincronización se conservan internamente para el Excel de 2027/28.
