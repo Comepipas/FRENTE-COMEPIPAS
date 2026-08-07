@@ -8,7 +8,7 @@
   async function enhance(){
     if(!memberId)return;
     const db=window.FrenteDatabase.getClient();
-    const {data:m,error}=await db.from("socios").select("numero_socio,numero_socio_provisional,numero_socio_estado,antiguedad_declarada_tipo,antiguedad_declarada_temporada,antiguedad_declarada_anio,antiguedad_declarada_observaciones,antiguedad_estado,precio_abono,sector").eq("id",memberId).single();
+    const {data:m,error}=await db.from("socios").select("numero_socio,numero_socio_provisional,numero_socio_estado,antiguedad_declarada_tipo,antiguedad_declarada_temporada,antiguedad_declarada_anio,antiguedad_declarada_observaciones,antiguedad_estado,precio_abono,sector,menor_sin_dni,email,email_contacto,correo_compartido_familiar,datos_revision_estado,datos_revisados_at,fecha_nacimiento,categoria,es_directivo").eq("id",memberId).single();
     if(error)return;
     const numberInput=$('[name="numero_socio"]');
     if(numberInput){
@@ -20,12 +20,34 @@
     if(pena&&!$("#antiquityStatus")){
       const declared=m.antiguedad_declarada_temporada||m.antiguedad_declarada_anio||m.antiguedad_declarada_tipo;
       pena.insertAdjacentHTML("beforeend",`<div id="antiquityStatus" class="record-field full"><label>Antigüedad declarada por el socio</label><div class="record-history-item"><strong>${esc(declared||"No declarada")}</strong><span>Estado: ${esc(text(m.antiguedad_estado))}</span>${m.antiguedad_declarada_observaciones?`<small>${esc(m.antiguedad_declarada_observaciones)}</small>`:""}</div></div>`);
+      pena.insertAdjacentHTML("beforeend",`<div class="record-field full"><label>Revisión de la ficha maestra</label><select name="datos_revision_estado" disabled><option value="pendiente">Pendiente de revisar</option><option value="incompleto">Datos incompletos</option><option value="posible_duplicado">Posible duplicado</option><option value="revisado">Revisado y correcto</option></select>${m.datos_revisados_at?`<small>Revisado el ${esc(new Date(m.datos_revisados_at).toLocaleDateString('es-ES'))}</small>`:""}</div>`);
     }
+    const personal=$('[data-panel="personal"] .record-grid');
+    if(personal&&!$("#masterDataFlags"))personal.insertAdjacentHTML("beforeend",`<div id="masterDataFlags" class="record-field full"><div class="record-checks"><label><input type="checkbox" name="menor_sin_dni" disabled> Menor sin DNI obligatorio</label><label><input type="checkbox" name="correo_compartido_familiar" disabled> Correo de contacto compartido con un familiar</label></div><small>El correo compartido sirve para contactar; no crea otra cuenta web para el menor.</small></div>`);
+    const minor=$('[name="menor_sin_dni"]');if(minor)minor.checked=!!m.menor_sin_dni;
+    const shared=$('[name="correo_compartido_familiar"]');if(shared)shared.checked=!!m.correo_compartido_familiar;
+    const email=$('[name="email"]');if(email&&m.correo_compartido_familiar){email.value=m.email_contacto||m.email||"";const label=email.closest('.record-field')?.querySelector('label');if(label)label.textContent="Correo de contacto familiar"}
+    const review=$('[name="datos_revision_estado"]');if(review)review.value=m.datos_revision_estado||"pendiente";
+    const dni=$('[name="dni"]');if(dni&&m.menor_sin_dni){dni.value="";dni.placeholder="MENOR — DNI no obligatorio"}
+    const category=$('[name="categoria"]');if(category){category.readOnly=true;category.title="Se calcula con la fecha de nacimiento y la fecha de corte de la temporada"}
+    await showCalculatedCategory(db,m,pena);
     const price=$('[name="precio_abono"]');
     if(price&&m.precio_abono==null){price.placeholder="Importe sin informar";price.value=""}
     const sector=$('[name="sector"]');if(sector&&!m.sector)sector.placeholder="Sector pendiente";
     const fee=$('[name="cuota_al_dia"]');if(fee){fee.disabled=true;fee.closest("label")?.append(" (calculado desde Cuotas y pagos)")}
     await addPaymentButton(db);
+  }
+
+  async function showCalculatedCategory(db,m,container){
+    if(!container||!m.fecha_nacimiento)return;
+    const {data:campaign}=await db.from("campanas_abonados").select("id,nombre,temporada,fecha_corte").in("estado",["abierta","revision","borrador"]).order("temporada",{ascending:false}).limit(1).maybeSingle();
+    if(!campaign)return;
+    const {data:categories}=await db.from("campanas_categorias").select("nombre,nacimiento_desde,nacimiento_hasta,cuota,activa").eq("campana_id",campaign.id).eq("activa",true).order("orden");
+    const list=categories||[];
+    const category=m.es_directivo?list.find(x=>String(x.nombre).toLowerCase()==="directivo"):list.find(x=>(!x.nacimiento_desde||m.fecha_nacimiento>=x.nacimiento_desde)&&(!x.nacimiento_hasta||m.fecha_nacimiento<=x.nacimiento_hasta)&&String(x.nombre).toLowerCase()!=="directivo");
+    if(!category)return;
+    const input=$('[name="categoria"]');if(input)input.value=String(category.nombre).toLowerCase();
+    container.insertAdjacentHTML("beforeend",`<div class="record-field full"><label>Categoría y cuota calculadas</label><div class="record-history-item"><strong>${esc(category.nombre)} · ${Number(category.cuota||0).toLocaleString('es-ES',{style:'currency',currency:'EUR'})}</strong><span>${esc(campaign.temporada||campaign.nombre)} · nacimiento ${esc(m.fecha_nacimiento)} · fecha de corte ${esc(campaign.fecha_corte||'sin configurar')}</span><small>La tarifa puede modificarse desde Categorías y cuotas de la campaña.</small></div></div>`);
   }
 
   async function addPaymentButton(db){

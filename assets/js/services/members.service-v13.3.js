@@ -6,11 +6,11 @@ window.FrenteMembersService=(()=>{
  function norm(v){return String(v??"").trim().toLowerCase()}
  function canonicalCategory(v){const x=norm(v);return ["adulto","joven","infantil"].includes(x)?x:(x||null)}
  function ageAt(birth,reference=new Date()){if(!birth)return null;const b=new Date(`${birth}T00:00:00`);if(Number.isNaN(b.getTime()))return null;let age=reference.getFullYear()-b.getFullYear();const m=reference.getMonth()-b.getMonth();if(m<0||(m===0&&reference.getDate()<b.getDate()))age--;return age>=0?age:null}
- function map(row){const pending=!row.numero_socio||norm(row.numero_socio_estado)!=="asignado";const provisional=row.numero_socio_provisional?`P-${String(row.numero_socio_provisional).padStart(4,"0")}`:null;return {...row,numero:pending?(provisional||"Pendiente de validar"):String(row.numero_socio).padStart(4,"0"),numeroProvisional:provisional,numeroSocioPendiente:pending,nombreCompleto:`${row.nombre||""} ${row.apellidos||""}`.trim(),cuenta:row.cuenta_activada?"Activada":"Pendiente de activar",cuota:row.cuota_al_dia?"Al día":"Pendiente",nacimiento:row.fecha_nacimiento,edadActual:ageAt(row.fecha_nacimiento),alta:row.fecha_alta,precioAbono:row.precio_abono==null?null:Number(row.precio_abono),observaciones:row.observaciones_internas}}
+ function map(row){const pending=!row.numero_socio||norm(row.numero_socio_estado)!=="asignado";const provisional=row.numero_socio_provisional?`P-${String(row.numero_socio_provisional).padStart(4,"0")}`:null;return {...row,emailAcceso:row.email,email:row.email||row.email_contacto||null,numero:pending?(provisional||"Pendiente de validar"):String(row.numero_socio).padStart(4,"0"),numeroProvisional:provisional,numeroSocioPendiente:pending,nombreCompleto:`${row.nombre||""} ${row.apellidos||""}`.trim(),cuenta:row.cuenta_activada?"Activada":"Pendiente de activar",cuota:row.cuota_al_dia?"Al día":"Pendiente",nacimiento:row.fecha_nacimiento,edadActual:ageAt(row.fecha_nacimiento),alta:row.fecha_alta,precioAbono:row.precio_abono==null?null:Number(row.precio_abono),observaciones:row.observaciones_internas}}
  async function list({search="",status="",category="",account="",fee="",page=1,pageSize=cfg().pageSize}={}){
    let query=db().from(cfg().table).select(cfg().select,{count:"exact"});
    const term=String(search||"").trim().replace(/[,%()]/g," ");
-   if(term){const numeric=Number(term);const clauses=[`nombre.ilike.%${term}%`,`apellidos.ilike.%${term}%`,`dni.ilike.%${term}%`,`email.ilike.%${term}%`,`telefono.ilike.%${term}%`,`numero_abonado_malaga.ilike.%${term}%`];if(Number.isInteger(numeric))clauses.push(`numero_socio.eq.${numeric}`);query=query.or(clauses.join(","))}
+   if(term){const numeric=Number(term);const clauses=[`nombre.ilike.%${term}%`,`apellidos.ilike.%${term}%`,`dni.ilike.%${term}%`,`email.ilike.%${term}%`,`email_contacto.ilike.%${term}%`,`telefono.ilike.%${term}%`,`numero_abonado_malaga.ilike.%${term}%`];if(Number.isInteger(numeric))clauses.push(`numero_socio.eq.${numeric}`);query=query.or(clauses.join(","))}
    if(status)query=query.eq("estado",status);
    if(category)query=query.ilike("categoria",String(category).trim());
    if(account!=="")query=query.eq("cuenta_activada",account==="true");
@@ -29,6 +29,9 @@ window.FrenteMembersService=(()=>{
     fecha_alta:cleanText(form.fecha_alta),categoria:canonicalCategory(form.categoria),numero_socio_estado:cleanText(form.numero_socio)?"asignado":"pendiente",cuenta_activada:Boolean(form.cuenta_activada),sector:cleanText(form.sector),fila:cleanText(form.fila),asiento:cleanText(form.asiento),
     tipo_abono:cleanText(form.tipo_abono),precio_abono:cleanText(form.precio_abono)==null?null:Number(form.precio_abono),numero_abonado_malaga:cleanText(form.numero_abonado_malaga),observaciones_internas:cleanText(form.observaciones_internas),es_directivo:Boolean(form.es_directivo),cargo_directiva:Boolean(form.es_directivo)?cleanText(form.cargo_directiva):null
    };
+   if(form.menor_sin_dni!==undefined)p.menor_sin_dni=Boolean(form.menor_sin_dni);
+   if(form.correo_compartido_familiar!==undefined){p.correo_compartido_familiar=Boolean(form.correo_compartido_familiar);if(p.correo_compartido_familiar){p.email_contacto=p.email;p.email=null}}
+   if(form.datos_revision_estado!==undefined)p.datos_revision_estado=cleanText(form.datos_revision_estado)||"pendiente";
    if(form.estado)p.estado=form.estado;
    if(!editing&&p.fecha_alta===null)p.fecha_alta=new Date().toISOString().slice(0,10);
    if(!editing&&!p.numero_socio)p.numero_socio=null;

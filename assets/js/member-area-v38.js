@@ -119,11 +119,11 @@
     const client = await MemberAuth.client();
     const { data, error } = await client
       .from('campanas_registros')
-      .select('importe_pagado,precio_abono,cuota_final,forma_pago,estado,zona_club,fecha_pago,created_at,campanas(temporada)')
+      .select('importe_pagado,precio_abono,cuota_final,forma_pago,estado,zona_club,fecha_pago,created_at,campanas(temporada,tipo,modo_pruebas)')
       .eq('socio_id', profile.id)
       .order('created_at', { ascending: false });
     if (error) throw error;
-    return data || [];
+    return (data || []).filter(row => row.campanas?.tipo !== 'piloto' && row.campanas?.modo_pruebas !== true);
   }
 
   function renderFees(rows) {
