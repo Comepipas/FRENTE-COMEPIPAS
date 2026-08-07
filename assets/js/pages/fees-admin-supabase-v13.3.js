@@ -5,6 +5,7 @@ window.addEventListener("DOMContentLoaded", async () => {
   const state = { rows: [], options: { members: [], seasons: [], categories: [] }, summary: { activeMembers: 0, activeSeason: null }, payingId: null, editingId: null };
   const money = value => new Intl.NumberFormat("es-ES", { style: "currency", currency: "EUR" }).format(Number(value || 0));
   const esc = value => String(value ?? "").replace(/[&<>'"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" }[c]));
+  const searchNorm = value => String(value ?? "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, " ").trim();
   const labelState = value => ({ pagada: "Pagada", pendiente: "Pendiente", anulada: "Anulada" }[value] || value || "Pendiente");
   const today = () => new Date().toISOString().slice(0, 10);
 
@@ -21,13 +22,13 @@ window.addEventListener("DOMContentLoaded", async () => {
   }
 
   function filteredRows() {
-    const term = ($("feesSearch")?.value || "").trim().toLowerCase();
+    const terms = searchNorm($("feesSearch")?.value || "").split(" ").filter(Boolean);
     const status = $("feesStatus")?.value || "";
-    const season = $("feesFilterSeason")?.value || "";
-    const category = $("feesFilterCategory")?.value || "";
+    const season = $("feesSeason")?.value || "";
+    const category = $("feesCategory")?.value || "";
     return state.rows.filter(row => {
-      const haystack = `${row.numeroSocio} ${row.socioNombre} ${row.socioCategoria} ${row.temporada} ${row.referencia || ""}`.toLowerCase();
-      return (!term || haystack.includes(term)) && (!status || row.estado === status) && (!season || row.temporada === season) && (!category || (category === "directivo" ? row.esDirectivo : String(row.socioCategoria || "").toLowerCase() === category));
+      const haystack = searchNorm(`${row.numeroSocio} ${row.socioNombre} ${row.socioCategoria} ${row.temporada} ${row.referencia || ""}`);
+      return (!terms.length || terms.every(term => haystack.includes(term))) && (!status || row.estado === status) && (!season || row.temporada === season) && (!category || (category === "directivo" ? row.esDirectivo : String(row.socioCategoria || "").toLowerCase() === category));
     });
   }
 
@@ -43,13 +44,12 @@ window.addEventListener("DOMContentLoaded", async () => {
     $("feesPending").textContent = base.filter(x => x.estado === "pendiente").length;
     $("feesMissing").textContent = Math.max(0, activeMembers - base.length);
     $("feesExempt").textContent = exempt.length;
-    const directors = $("feesDirectors");
-    if (directors) directors.textContent = base.filter(x => x.esDirectivo).length;
+    $("feesDirectors").textContent = base.filter(x => x.esDirectivo).length;
     $("feesIncome").textContent = money(paid.reduce((sum, x) => sum + x.importe, 0));
   }
 
   function renderSeasons() {
-    const select = $("feesFilterSeason");
+    const select = $("feesSeason");
     if (!select) return;
     const current = select.value;
     const seasons = [...new Set(state.rows.map(x => x.temporada).filter(Boolean))].sort().reverse();
@@ -256,7 +256,7 @@ window.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
-  ["feesSearch", "feesStatus", "feesFilterSeason", "feesFilterCategory"].forEach(id => $(id)?.addEventListener(id === "feesSearch" ? "input" : "change", renderTable));
+  ["feesSearch", "feesStatus", "feesSeason", "feesCategory"].forEach(id => $(id)?.addEventListener(id === "feesSearch" ? "input" : "change", renderTable));
   $("retryFees")?.addEventListener("click", load);
   $("syncFees")?.addEventListener("click", async () => {
     const button = $("syncFees");

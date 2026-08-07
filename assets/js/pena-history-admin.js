@@ -24,7 +24,7 @@
         <input data-i="${index}" data-k="year" value="${escapeAttr(item.year)}" placeholder="Año">
         <input data-i="${index}" data-k="title" value="${escapeAttr(item.title)}" placeholder="Título">
         <textarea data-i="${index}" data-k="text" placeholder="Texto">${escapeAttr(item.text)}</textarea>
-        <button type="button" data-remove="${index}">Eliminar</button>
+        <div class="history-row-actions"><button type="button" data-up="${index}" title="Subir etapa">↑</button><button type="button" data-down="${index}" title="Bajar etapa">↓</button><button type="button" data-remove="${index}">Eliminar</button></div>
       </div>`).join('');
 
     container.querySelectorAll('[data-i]').forEach(element=>{
@@ -38,6 +38,8 @@
         renderTimeline();
       });
     });
+    container.querySelectorAll('[data-up]').forEach(button=>button.addEventListener('click',()=>{const index=Number(button.dataset.up);if(index>0){[timeline[index-1],timeline[index]]=[timeline[index],timeline[index-1]];renderTimeline()}}));
+    container.querySelectorAll('[data-down]').forEach(button=>button.addEventListener('click',()=>{const index=Number(button.dataset.down);if(index<timeline.length-1){[timeline[index+1],timeline[index]]=[timeline[index],timeline[index+1]];renderTimeline()}}));
   }
 
   async function connectAuthenticatedAdmin(){
@@ -145,7 +147,15 @@
   }
 
   document.addEventListener('DOMContentLoaded',async()=>{
+    document.body.classList.add('history-enterprise-page');
+    if(!document.querySelector('link[href*="history-admin-enterprise-v40.12.css"]')){const enterpriseStyle=document.createElement('link');enterpriseStyle.rel='stylesheet';enterpriseStyle.href='assets/css/history-admin-enterprise-v40.12.css';document.head.appendChild(enterpriseStyle)}
+    const navigation=[['admin.html','▦','Dashboard'],['socios-admin.html','♟','Socios'],['cuotas-admin.html','€','Cuotas y pagos'],['campanas-admin.html','◉','Campañas'],['tienda-admin.html','◇','Material y solicitudes'],['viajes-admin.html','➜','ON TOUR'],['noticias-admin.html','▤','Noticias'],['multimedia-admin.html','▧','Multimedia'],['calendario-admin.html','□','Calendario y avisos'],['historia-admin.html','⌁','Historia de la Peña'],['configuracion-admin.html','⚙','Configuración']];
+    document.body.insertAdjacentHTML('afterbegin',`<aside class="enterprise-sidebar" id="enterpriseSidebar"><div class="enterprise-brand"><img src="assets/images/brand/escudo-transparente.png" alt="Escudo"><div><strong>Frente Comepipas</strong><span>Administración Enterprise</span></div><button class="sidebar-close" id="sidebarClose" aria-label="Cerrar menú">×</button></div><nav class="enterprise-nav"><small>Administración</small>${navigation.map(item=>`<a class="${item[0]==='historia-admin.html'?'active':''}" href="${item[0]}"><span class="nav-icon">${item[1]}</span>${item[2]}</a>`).join('')}</nav><div class="enterprise-sidebar-footer"><a href="la-pena.html" target="_blank">Ver página pública ↗</a><button data-auth-logout>Cerrar sesión</button></div></aside><header class="enterprise-topbar"><button class="sidebar-open" id="sidebarOpen" aria-label="Abrir menú">☰</button><div class="topbar-search"><span>⌕</span><input placeholder="Buscar un módulo…" aria-label="Buscar un módulo"></div><div class="topbar-meta"><div class="avatar">FC</div></div></header>`);
+    document.getElementById('sidebarOpen')?.addEventListener('click',()=>document.getElementById('enterpriseSidebar')?.classList.add('open'));document.getElementById('sidebarClose')?.addEventListener('click',()=>document.getElementById('enterpriseSidebar')?.classList.remove('open'));
+    if(!document.querySelector('link[href*="pena-history-v40.11.css"]')){const style=document.createElement('link');style.rel='stylesheet';style.href='assets/css/pena-history-v40.11.css';document.head.appendChild(style)}
     const form=document.getElementById('historyForm');
+    const help=document.createElement('div');help.className='history-admin-help';help.innerHTML='<strong>Consejo de diseño:</strong> separa los párrafos de la introducción dejando una línea en blanco. En Valores, escribe cada valor separado por comas para convertirlos en etiquetas visuales.';form.prepend(help);
+    const heading=document.querySelector('.history-heading');const templates=document.createElement('div');templates.className='history-template-actions';templates.innerHTML='<button id="completeHistoryTemplate" type="button" class="btn btn-dark-outline">Usar cronología sugerida</button>';heading?.appendChild(templates);
     const submitButton=form.querySelector('button[type="submit"]');
 
     submitButton.disabled=true;
@@ -176,6 +186,10 @@
     document.getElementById('addHistoryRow').addEventListener('click',()=>{
       timeline.push({year:'',title:'',text:''});
       renderTimeline();
+    });
+    document.getElementById('completeHistoryTemplate')?.addEventListener('click',()=>{
+      if(timeline.length&& !confirm('¿Sustituir las etapas actuales por una cronología sugerida? Podrás editarla antes de guardar.'))return;
+      timeline=JSON.parse(JSON.stringify(window.FRENTE_PENA_DEFAULTS.timeline));renderTimeline();showMessage('Cronología sugerida preparada. Revísala y pulsa Guardar cambios para publicarla.');
     });
 
     form.addEventListener('submit',async event=>{
