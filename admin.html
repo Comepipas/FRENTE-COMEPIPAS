@@ -1,3 +1,132 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Administración | Frente Comepipas</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet"><link rel="stylesheet" href="assets/css/variables.css"><link rel="stylesheet" href="assets/css/style.css"><link rel="stylesheet" href="assets/css/responsive.css"><script src="assets/js/roles.js"></script><script src="assets/js/auth-bootstrap-v13.3.js"></script><script>if(!protectAdminPage("dashboard")){throw new Error("Acceso bloqueado");}</script><link rel="stylesheet" href="assets/css/admin-cleanup-v28.2.css"><link rel="stylesheet" href="assets/css/incidents-v31.css"><link rel="stylesheet" href="assets/css/admin-enterprise-v40.css?v=40.0"></head><body><header class="site-header"><div class="container nav"><a class="brand" href="index.html"><img src="assets/images/brand/escudo-transparente.png"><div><span data-config="nombre">FRENTE COMEPIPAS</span><small data-config="subtitulo">PEÑA MALAGUISTA</small></div></a><button class="menu-btn"><span></span><span></span><span></span></button><nav class="nav-links"><a class="" href="index.html">Inicio</a><a class="" href="la-pena.html">La Peña</a><a class="" href="noticias.html" data-feature="noticias">Noticias</a><a class="" href="tienda.html" data-feature="tienda">Material</a><a class="" href="viajes.html" data-feature="viajes">ON TOUR</a><a class="" href="socios.html" data-feature="socios">Socios</a><a class="" href="galeria.html" data-feature="galeria">Galería</a><a class="active" href="contacto.html" data-feature="contacto">Contacto</a></nav></div></header>
-<main class="admin-pro-shell"><aside class="admin-pro-sidebar"><div class="admin-pro-brand"><img src="assets/images/brand/escudo-transparente.png" alt="Escudo"><div><strong>Frente Comepipas</strong><span>Panel de administración</span></div></div><nav class="admin-pro-nav"><a class="active" href="admin.html">Resumen</a><a href="socios-admin.html" data-permission="socios">Socios</a><a href="cuotas-admin.html" data-permission="cuotas">Cuotas y pagos</a><a href="campanas-admin.html" data-permission="cuotas">Campañas de abonados</a><a href="centro-incidencias-admin.html">Centro de incidencias</a><a href="centro-migracion-admin.html">Importación y sincronización</a><a href="tienda-admin.html" data-permission="tienda">Material y solicitudes</a><a href="viajes-admin.html" data-permission="viajes">ON TOUR y solicitudes</a><a href="noticias-admin.html" data-permission="noticias">Noticias</a><a href="multimedia-admin.html" data-permission="multimedia">Multimedia y galería</a><a href="documentos-admin.html">Centro documental</a><a href="comunicaciones-admin.html">Comunicaciones</a><a href="historia-admin.html">Historia de la Peña</a><a href="calendario-admin.html" data-permission="calendario">Calendario y avisos</a><a href="partidos-admin.html" data-permission="calendario">Próximos partidos</a><a href="conexion.html">Conexión Supabase</a><a href="usuarios-admin.html" data-permission="usuarios">Usuarios y permisos</a><a href="configuracion-admin.html">Configuración general</a><a href="cms-admin.html">Inicio</a><a href="backups-admin.html">Copias de seguridad</a><a href="auditoria-admin.html">Auditoría</a><a href="index.html">Ver web pública</a></nav><div class="admin-pro-footer"><span class="data-mode-badge is-local" data-mode-status><span data-mode-label>Modo local</span></span><button data-auth-logout class="btn btn-gold">Cerrar sesión</button></div></aside><section class="admin-pro-main"><div class="admin-pro-topbar"><div><span class="kicker">Panel general</span><h1>Administración</h1></div><div class="admin-pro-actions"><a class="btn btn-primary" href="socios-admin.html" data-permission="socios">Nuevo socio</a><a class="btn btn-dark-outline" href="tienda-admin.html" data-permission="tienda">Nuevo material</a></div></div><section class="dashboard-grid"><article class="dashboard-card"><span>Socios activos</span><strong id="dashMembers">0</strong></article><article class="dashboard-card"><span>Cuotas pendientes</span><strong id="dashPendingFees">0</strong></article><article class="dashboard-card"><span>Solicitudes de material</span><strong id="dashOpenOrders">0</strong></article><article class="dashboard-card"><span>Ingresos registrados</span><strong id="dashIncome">0 €</strong></article><article class="dashboard-card"><span>ON TOUR</span><strong id="dashTrips">0</strong></article><article class="dashboard-card"><span>Noticias</span><strong id="dashNews">0</strong></article><article class="dashboard-card"><span>Material no disponible</span><strong id="dashLowStock">0</strong></article><article class="dashboard-card"><span>Estado de datos</span><strong id="dashConnection" class="fc-loading-badge">Comprobando…</strong></article><a class="dashboard-card inc31-dashboard-card" href="centro-incidencias-admin.html"><span>Centro de incidencias</span><strong id="dashIncidentsV31">Sin analizar</strong></a></section><section class="dashboard-layout"><article class="dashboard-panel"><h2>Accesos rápidos</h2><div class="dashboard-shortcuts"><a class="dashboard-shortcut" href="socios-admin.html" data-permission="socios"><strong>Gestionar socios</strong><span>Altas, bajas y exportación.</span></a><a class="dashboard-shortcut" href="cuotas-admin.html" data-permission="cuotas"><strong>Cuotas y pagos</strong><span>Estados e ingresos.</span></a><a class="dashboard-shortcut" href="campanas-admin.html" data-permission="cuotas"><strong>Campañas de abonados</strong><span>Histórico, campaña piloto, cuotas, importación y cobros.</span></a><a class="dashboard-shortcut" href="centro-incidencias-admin.html"><strong>Centro de incidencias</strong><span>Analizar y resolver errores, advertencias y avisos.</span></a><a class="dashboard-shortcut" href="centro-migracion-admin.html"><strong>Importación y sincronización</strong><span>Unificar Excel, revisar familias e importar datos reales.</span></a><a class="dashboard-shortcut" href="tienda-admin.html" data-permission="tienda"><strong>Material y solicitudes</strong><span>Disponibilidad y solicitudes.</span></a><a class="dashboard-shortcut" href="viajes-admin.html"><strong>ON TOUR</strong><span>Crear desplazamientos y gestionar solicitudes de entradas.</span></a><a class="dashboard-shortcut" href="noticias.html"><strong>Noticias</strong><span>Actualidad de la peña.</span></a><a class="dashboard-shortcut" href="calendario-admin.html"><strong>Agenda y avisos</strong><span>Eventos, reuniones y comunicación.</span></a><a class="dashboard-shortcut" href="multimedia-admin.html"><strong>Galería y fotos</strong><span>Subir imágenes desde el PC.</span></a><a class="dashboard-shortcut" href="documentos-admin.html"><strong>Centro documental</strong><span>Documentos, versiones, permisos y aceptaciones.</span></a><a class="dashboard-shortcut" href="comunicaciones-admin.html"><strong>Comunicaciones</strong><span>Correos segmentados y avisos privados.</span></a><a class="dashboard-shortcut" href="cms-admin.html"><strong>Inicio</strong><span>Patrocinadores, imagen de material y redes sociales.</span></a><a class="dashboard-shortcut" href="historia-admin.html"><strong>Historia de la Peña</strong><span>Textos, foto y cronología.</span></a></div></article><article class="dashboard-panel"><h2>Actividad reciente</h2><div id="dashboardActivity" class="dashboard-activity"></div></article></section></section><section class="section"><div class="container"><a class="btn btn-primary" href="area-socio.html">Acceder al área del socio</a></div></section></main>
-<footer class="site-footer"><div class="container footer-grid"><div><h4 data-config="nombre">Frente Comepipas</h4><p data-config="lema">Levantando copas contigo desde 2007.</p></div><div><h4>La Peña</h4><a href="la-pena.html">Historia</a><a href="socios.html" data-feature="socios">Hazte socio</a></div><div><h4>Actividad</h4><a href="viajes.html" data-feature="viajes">ON TOUR</a><a href="calendario.html" data-feature="calendario">Calendario</a><a href="tienda.html" data-feature="tienda">Material</a></div><div><h4>Contacto</h4><p data-config="ciudad">Málaga, Andalucía</p><p data-config="email">contacto@frentecomepipas.es</p><a href="admin.html">Administración</a></div></div><div class="footer-bottom">© 2026 Frente Comepipas</div></footer><div class="toast"></div><script src="assets/js/config.js"></script><script src="assets/js/site-settings.js"></script><script src="assets/js/site-settings-runtime.js"></script><script src="assets/js/roles.js"></script><script src="assets/js/admin-users.js"></script><script src="assets/js/auth.js?v=22-commit6"></script><script src="assets/js/audit.js"></script><script src="assets/js/features.js"></script><script src="assets/js/members-db.js"></script><script src="assets/js/fees.js"></script><script src="assets/js/products.js"></script><script src="assets/js/orders.js"></script><script src="assets/js/trips.js"></script><script src="assets/js/news.js"></script><script src="assets/js/app.js"></script><script src="assets/js/admin.js"></script><script src="assets/js/dashboard-real-v28.2.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/supabase-config.js"></script><script src="assets/js/supabase-client.js"></script><script src="assets/js/api.js"></script><script src="assets/js/data-mode.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/supabase-config.js"></script><script src="assets/js/supabase-client.js?v=13.3.0-r5"></script><script src="assets/js/auth.js?v=22-commit6"></script><script src="assets/js/auth-session-guard-v13.3.js?v=13.3.0-r5"></script><script src="assets/js/incidents-dashboard-v31.js"></script><script src="assets/js/admin-cleanup-v28.2.js"></script><script src="assets/js/admin-enterprise-v40.js?v=40.0"></script></body></html>
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#061a33">
+  <title>Dashboard Enterprise | Frente Comepipas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/variables.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/responsive.css">
+  <link rel="stylesheet" href="assets/css/admin-enterprise-v40.1.css">
+  <script src="assets/js/roles.js"></script>
+  <script src="assets/js/auth-bootstrap-v13.3.js"></script>
+  <script>if(!protectAdminPage("dashboard")){throw new Error("Acceso bloqueado");}</script>
+</head>
+<body class="enterprise-body">
+<main class="enterprise-shell">
+  <aside class="enterprise-sidebar" id="enterpriseSidebar">
+    <div class="enterprise-brand">
+      <img src="assets/images/brand/escudo-transparente.png" alt="Escudo de Frente Comepipas">
+      <div><strong>Frente Comepipas</strong><span>Administración Enterprise</span></div>
+      <button class="sidebar-close" id="sidebarClose" aria-label="Cerrar menú">×</button>
+    </div>
+    <nav class="enterprise-nav" aria-label="Administración">
+      <span class="nav-group">Visión general</span>
+      <a class="active" href="admin.html"><span class="nav-icon">▦</span>Dashboard</a>
+      <a href="centro-incidencias-admin.html"><span class="nav-icon">⚠</span>Centro de alertas <b class="nav-count" id="navAlerts">0</b></a>
+      <span class="nav-group">Operaciones</span>
+      <a href="socios-admin.html" data-permission="socios"><span class="nav-icon">♙</span>Socios</a>
+      <a href="cuotas-admin.html" data-permission="cuotas"><span class="nav-icon">€</span>Cuotas y pagos</a>
+      <a href="campanas-admin.html" data-permission="cuotas"><span class="nav-icon">◉</span>Campañas</a>
+      <a href="tienda-admin.html" data-permission="tienda"><span class="nav-icon">◇</span>Material y solicitudes</a>
+      <a href="viajes-admin.html" data-permission="viajes"><span class="nav-icon">➜</span>ON TOUR</a>
+      <a href="centro-migracion-admin.html"><span class="nav-icon">⇄</span>Importación</a>
+      <span class="nav-group">Contenido</span>
+      <a href="noticias-admin.html" data-permission="noticias"><span class="nav-icon">▤</span>Noticias</a>
+      <a href="multimedia-admin.html" data-permission="multimedia"><span class="nav-icon">▧</span>Multimedia</a>
+      <a href="calendario-admin.html" data-permission="calendario"><span class="nav-icon">□</span>Calendario y avisos</a>
+      <a href="partidos-admin.html" data-permission="calendario"><span class="nav-icon">⚽</span>Próximos partidos</a>
+      <a href="documentos-admin.html"><span class="nav-icon">▱</span>Documentos</a>
+      <a href="comunicaciones-admin.html"><span class="nav-icon">✉</span>Comunicaciones</a>
+      <a href="historia-admin.html"><span class="nav-icon">⌁</span>Historia de la Peña</a>
+      <span class="nav-group">Sistema</span>
+      <a href="usuarios-admin.html" data-permission="usuarios"><span class="nav-icon">♚</span>Usuarios y permisos</a>
+      <a href="configuracion-admin.html"><span class="nav-icon">⚙</span>Configuración</a>
+      <a href="editor-portada-admin.html"><span class="nav-icon">✦</span>Editor de portada</a>
+      <a href="cms-admin.html"><span class="nav-icon">▣</span>CMS portada</a>
+      <a href="backups-admin.html"><span class="nav-icon">↻</span>Copias de seguridad</a>
+      <a href="auditoria-admin.html"><span class="nav-icon">◎</span>Auditoría</a>
+      <a href="conexion.html"><span class="nav-icon">⌁</span>Conexión Supabase</a>
+      <a href="migracion-supabase.html"><span class="nav-icon">⇧</span>Migración Supabase</a>
+    </nav>
+    <div class="enterprise-sidebar-footer">
+      <div class="connection-pill is-loading" id="dashboardConnection"><i></i><span>Comprobando datos</span></div>
+      <a href="index.html">Ver web pública ↗</a>
+      <button data-auth-logout>Cerrar sesión</button>
+    </div>
+  </aside>
+
+  <section class="enterprise-main">
+    <header class="enterprise-topbar">
+      <button class="sidebar-open" id="sidebarOpen" aria-label="Abrir menú">☰</button>
+      <div class="topbar-search"><span>⌕</span><input id="dashboardSearch" type="search" placeholder="Buscar un módulo…" autocomplete="off"><div id="searchResults" class="search-results"></div></div>
+      <div class="topbar-meta"><button class="refresh-button" id="refreshDashboard" title="Actualizar datos">↻</button><div class="admin-identity"><span>Administrador</span><small id="dashboardDate"></small></div><div class="avatar">FC</div></div>
+    </header>
+
+    <div class="enterprise-content">
+      <section class="dashboard-welcome">
+        <div><span class="eyebrow">CENTRO DE CONTROL</span><h1>Buenos días, <em>equipo.</em></h1><p>Esta es la situación de Frente Comepipas en tiempo real.</p></div>
+        <div class="welcome-actions"><a class="button-secondary" href="auditoria-admin.html">Ver auditoría</a><a class="button-primary" href="socios-admin.html" data-permission="socios">＋ Nuevo socio</a></div>
+      </section>
+
+      <section class="enterprise-kpis" aria-label="Indicadores principales">
+        <article class="enterprise-kpi kpi-blue"><div class="kpi-head"><span>Socios activos</span><i>♙</i></div><strong id="dashMembers">—</strong><div class="kpi-foot"><span id="membersTrend">Base social</span><a href="socios-admin.html">Gestionar →</a></div></article>
+        <article class="enterprise-kpi kpi-amber"><div class="kpi-head"><span>Cuotas pendientes</span><i>€</i></div><strong id="dashPendingFees">—</strong><div class="kpi-foot"><span id="feesTrend">Requieren revisión</span><a href="cuotas-admin.html">Revisar →</a></div></article>
+        <article class="enterprise-kpi kpi-green"><div class="kpi-head"><span>Ingresos registrados</span><i>↗</i></div><strong id="dashIncome">—</strong><div class="kpi-foot"><span id="incomeTrend">Cuotas abonadas</span><a href="cuotas-admin.html">Detalle →</a></div></article>
+        <article class="enterprise-kpi kpi-purple"><div class="kpi-head"><span>Solicitudes abiertas</span><i>◇</i></div><strong id="dashOpenOrders">—</strong><div class="kpi-foot"><span id="ordersTrend">Material pendiente</span><a href="tienda-admin.html">Atender →</a></div></article>
+      </section>
+
+      <section class="enterprise-grid">
+        <article class="enterprise-panel activity-panel">
+          <div class="panel-heading"><div><span class="eyebrow">MOVIMIENTOS</span><h2>Actividad reciente</h2></div><a href="auditoria-admin.html">Ver toda</a></div>
+          <div class="activity-list" id="dashboardActivity"><div class="dashboard-skeleton"></div><div class="dashboard-skeleton"></div><div class="dashboard-skeleton"></div></div>
+        </article>
+
+        <article class="enterprise-panel alerts-panel">
+          <div class="panel-heading"><div><span class="eyebrow">ATENCIÓN</span><h2>Panel de alertas</h2></div><span class="alerts-badge" id="alertsCount">0</span></div>
+          <div id="dashboardAlerts" class="alerts-list"><div class="dashboard-skeleton"></div><div class="dashboard-skeleton"></div></div>
+          <a class="panel-footer-link" href="centro-incidencias-admin.html">Abrir centro de incidencias <span>→</span></a>
+        </article>
+
+        <article class="enterprise-panel shortcuts-panel">
+          <div class="panel-heading"><div><span class="eyebrow">OPERACIONES</span><h2>Accesos rápidos</h2></div></div>
+          <div class="enterprise-shortcuts">
+            <a href="socios-admin.html" data-permission="socios"><i class="shortcut-blue">♙</i><span><strong>Socios</strong><small>Altas y gestión</small></span><b>→</b></a>
+            <a href="cuotas-admin.html" data-permission="cuotas"><i class="shortcut-green">€</i><span><strong>Cuotas</strong><small>Pagos e ingresos</small></span><b>→</b></a>
+            <a href="tienda-admin.html" data-permission="tienda"><i class="shortcut-purple">◇</i><span><strong>Material</strong><small>Stock y solicitudes</small></span><b>→</b></a>
+            <a href="viajes-admin.html" data-permission="viajes"><i class="shortcut-amber">➜</i><span><strong>ON TOUR</strong><small>Viajes y plazas</small></span><b>→</b></a>
+            <a href="noticias-admin.html" data-permission="noticias"><i class="shortcut-red">▤</i><span><strong>Noticias</strong><small>Publicar contenido</small></span><b>→</b></a>
+            <a href="comunicaciones-admin.html"><i class="shortcut-cyan">✉</i><span><strong>Comunicar</strong><small>Correos y avisos</small></span><b>→</b></a>
+          </div>
+        </article>
+
+        <article class="enterprise-panel health-panel">
+          <div class="panel-heading"><div><span class="eyebrow">ESTADO GLOBAL</span><h2>Indicadores</h2></div><span class="health-score" id="healthScore">—</span></div>
+          <div class="health-chart"><div class="health-ring" id="healthRing"><span id="healthPercent">—</span><small>operativo</small></div><div class="health-legend"><div><i class="ok"></i><span>Supabase</span><strong id="healthDatabase">Revisando</strong></div><div><i class="ok"></i><span>Inventario</span><strong id="healthStock">Revisando</strong></div><div><i class="ok"></i><span>Gestión</span><strong id="healthOperations">Revisando</strong></div></div></div>
+          <div class="secondary-stats"><div><span>Noticias</span><strong id="dashNews">—</strong></div><div><span>ON TOUR</span><strong id="dashTrips">—</strong></div><div><span>Sin stock</span><strong id="dashLowStock">—</strong></div></div>
+        </article>
+      </section>
+    </div>
+  </section>
+</main>
+<div class="toast"></div>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/site-settings.js"></script>
+<script src="assets/js/site-settings-runtime.js"></script>
+<script src="assets/js/admin-users.js"></script>
+<script src="assets/js/auth.js?v=22-commit6"></script>
+<script src="assets/js/features.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/js/supabase-config.js"></script>
+<script src="assets/js/supabase-client.js?v=13.3.0-r5"></script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/data-mode.js"></script>
+<script src="assets/js/auth-session-guard-v13.3.js?v=13.3.0-r5"></script>
+<script src="assets/js/admin-enterprise-v40.1.js"></script>
+</body>
+</html>
