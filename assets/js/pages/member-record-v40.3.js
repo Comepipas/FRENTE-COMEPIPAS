@@ -8,6 +8,7 @@
   async function enhance(){
     if(!memberId)return;
     const db=window.FrenteDatabase.getClient();
+    await setupFamilyAdmin(db);
     const {data:m,error}=await db.from("socios").select("numero_socio,numero_socio_provisional,numero_socio_estado,antiguedad_declarada_tipo,antiguedad_declarada_temporada,antiguedad_declarada_anio,antiguedad_declarada_observaciones,antiguedad_estado,precio_abono,sector,sector_codigo_club,gestion_abono_preferida,continuidad_estado,menor_sin_dni,email,email_contacto,correo_compartido_familiar,datos_revision_estado,datos_revisados_at,fecha_nacimiento,categoria,es_directivo,cargo_directiva,cuenta_activada,auth_user_id").eq("id",memberId).single();
     if(error)return;
     const numberInput=$('[name="numero_socio"]');
@@ -38,10 +39,9 @@
     setupSeasonTicket(m);
     simplifyTabs();
     await showCalculatedCategory(db,m,pena);
-    await setupFamilyAdmin(db);
     const price=$('[name="precio_abono"]');
     if(price&&m.precio_abono==null){price.placeholder="Importe sin informar";price.value=""}
-    const sector=$('[name="sector"]');if(sector&&!m.sector)sector.placeholder="Sector pendiente";
+    const sector=$('[name="sector"]');if(sector&&!m.sector)sector.placeholder="Zona pendiente";
     const fee=$('[name="cuota_al_dia"]');if(fee){fee.disabled=true;fee.closest("label")?.append(" (calculado desde Cuotas y pagos)")}
     await addPaymentButton(db);
   }
@@ -55,9 +55,8 @@
 
   function setupSeasonTicket(m){
     const panel=$('[data-panel="abono"]');if(!panel)return;
-    ['fila','asiento'].forEach(name=>$(`[name="${name}"]`)?.closest('.record-field')?.remove());
-    const sector=$('[name="sector"]');if(sector){const label=sector.closest('.record-field')?.querySelector('label');if(label)label.textContent='Sector del club'}
-    if(!panel.querySelector('[name="sector_codigo_club"]'))sector?.closest('.record-field')?.insertAdjacentHTML('afterend',`<div class="record-field"><label>Número identificador del sector</label><input name="sector_codigo_club" value="${esc(m.sector_codigo_club||'')}" disabled></div>`);
+    const zone=$('[name="sector"]');if(zone){const label=zone.closest('.record-field')?.querySelector('label');if(label)label.textContent='Zona'}
+    const sector=$('[name="sector_codigo_club"]');if(sector){sector.value=m.sector_codigo_club||'';const label=sector.closest('.record-field')?.querySelector('label');if(label)label.textContent='Sector'}
   }
 
   function simplifyTabs(){
@@ -67,8 +66,9 @@
 
   async function setupFamilyAdmin(db){
     const box=$('#guardiansBox');if(!box)return;
+    if($('#familyInlineAdmin'))return;
     box.insertAdjacentHTML('afterend','<div id="familyInlineAdmin" style="margin-top:18px"><h3>Añadir familiar autorizado</h3><div class="record-grid"><div class="record-field"><label>Buscar por número, DNI o nombre</label><input id="familyInlineQuery"></div><div class="record-field"><label>Quién realizará la gestión</label><select id="familyInlineDirection"><option value="current">Este socio gestionará al familiar</option><option value="found">El familiar gestionará a este socio</option></select></div><div class="record-field"><label>Parentesco</label><select id="familyInlineType"><option value="hijo">Hijo/a</option><option value="pareja">Pareja</option><option value="sobrino">Sobrino/a</option><option value="padre">Padre/madre</option><option value="otro_familiar">Otro familiar</option></select></div><div class="record-field full"><label>Autorización recibida</label><input id="familyInlineNote" placeholder="Ej.: autorización presencial del responsable"></div></div><button id="familyInlineSearch" type="button" class="btn btn-primary">Buscar familiar</button><div id="familyInlineResults" class="record-history" style="margin-top:12px"></div></div>');
-    const render=async()=>{const {data,error}=await db.rpc('commit405_family_list',{p_socio_id:memberId});if(error)return;box.innerHTML=data?.length?data.map(x=>`<article class="record-history-item"><strong>${esc(x.nombre)} ${esc(x.apellidos)}</strong><span>${esc(x.relacion||x.tipo_vinculo||'Familiar')} · socio ${esc(x.numero_socio||'pendiente')}</span>${x.socio_id!==memberId?`<button type="button" class="btn btn-dark-outline" data-unlink="${x.familia_id}|${x.socio_id}">Revocar vínculo</button>`:''}</article>`).join(''):'<div class="record-empty">No hay relaciones familiares registradas.</div>';box.querySelectorAll('[data-unlink]').forEach(b=>b.onclick=async()=>{if(!confirm('¿Revocar este vínculo familiar?'))return;const [family,socio]=b.dataset.unlink.split('|');const r=await db.rpc('commit405_family_unlink',{p_familia_id:family,p_socio_id:socio});if(r.error)return window.FrenteNotify.error(r.error.message);render()})};
+    const render=async()=>{const {data,error}=await db.rpc('commit405_family_list',{p_socio_id:memberId});if(error){box.innerHTML='<div class="record-empty">No se pudo cargar la familia. Comprueba que ejecutaste el SQL 040_5.</div>';return}box.innerHTML=data?.length?data.map(x=>`<article class="record-history-item"><strong>${esc(x.nombre)} ${esc(x.apellidos)}</strong><span>${esc(x.relacion||x.tipo_vinculo||'Familiar')} · socio ${esc(x.numero_socio||'pendiente')}</span>${x.socio_id!==memberId?`<button type="button" class="btn btn-dark-outline" data-unlink="${x.familia_id}|${x.socio_id}">Revocar vínculo</button>`:''}</article>`).join(''):'<div class="record-empty">No hay relaciones familiares registradas.</div>';box.querySelectorAll('[data-unlink]').forEach(b=>b.onclick=async()=>{if(!confirm('¿Revocar este vínculo familiar?'))return;const [family,socio]=b.dataset.unlink.split('|');const r=await db.rpc('commit405_family_unlink',{p_familia_id:family,p_socio_id:socio});if(r.error)return window.FrenteNotify.error(r.error.message);render()})};
     $('#familyInlineSearch').onclick=async()=>{const q=$('#familyInlineQuery').value.trim();if(q.length<2)return;const {data,error}=await db.rpc('family_admin_search',{p_query:q});if(error)return window.FrenteNotify.error(error.message);$('#familyInlineResults').innerHTML=(data||[]).filter(x=>x.id!==memberId).map(x=>`<article class="record-history-item"><strong>${esc(x.nombre)} ${esc(x.apellidos)}</strong><span>Socio ${esc(x.numero_socio||'pendiente')}</span><button type="button" class="btn btn-primary" data-add-family="${x.id}">Añadir</button></article>`).join('')||'Sin coincidencias';document.querySelectorAll('[data-add-family]').forEach(b=>b.onclick=async()=>{const note=$('#familyInlineNote').value.trim();if(!note)return window.FrenteNotify.error('Indica cómo se recibió la autorización.');const found=b.dataset.addFamily,currentManages=$('#familyInlineDirection').value==='current';const r=await db.rpc('family_admin_link',{p_gestor:currentManages?memberId:found,p_gestionado:currentManages?found:memberId,p_tipo:$('#familyInlineType').value,p_observaciones:note});if(r.error)return window.FrenteNotify.error(r.error.message);window.FrenteNotify.success('Familiar añadido sin eliminar los vínculos anteriores.');$('#familyInlineResults').innerHTML='';render()})};
     await render();
   }
