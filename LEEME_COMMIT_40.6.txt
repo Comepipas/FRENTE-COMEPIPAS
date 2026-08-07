@@ -1,3 +1,24 @@
-COMMIT 40.6 · NOTICIAS ENTERPRISE
+FRENTE COMEPIPAS - COMMIT 40.6
 
-Noticias, KPIs, filtros, tabla, editor y vista previa integrados en Administración Enterprise. Se conservan borradores, programación, publicación, destacadas, exportación y Supabase.
+OBJETIVO
+Preparar la ficha del socio para revisar el censo persona por persona sin mezclar datos permanentes con datos de cada temporada.
+
+MEJORAS
+- Control visible del progreso de revisión del censo.
+- Avisos de datos básicos pendientes.
+- Estados "pendiente/incompleto/revisado" y acceso al siguiente socio pendiente.
+- Historial de abonos separado por temporada.
+- Zona, código de zona, tipo del club, precio, descuento, cuota, total, pago y diferencia en el historial.
+- Los descuadres nunca se clasifican automáticamente como no renovación.
+- Los registros piloto quedan fuera del historial real.
+- Familia queda como apartado secundario para incidencias.
+- Los campos económicos de temporada dejan de presentarse como datos permanentes editables.
+
+EXCEL ANALIZADO
+- Excel de la Peña: fuente de datos personales y número de abonado.
+- Excel del Málaga CF: fuente del historial económico y de zona de la temporada.
+- No se importan automáticamente registros dudosos ni se modifica Supabase desde el análisis.
+
+SQL
+Este commit NO incorpora un SQL nuevo.
+Requiere que ya estén ejecutados, en orden, los SQL 040_3, 040_4 y 040_5 de entregas anteriores.

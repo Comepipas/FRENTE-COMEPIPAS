@@ -7,9 +7,10 @@
 
   async function enhance(){
     if(!memberId)return;
+    if(!document.querySelector('link[href*="member-review-v40.6.css"]'))document.head.insertAdjacentHTML('beforeend','<link rel="stylesheet" href="assets/css/member-review-v40.6.css?v=40.6.0">');
     const db=window.FrenteDatabase.getClient();
     await setupFamilyAdmin(db);
-    const {data:m,error}=await db.from("socios").select("numero_socio,numero_socio_provisional,numero_socio_estado,antiguedad_declarada_tipo,antiguedad_declarada_temporada,antiguedad_declarada_anio,antiguedad_declarada_observaciones,antiguedad_estado,precio_abono,sector,sector_codigo_club,gestion_abono_preferida,continuidad_estado,menor_sin_dni,email,email_contacto,correo_compartido_familiar,datos_revision_estado,datos_revisados_at,fecha_nacimiento,categoria,es_directivo,cargo_directiva,cuenta_activada,auth_user_id").eq("id",memberId).single();
+    const {data:m,error}=await db.from("socios").select("numero_socio,numero_socio_provisional,numero_socio_estado,antiguedad_declarada_tipo,antiguedad_declarada_temporada,antiguedad_declarada_anio,antiguedad_declarada_observaciones,antiguedad_estado,precio_abono,sector,sector_codigo_club,gestion_abono_preferida,continuidad_estado,menor_sin_dni,nombre,apellidos,dni,telefono,direccion,numero_abonado_malaga,email,email_contacto,correo_compartido_familiar,datos_revision_estado,datos_revisados_at,fecha_nacimiento,categoria,es_directivo,cargo_directiva,cuenta_activada,auth_user_id").eq("id",memberId).single();
     if(error)return;
     const numberInput=$('[name="numero_socio"]');
     if(numberInput){
@@ -44,7 +45,47 @@
     const sector=$('[name="sector"]');if(sector&&!m.sector)sector.placeholder="Zona pendiente";
     const fee=$('[name="cuota_al_dia"]');if(fee){fee.disabled=true;fee.closest("label")?.append(" (calculado desde Cuotas y pagos)")}
     await addPaymentButton(db);
+    await setupCensusReview(db,m);
+    await setupSeasonHistory(db);
   }
+
+  async function setupCensusReview(db,m){
+    const head=document.querySelector('.member-record-head');if(!head||document.querySelector('#censusReviewControl'))return;
+    const missing=[];
+    if(!String(m.nombre||'').trim()||!String(m.apellidos||'').trim())missing.push('nombre y apellidos');
+    if(!m.fecha_nacimiento)missing.push('fecha de nacimiento');
+    if(!m.menor_sin_dni&&!String(m.dni||'').trim())missing.push('DNI/NIE');
+    if(!String(m.email||m.email_contacto||'').trim()&&!String(m.telefono||'').trim())missing.push('correo o teléfono');
+    if(!String(m.direccion||'').trim())missing.push('dirección');
+    if(!String(m.numero_abonado_malaga||'').trim())missing.push('número de abonado');
+    const [{count:total},{count:reviewed}]=await Promise.all([
+      db.from('socios').select('id',{count:'exact',head:true}).or('es_registro_prueba.is.null,es_registro_prueba.eq.false'),
+      db.from('socios').select('id',{count:'exact',head:true}).or('es_registro_prueba.is.null,es_registro_prueba.eq.false').eq('datos_revision_estado','revisado')
+    ]);
+    head.insertAdjacentHTML('afterend',`<section id="censusReviewControl" class="census-review-card"><div><span class="kicker">Control de revisión</span><h2>${esc(m.datos_revision_estado==='revisado'?'Ficha revisada':'Ficha pendiente')}</h2><p>${missing.length?`Falta comprobar: <strong>${missing.map(esc).join(', ')}</strong>.`:'Los datos básicos necesarios están informados.'}</p></div><div class="census-review-progress"><strong>${Number(reviewed||0)} / ${Number(total||0)}</strong><span>fichas revisadas</span></div><div class="census-review-actions"><button type="button" id="markCensusIncomplete" class="btn btn-dark-outline">Dejar pendiente</button><button type="button" id="markCensusReviewed" class="btn btn-primary" ${missing.length?'disabled title="Completa primero los campos indicados"':''}>Marcar revisada</button><button type="button" id="nextCensusMember" class="btn btn-dark-outline">Siguiente pendiente →</button></div></section>`);
+    const setState=async state=>{const {error}=await db.from('socios').update({datos_revision_estado:state}).eq('id',memberId);if(error)return window.FrenteNotify.error(error.message);window.FrenteNotify.success(state==='revisado'?'Ficha marcada como revisada.':'Ficha guardada como pendiente de completar.');setTimeout(()=>location.reload(),350)};
+    document.querySelector('#markCensusIncomplete').onclick=()=>setState('incompleto');
+    document.querySelector('#markCensusReviewed').onclick=()=>setState('revisado');
+    document.querySelector('#nextCensusMember').onclick=async()=>{const {data,error}=await db.from('socios').select('id').or('es_registro_prueba.is.null,es_registro_prueba.eq.false').neq('datos_revision_estado','revisado').neq('id',memberId).order('nombre').order('apellidos').limit(1).maybeSingle();if(error)return window.FrenteNotify.error(error.message);if(!data)return window.FrenteNotify.success('No quedan fichas pendientes.');location.href=`ficha-socio-admin.html?id=${encodeURIComponent(data.id)}`};
+    const permanentTab=document.querySelector('[data-tab="pena"]');if(permanentTab)permanentTab.textContent='Datos de la Peña';
+    const seasonTab=document.querySelector('[data-tab="abono"]');if(seasonTab)seasonTab.textContent='Historial de abonos';
+    const familyTab=document.querySelector('[data-tab="tutor"]');if(familyTab)familyTab.textContent='Familia / incidencias';
+    ['categoria','gestion_abono_preferida','continuidad_estado','sector','sector_codigo_club','tipo_abono','precio_abono'].forEach(name=>{const field=document.querySelector(`[name="${name}"]`)?.closest('.record-field');if(field)field.hidden=true});
+    const account=document.querySelector('[name="cuenta_activada"]')?.closest('label');if(account)account.hidden=false;
+  }
+
+  async function setupSeasonHistory(db){
+    const panel=document.querySelector('[data-panel="abono"]');if(!panel)return;
+    panel.querySelector('.record-grid')?.classList.add('season-master-hidden');
+    const old=document.querySelector('#renewalsBox');if(old)old.hidden=true;
+    let box=document.querySelector('#seasonHistory406');if(!box){panel.insertAdjacentHTML('beforeend','<div id="seasonHistory406" class="season-history-406">Cargando historial por temporada…</div>');box=document.querySelector('#seasonHistory406')}
+    const {data,error}=await db.from('campanas_registros').select('id,estado,zona_club,categoria_club,precio_original,descuento_club,precio_abono,cuota_final,importe_total,importe_pagado,gestion_abono,forma_pago,fecha_pago,observaciones,datos_origen,created_at,campanas(temporada,nombre,tipo,modo_pruebas)').eq('socio_id',memberId).order('created_at',{ascending:false}).limit(30);
+    if(error){box.innerHTML='<div class="record-empty">No se pudo cargar el historial de temporadas.</div>';return}
+    const rows=(data||[]).filter(r=>r.campanas?.tipo!=='piloto'&&r.campanas?.modo_pruebas!==true);
+    box.innerHTML=rows.length?rows.map(r=>{const raw=r.datos_origen||{},zoneId=raw['Id. Zona Abono']||raw['id. zona abono']||raw.sector_codigo_club||'';const expected=Number(r.importe_total||0),paid=Number(r.importe_pagado||0),difference=Math.round((paid-expected)*100)/100;return `<article class="season-record-card"><header><div><span>${esc(r.campanas?.temporada||'Temporada')}</span><strong>${esc(String(r.estado||'pendiente de revisión').replaceAll('_',' '))}</strong></div><em>${esc(r.gestion_abono||'pendiente de confirmar')}</em></header><div class="season-record-grid"><div><small>Zona</small><b>${esc(r.zona_club||'Sin informar')}</b></div><div><small>Código de zona</small><b>${esc(zoneId||'Sin informar')}</b></div><div><small>Tipo del club</small><b>${esc(r.categoria_club||'Sin informar')}</b></div><div><small>Precio inicial</small><b>${money(r.precio_original)}</b></div><div><small>Descuento</small><b>${money(r.descuento_club)}</b></div><div><small>Precio club final</small><b>${money(r.precio_abono)}</b></div><div><small>Cuota Peña</small><b>${money(r.cuota_final)}</b></div><div><small>Total esperado</small><b>${money(expected)}</b></div><div><small>Pagado registrado</small><b>${money(paid)}</b></div><div class="${Math.abs(difference)>.009?'season-difference':''}"><small>Diferencia</small><b>${money(difference)}</b></div></div>${Math.abs(difference)>.009?'<p class="season-warning">Pendiente de revisión manual: la web no decide si renovó o no.</p>':''}${r.observaciones?`<p>${esc(r.observaciones)}</p>`:''}</article>`}).join(''):'<div class="record-empty">No hay datos reales de temporadas cargados para este socio. Los registros piloto no se muestran.</div>';
+  }
+
+  function money(v){return Number(v||0).toLocaleString('es-ES',{style:'currency',currency:'EUR'})}
 
   function setupAccountAndBoard(m){
     const account=$('[name="cuenta_activada"]');if(account){account.checked=!!(m.cuenta_activada||m.auth_user_id);account.disabled=true;const label=account.closest('label');if(label){label.title='Se activa automáticamente al vincular una cuenta de Supabase. Para bloquear acceso use Usuarios y permisos.';label.append(' (automático)')}}
