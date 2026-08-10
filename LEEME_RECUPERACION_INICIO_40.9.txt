@@ -1,0 +1,12 @@
+FRENTE COMEPIPAS · RECUPERACIÓN INICIO 40.9
+
+- Recuperado el módulo profesional de los tres próximos partidos del Commit 38.7.
+- Restaurados los escudos del Málaga CF, Atlético de Madrid, RC Deportivo y Real Madrid.
+- Restauradas las fotografías del Metropolitano, La Rosaleda y Santiago Bernabéu.
+- La portada vuelve a cargar home-v38.6.js en lugar del módulo antiguo home-v27.js.
+- Se han restaurado tres registros iniciales con horario pendiente de confirmación.
+- Se mantienen todos los módulos Enterprise 40 y sus correcciones.
+
+IMPORTANTE
+Las fechas y horarios deben confirmarse con el calendario oficial antes de comenzar la temporada.
+Cuando esté disponible la configuración completa de las 38 jornadas se incorporará sin cambiar el diseño recuperado.
