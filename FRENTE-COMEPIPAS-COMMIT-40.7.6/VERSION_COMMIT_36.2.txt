@@ -1,2 +1,0 @@
-COMMIT 36.2
-Corrección de solicitudes de material (jarra, lotería y resto del catálogo).

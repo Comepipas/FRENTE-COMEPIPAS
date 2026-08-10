@@ -1,3 +1,0 @@
-FRENTE COMEPIPAS
-COMMIT 40.6.2
-Edición de zona y sector por temporada desde la ficha del socio.

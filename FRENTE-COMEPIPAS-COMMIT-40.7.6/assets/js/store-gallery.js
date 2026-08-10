@@ -1,1 +1,0 @@
-window.StoreGallery={version:'10.5-d',panoramicCategories:['Bufandas']};

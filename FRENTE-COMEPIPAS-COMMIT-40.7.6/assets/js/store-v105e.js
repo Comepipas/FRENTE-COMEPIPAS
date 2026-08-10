@@ -1,1 +1,0 @@
-window.StoreV105E={version:"10.5-e"};

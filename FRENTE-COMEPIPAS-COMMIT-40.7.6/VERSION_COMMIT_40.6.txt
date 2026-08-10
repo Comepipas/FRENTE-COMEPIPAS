@@ -1,3 +1,0 @@
-FRENTE COMEPIPAS
-COMMIT 40.6
-Ficha de socio preparada para la revisión manual del censo y separación del historial por temporada.

@@ -1,2 +1,0 @@
-COMMIT 34.5
-Antigüedad en activación, número pendiente y exención automática de directivos.

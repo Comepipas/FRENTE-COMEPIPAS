@@ -1,1 +1,0 @@
-window.StoreCRUD={version:'10.5-a.2',create(){},edit(){},remove(){},duplicate(){}};
