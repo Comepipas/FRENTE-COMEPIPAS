@@ -1,0 +1,12 @@
+FRENTE COMEPIPAS - COMMIT 40.13
+
+ORDEN DE LA PORTADA
+
+- "Hazte socio" desaparece de la cabecera inicial.
+- La cabecera muestra únicamente "Área de socios" y "Activar cuenta".
+- "Material de la Peña" se sitúa al final de la página.
+- "Hazte socio" se sitúa como último bloque, inmediatamente antes del pie de página.
+- El editor visual reconoce ahora ambos bloques y conserva su posición final al cargar la configuración compartida de Supabase.
+- Desde el Editor de portada también pueden ordenarse u ocultarse como cualquier otra sección.
+- Se mantiene toda la funcionalidad acumulada, incluida la Historia Enterprise y los tres próximos partidos.
+- El commit 41 continúa aparcado.
