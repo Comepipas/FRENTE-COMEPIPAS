@@ -1,0 +1,3 @@
+FRENTE COMEPIPAS
+COMMIT 40.6.3
+Buscador de socios corregido para nombres y apellidos completos.
