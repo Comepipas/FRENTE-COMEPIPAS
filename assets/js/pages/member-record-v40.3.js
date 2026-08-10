@@ -12,11 +12,8 @@
     await setupFamilyAdmin(db);
     const {data:m,error}=await db.from("socios").select("numero_socio,numero_socio_provisional,numero_socio_estado,antiguedad_declarada_tipo,antiguedad_declarada_temporada,antiguedad_declarada_anio,antiguedad_declarada_observaciones,antiguedad_estado,precio_abono,sector,sector_codigo_club,gestion_abono_preferida,continuidad_estado,menor_sin_dni,nombre,apellidos,dni,telefono,direccion,numero_abonado_malaga,email,email_contacto,correo_compartido_familiar,datos_revision_estado,datos_revisados_at,fecha_nacimiento,categoria,es_directivo,cargo_directiva,cuenta_activada,auth_user_id").eq("id",memberId).single();
     if(error)return;
-<<<<<<< Updated upstream
-=======
     ['nombre','apellidos'].forEach(name=>{const input=$(`[name="${name}"]`);if(input)input.value=String(input.value||'').toLocaleUpperCase('es-ES')});
     const heroName=$('#recordHero h2');if(heroName)heroName.textContent=String(heroName.textContent||'').toLocaleUpperCase('es-ES');
->>>>>>> Stashed changes
     const numberInput=$('[name="numero_socio"]');
     if(numberInput){
       const definitive=m.numero_socio&&String(m.numero_socio_estado).toLowerCase()==="asignado";
@@ -117,13 +114,8 @@
       save.textContent='Guardar revisión económica';
       const number=selector=>{const value=editor.querySelector(selector).value;if(value==='')return null;const parsed=Number(value);return Number.isFinite(parsed)?parsed:null};
       const payload=()=>({zona_club:editor.querySelector('[data-season-zone]').value.trim()||null,sector_club:editor.querySelector('[data-season-sector]').value.trim()||null,categoria_club:editor.querySelector('[data-season-category]').value.trim()||null,precio_original:number('[data-season-original]'),descuento_club:number('[data-season-discount]'),precio_abono:number('[data-season-price]'),gestion_abono:editor.querySelector('[data-season-management]').value,importe_pagado:number('[data-season-paid]')||0,forma_pago:editor.querySelector('[data-season-method]').value||null,pago_club_declarado_at:editor.querySelector('[data-season-club-declared]').checked?(row.pago_club_declarado_at||new Date().toISOString()):null,pago_club_verificado_at:editor.querySelector('[data-season-club-verified]').checked?(row.pago_club_verificado_at||new Date().toISOString()):null});
-<<<<<<< Updated upstream
-      save.onclick=async()=>{const values=payload(),expected=(values.gestion_abono==='pena'?Number(values.precio_abono||0):0)+Number(row.cuota_final||0);values.estado=values.importe_pagado>=expected&&expected>=0?'pagado':'pendiente_revision';values.fecha_pago=values.estado==='pagado'?new Date().toISOString():null;save.disabled=true;const {error}=await db.from('campanas_registros').update(values).eq('id',row.id);save.disabled=false;if(error)return window.FrenteNotify.error(error.message);window.FrenteNotify.success('Revisión económica guardada.');await setupSeasonHistory(db)};
-      editor.querySelector('[data-confirm-transfer]').onclick=async()=>{const management=editor.querySelector('[data-season-management]').value,expected=(management==='pena'?Number(editor.querySelector('[data-season-price]').value||0):0)+Number(row.cuota_final||0);if(!confirm(`¿Confirmas un pago por transferencia de ${money(expected)}?`))return;const {error}=await db.from('campanas_registros').update({gestion_abono:management,importe_pagado:expected,forma_pago:'transferencia',estado:'pagado',fecha_pago:new Date().toISOString()}).eq('id',row.id);if(error)return window.FrenteNotify.error(error.message);window.FrenteNotify.success('Pago por transferencia confirmado; la diferencia queda a cero.');await setupSeasonHistory(db)};
-=======
       save.onclick=async()=>{const values=payload(),expected=(values.gestion_abono==='pena'?Number(values.precio_abono||0):0)+Number(row.cuota_final||0);values.estado=values.importe_pagado>=expected&&expected>=0?'pagado':'pendiente_revision';values.fecha_pago=values.estado==='pagado'?new Date().toISOString():null;save.disabled=true;const {error}=await db.from('campanas_registros').update(values).eq('id',row.id);if(!error)await syncSeasonFeeStatus(db,row,values.estado==='pagado',values.forma_pago);save.disabled=false;if(error)return window.FrenteNotify.error(error.message);window.FrenteNotify.success('Revisión económica guardada y cuota sincronizada.');await setupSeasonHistory(db)};
       editor.querySelector('[data-confirm-transfer]').onclick=async()=>{const management=editor.querySelector('[data-season-management]').value,expected=(management==='pena'?Number(editor.querySelector('[data-season-price]').value||0):0)+Number(row.cuota_final||0);if(!confirm(`¿Confirmas un pago por transferencia de ${money(expected)}?`))return;const {error}=await db.from('campanas_registros').update({gestion_abono:management,importe_pagado:expected,forma_pago:'transferencia',estado:'pagado',fecha_pago:new Date().toISOString()}).eq('id',row.id);if(error)return window.FrenteNotify.error(error.message);await syncSeasonFeeStatus(db,row,true,'transferencia');window.FrenteNotify.success('Pago por transferencia confirmado; diferencia y cuota quedan al día.');await setupSeasonHistory(db)};
->>>>>>> Stashed changes
     });
   }
 
@@ -179,8 +171,6 @@
     container.insertAdjacentHTML("beforeend",`<div class="record-field full"><label>Categoría y cuota calculadas</label><div class="record-history-item"><strong>${esc(category.nombre)} · ${Number(category.cuota||0).toLocaleString('es-ES',{style:'currency',currency:'EUR'})}</strong><span>${esc(campaign.temporada||campaign.nombre)} · nacimiento ${esc(m.fecha_nacimiento)} · fecha de corte ${esc(campaign.fecha_corte||'sin configurar')}</span><small>La tarifa puede modificarse desde Categorías y cuotas de la campaña.</small></div></div>`);
   }
 
-<<<<<<< Updated upstream
-=======
   async function syncSeasonFeeStatus(db,row,isPaid,method='transferencia'){
     const seasonName=row.campanas?.temporada||'2026/27';
     const {data:season}=await db.from('temporadas').select('id').eq('nombre',seasonName).limit(1).maybeSingle();
@@ -192,7 +182,6 @@
     await db.from('socios').update({cuota_al_dia:isPaid}).eq('id',memberId);
   }
 
->>>>>>> Stashed changes
   async function addPaymentButton(db,m){
     const box=$("#feesBox");if(!box)return;
     const {data:season}=await db.from("temporadas").select("id,nombre").eq("activa",true).limit(1).maybeSingle();
@@ -208,11 +197,7 @@
     if(String(fee.estado).toLowerCase()==="pagada"){
       if(Number(fee.importe||0)<=0)return;
       box.insertAdjacentHTML("afterend",`<div style="margin-top:14px"><button id="recordReviewPayment" type="button" class="btn btn-dark-outline">Marcar este pago como pendiente de comprobar</button><small style="display:block;margin-top:8px">Úsalo si no puedes confirmar el ingreso de ${esc(season.nombre)}. No elimina la cuota.</small></div>`);
-<<<<<<< Updated upstream
-      $("#recordReviewPayment").onclick=async()=>{if(!confirm('¿Marcar este pago como pendiente de comprobar?'))return;const {error}=await db.from('cuotas_socios').update({estado:'pendiente',fecha_pago:null,metodo_pago:null,referencia:null,observaciones:'Pago pendiente de comprobar durante la revisión del censo',updated_at:new Date().toISOString()}).eq('id',fee.id);if(error)return window.FrenteNotify.error(error.message);await db.from('socios').update({continuidad_estado:'pendiente_pago',datos_revision_estado:'incompleto'}).eq('id',memberId);window.FrenteNotify.success('Pago marcado para revisión.');setTimeout(()=>location.reload(),400)};
-=======
       $("#recordReviewPayment").onclick=async()=>{if(!confirm('¿Marcar este pago como pendiente de comprobar?'))return;const {error}=await db.from('cuotas_socios').update({estado:'pendiente',fecha_pago:null,metodo_pago:null,referencia:null,observaciones:'Pago pendiente de comprobar durante la revisión del censo',updated_at:new Date().toISOString()}).eq('id',fee.id);if(error)return window.FrenteNotify.error(error.message);await db.from('socios').update({cuota_al_dia:false,continuidad_estado:'pendiente_pago',datos_revision_estado:'incompleto'}).eq('id',memberId);window.FrenteNotify.success('Pago marcado para revisión.');setTimeout(()=>location.reload(),400)};
->>>>>>> Stashed changes
       return;
     }
     box.insertAdjacentHTML("afterend",`<div style="margin-top:14px"><button id="recordMarkPaid" type="button" class="btn btn-primary">Registrar pago de ${Number(fee.importe||0).toLocaleString("es-ES",{style:"currency",currency:"EUR"})}</button><small style="display:block;margin-top:8px">Temporada ${esc(season.nombre)}. Esta acción actualiza el registro económico real.</small></div>`);
@@ -222,10 +207,7 @@
       const reference=prompt("Referencia o concepto del ingreso (opcional)","")||null;
       const {error}=await db.from("cuotas_socios").update({estado:"pagada",fecha_pago:new Date().toISOString().slice(0,10),metodo_pago:method,referencia:reference,observaciones:"Pago registrado desde la ficha del socio",updated_at:new Date().toISOString()}).eq("id",fee.id);
       if(error)return window.FrenteNotify.error(error.message);
-<<<<<<< Updated upstream
-=======
       await db.from('socios').update({cuota_al_dia:true}).eq('id',memberId);
->>>>>>> Stashed changes
       window.FrenteNotify.success("Pago registrado correctamente en la cuota de la temporada activa.");
       setTimeout(()=>location.reload(),500);
     };
