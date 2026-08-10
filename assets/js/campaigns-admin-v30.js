@@ -35,6 +35,9 @@ async function addCategory(){const {error}=await sb.from('campanas_categorias').
 async function saveCategory(id){const o={};$$(`[data-cat="${id}"]`).forEach(i=>{o[i.dataset.field]=i.type==='checkbox'?i.checked:(i.value===''?null:(i.dataset.field==='cuota'?Number(i.value):i.value));});const directivo=String(o.nombre||'').toLowerCase()==='directivo';if(!directivo&&(!o.nacimiento_desde||!o.nacimiento_hasta))return msg('Debes indicar las dos fechas de nacimiento de la categoría.');if(!directivo&&o.nacimiento_desde>o.nacimiento_hasta)return msg('La fecha «Nacidos desde» no puede ser posterior a «Nacidos hasta».');const overlap=!directivo&&categories.some(c=>c.id!==id&&c.activa&&String(c.nombre).toLowerCase()!=='directivo'&&o.activa&&c.nacimiento_desde&&c.nacimiento_hasta&&o.nacimiento_desde<=c.nacimiento_hasta&&o.nacimiento_hasta>=c.nacimiento_desde);if(overlap)return msg('Este rango se solapa con otra categoría activa. Corrige las fechas antes de guardar.');const {error}=await sb.from('campanas_categorias').update(o).eq('id',id);if(error)return msg(error.message);if(current.tipo!=='piloto'&&!current.modo_pruebas){const sync=await sb.rpc('commit407_refresh_census_categories',{p_campaign:current.id});if(sync.error)return msg('Categoría guardada, pero falta ejecutar el SQL 040_7 para actualizar el censo.');const fees=await sb.rpc('commit4075_refresh_campaign_fees',{p_campaign:current.id});if(fees.error&&!/function.*does not exist/i.test(fees.error.message||''))return msg(`Categoría guardada, pero no se actualizaron las cuotas: ${fees.error.message}`);msg(`Categoría y cuota guardadas; censo recalculado (${sync.data?.updated||0} socios).`)}else msg('Categoría y fechas guardadas. La campaña piloto no modifica el censo real.');await loadAll();}
 function normalizeKey(k){return String(k||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]/g,'');}
 function pick(row,names){const map=Object.fromEntries(Object.entries(row).map(([k,v])=>[normalizeKey(k),v]));for(const n of names){const v=map[normalizeKey(n)];if(v!==undefined&&v!=='')return v;}return null;}
+function amount(v){if(typeof v==='number')return Number.isFinite(v)?v:null;const cleaned=String(v??'').trim().replace(/\s/g,'').replace(',','.');if(!cleaned||!/^[-+]?\d+(\.\d+)?$/.test(cleaned))return null;const n=Number(cleaned);return Number.isFinite(n)?n:null}
+function excelDate(v){if(v instanceof Date&&!Number.isNaN(v.getTime()))return v.toISOString();if(!v)return null;const d=new Date(v);return Number.isNaN(d.getTime())?null:d.toISOString()}
+function reconciliation(row){const raw=pick(row,['descuadre','diferencia','saldo pendiente']),value=amount(raw);return{raw,value,ok:value!==null&&Math.abs(value)<0.005,unknown:raw===null||raw===''||value===null}}
 function renderImportPreview(){
  const pageSize=50,total=previewRows.length,pages=Math.max(1,Math.ceil(total/pageSize));
  previewPage=Math.min(Math.max(1,previewPage),pages);
@@ -59,25 +62,28 @@ function rowIdentity(r,index){
  const name=String(pick(r,['nombre','nombre y apellidos','abonado','socio'])||'').trim();
  return {dni,name,key:normalizeKey(dni),index};
 }
+function memberFor(item,list){const candidates=(list||[]).filter(m=>normalizeKey(m.dni)===item.key);if(candidates.length===1)return candidates[0];const wanted=normalizeKey(item.name);return candidates.find(m=>normalizeKey(`${m.nombre||''} ${m.apellidos||''}`)===wanted)||null}
 async function analyseRows(){
  const {data:members,error}=await sb.from('socios').select('id,numero_socio,nombre,apellidos,dni,fecha_nacimiento');
  if(error)throw error;
  const existingByDni=new Map((members||[]).filter(m=>m.dni).map(m=>[normalizeKey(m.dni),m]));
- const firstByDni=new Map(),duplicates=[],missingDni=[],valid=[];
+ const firstByIdentity=new Map(),duplicates=[],missingDni=[],valid=[];
  previewRows.forEach((r,index)=>{
   const ident=rowIdentity(r,index);
   if(!ident.key){missingDni.push({...ident,row:r});return;}
-  if(firstByDni.has(ident.key)){duplicates.push({...ident,row:r,firstIndex:firstByDni.get(ident.key).index});return;}
-  firstByDni.set(ident.key,{...ident,row:r});valid.push({...ident,row:r});
+  const identityKey=`${ident.key}|${normalizeKey(ident.name)}`;
+  if(firstByIdentity.has(identityKey)){duplicates.push({...ident,row:r,firstIndex:firstByIdentity.get(identityKey).index});return;}
+  firstByIdentity.set(identityKey,{...ident,row:r});valid.push({...ident,row:r});
  });
- const existing=valid.filter(x=>existingByDni.has(x.key));
- const newMembers=valid.filter(x=>!existingByDni.has(x.key));
- return {members:members||[],existingByDni,valid,existing,newMembers,duplicates,missingDni};
+ const existing=valid.filter(x=>memberFor(x,members));
+ const newMembers=valid.filter(x=>!memberFor(x,members));
+ const reconciled=valid.filter(x=>reconciliation(x.row).ok),paymentIssues=valid.filter(x=>!reconciliation(x.row).ok);
+ return {members:members||[],existingByDni,valid,existing,newMembers,duplicates,missingDni,reconciled,paymentIssues};
 }
 function renderAnalysis(){
  const a=previewAnalysis;if(!a)return;
  const box=$('#importAnalysis');box.hidden=false;
- box.innerHTML=`<div class="c283-kpis"><article><span>Filas del Excel</span><strong>${previewRows.length}</strong></article><article><span>DNI válidos únicos</span><strong>${a.valid.length}</strong></article><article><span>Ya existen en socios</span><strong>${a.existing.length}</strong></article><article><span>Socios nuevos</span><strong>${a.newMembers.length}</strong></article><article class="${a.duplicates.length?'warn':''}"><span>DNI repetidos</span><strong>${a.duplicates.length}</strong></article><article class="${a.missingDni.length?'warn':''}"><span>Sin DNI</span><strong>${a.missingDni.length}</strong></article></div><p>${a.duplicates.length||a.missingDni.length?'Las filas problemáticas se omitirán y quedarán reflejadas como incidencias.':'El archivo no contiene duplicados ni filas sin DNI.'}</p>`;
+ box.innerHTML=`<div class="c283-kpis"><article><span>Filas del Excel</span><strong>${previewRows.length}</strong></article><article><span>Conciliadas automáticamente</span><strong>${a.reconciled.length}</strong></article><article class="${a.paymentIssues.length?'warn':''}"><span>Pagos para revisar</span><strong>${a.paymentIssues.length}</strong></article><article><span>Ya existen en socios</span><strong>${a.existing.length}</strong></article><article><span>Socios nuevos</span><strong>${a.newMembers.length}</strong></article><article class="${a.duplicates.length?'warn':''}"><span>DNI repetidos</span><strong>${a.duplicates.length}</strong></article><article class="${a.missingDni.length?'warn':''}"><span>Sin DNI</span><strong>${a.missingDni.length}</strong></article></div><p><strong>Regla económica:</strong> DESCUADRE = 0 se registra como pagado por transferencia. Cualquier otro valor, error o celda vacía se convierte en incidencia para revisión manual.</p>`;
 }
 async function previewExcel(){
  try{
@@ -115,19 +121,23 @@ async function confirmImport(){
    await insertInChunks('socios',previewAnalysis.newMembers.map(memberPayload));
   }
   const {data:members,error:merr}=await sb.from('socios').select('id,numero_socio,nombre,apellidos,dni,fecha_nacimiento');if(merr)throw merr;
-  const byDni=new Map((members||[]).filter(m=>m.dni).map(m=>[normalizeKey(m.dni),m]));
   const origin=$('#importOrigin').value,matched=[],unmatched=[],newIssues=[];
   for(const item of previewAnalysis.valid){
-   const r=item.row,member=byDni.get(item.key);
+   const r=item.row,member=memberFor(item,members);
    const price=Number(pick(r,['cuota de abono con descuento (euros)','precio final','importe final','precio abono','importe abono','total abono'])||0);
    const original=Number(pick(r,['cuota de abono euros','precio original','precio'])||price);
    const discount=Number(pick(r,['descuento','descuentos','cesion','cesión'])||0);
-   const fee=Number(pick(r,['cuota pena','cuota peña','cuota socio'])||0);
-   const paid=Number(pick(r,['importe pagado','pagado','total cobrado'])||0);
+   const totalPena=amount(pick(r,['precio final peña','precio final pena','total peña','total pena']));
+   const explicitFee=amount(pick(r,['cuota pena','cuota peña','cuota socio']));
+   const fee=explicitFee??(totalPena!==null?Math.max(0,Math.round((totalPena-price)*100)/100):0);
+   const paid=amount(pick(r,['importe pagado','pagado','total cobrado']))??0;
+   const paymentDate=excelDate(pick(r,['pagado2','fecha pago','fecha de pago']));
+   const check=reconciliation(r);
    const gestion=normalizeKey(pick(r,['gestion abono','renovacion','tramitado por'])||'').includes('club')?'club':'pena';
-   const row={campana_id:current.id,socio_id:member?.id||null,origen:origin,dni_club:item.dni||null,nombre_club:item.name||null,zona_club:pick(r,['nombre zona del abono','zona','sector']),sector_club:pick(r,['id. zona abono','id zona abono','número zona','numero zona','sector id']),categoria_club:pick(r,['tipo de abono','tipo abono','categoria','categoría']),precio_original:original,descuento_club:discount,precio_abono:price,categoria_pena:pick(r,['categoria pena','categoría peña']),cuota_base:fee,cuota_final:fee,gestion_abono:gestion,estado:paid>0?'pagado':(member?'pendiente_revision':'incidencia'),forma_pago:pick(r,['forma pago','metodo pago','método pago'])||null,importe_pagado:paid,datos_origen:r};
+   const row={campana_id:current.id,socio_id:member?.id||null,origen:origin,dni_club:item.dni||null,nombre_club:item.name||null,zona_club:pick(r,['nombre zona del abono','zona','sector']),sector_club:pick(r,['id. zona abono','id zona abono','número zona','numero zona','sector id']),categoria_club:pick(r,['tipo de abono','tipo abono','categoria','categoría']),precio_original:original,descuento_club:discount,precio_abono:price,categoria_pena:pick(r,['categoria pena','categoría peña']),cuota_base:fee,cuota_final:fee,gestion_abono:gestion,estado:check.ok&&member?'pagado':'incidencia',forma_pago:check.ok?'transferencia':null,importe_pagado:paid,fecha_pago:check.ok?(paymentDate||new Date().toISOString()):null,datos_origen:r,observaciones:check.ok?'Conciliado automáticamente: DESCUADRE = 0 en el Excel del club.':`Pendiente de revisión: DESCUADRE ${String(check.raw??'vacío')}.`};
    member?matched.push(row):unmatched.push(row);
    if(!member)newIssues.push({campana_id:current.id,tipo:'socio_no_localizado',gravedad:'alta',descripcion:`No se pudo vincular ${item.name||item.dni}.`});
+   else if(!check.ok){const description=`${item.name||'Socio'} · DNI ${item.dni} · DESCUADRE ${String(check.raw??'vacío')} · pagado ${paid.toFixed(2)} € de ${Number(totalPena??price+fee).toFixed(2)} €.`;if(!issues.some(i=>i.tipo==='descuadre_excel'&&String(i.descripcion||'').includes(item.dni)))newIssues.push({campana_id:current.id,tipo:'descuadre_excel',gravedad:'alta',descripcion:description});}
   }
   previewAnalysis.duplicates.forEach(x=>newIssues.push({campana_id:current.id,tipo:'duplicado_en_excel',gravedad:'alta',descripcion:`DNI repetido ${x.dni}: ${x.name||'sin nombre'}. Se omitió la fila ${x.index+2}.`}));
   previewAnalysis.missingDni.forEach(x=>newIssues.push({campana_id:current.id,tipo:'dni_ausente',gravedad:'alta',descripcion:`Fila ${x.index+2} sin DNI: ${x.name||'sin nombre'}. No se importó.`}));

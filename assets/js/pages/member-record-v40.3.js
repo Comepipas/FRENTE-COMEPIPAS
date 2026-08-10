@@ -59,12 +59,16 @@
     if(!String(m.email||m.email_contacto||'').trim()&&!String(m.telefono||'').trim())missing.push('correo o teléfono');
     if(!String(m.direccion||'').trim())missing.push('dirección');
     if(!String(m.numero_abonado_malaga||'').trim())missing.push('número de abonado');
+    const incidentQuery=await db.from('campanas_registros').select('id,estado,observaciones').eq('socio_id',memberId).eq('estado','incidencia').limit(10);
+    const paymentIncidents=incidentQuery.error?[]:(incidentQuery.data||[]);
     const antiquity=m.antiguedad_declarada_temporada||m.antiguedad_declarada_anio||(m.antiguedad_declarada_tipo==='no_recuerda'?'No recuerda la antigüedad':'Pendiente de declarar');
     const [{count:total},{count:reviewed}]=await Promise.all([
       db.from('socios').select('id',{count:'exact',head:true}).or('es_registro_prueba.is.null,es_registro_prueba.eq.false'),
       db.from('socios').select('id',{count:'exact',head:true}).or('es_registro_prueba.is.null,es_registro_prueba.eq.false').eq('datos_revision_estado','revisado')
     ]);
     head.insertAdjacentHTML('afterend',`<section id="censusReviewControl" class="census-review-card"><div><span class="kicker">Control de revisión</span><h2>${esc(m.datos_revision_estado==='revisado'?'Ficha revisada':'Ficha pendiente')}</h2><p>${missing.length?`Falta comprobar: <strong>${missing.map(esc).join(', ')}</strong>.`:'Los datos básicos necesarios están informados.'}</p><p class="census-antiquity"><strong>Antigüedad declarada:</strong> ${esc(antiquity)} · ${esc(m.antiguedad_estado||'pendiente')}</p></div><div class="census-review-progress"><strong>${Number(reviewed||0)} / ${Number(total||0)}</strong><span>fichas revisadas</span></div><div class="census-review-actions"><button type="button" id="markCensusIncomplete" class="btn btn-dark-outline">Dejar pendiente</button><button type="button" id="markCensusReviewed" class="btn btn-primary" ${missing.length?'disabled title="Completa primero los campos indicados"':''}>Marcar revisada</button><button type="button" id="nextCensusMember" class="btn btn-dark-outline">Siguiente pendiente →</button></div></section>`);
+    if(paymentIncidents.length)document.querySelector('#censusReviewControl')?.insertAdjacentHTML('afterend',`<section class="census-payment-incidents"><strong>Incidencia económica pendiente</strong><span>${paymentIncidents.map(x=>esc(x.observaciones||'Pago con descuadre pendiente de revisar.')).join('<br>')}</span><button type="button" class="btn btn-dark-outline" id="openEconomyIncident">Resolver en Economía y pagos</button></section>`);
+    document.querySelector('#openEconomyIncident')?.addEventListener('click',()=>document.querySelector('[data-tab="abono"]')?.click());
     const setState=async state=>{const {error}=await db.from('socios').update({datos_revision_estado:state}).eq('id',memberId);if(error)return window.FrenteNotify.error(error.message);window.FrenteNotify.success(state==='revisado'?'Ficha marcada como revisada.':'Ficha guardada como pendiente de completar.');setTimeout(()=>location.reload(),350)};
     document.querySelector('#markCensusIncomplete').onclick=()=>setState('incompleto');
     document.querySelector('#markCensusReviewed').onclick=()=>setState('revisado');
