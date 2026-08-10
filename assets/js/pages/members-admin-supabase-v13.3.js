@@ -28,6 +28,14 @@ async function load(){
     ]);
     state.rows=r.rows||[];
     await loadSeasonAbonos(state.rows);
+<<<<<<< Updated upstream
+=======
+    await loadSeasonFees(state.rows);
+    await loadReconciledPayments(state.rows);
+    await persistReconciledFees(state.rows);
+    state.rows.forEach(m=>{m.nombreCompleto=String(m.nombreCompleto||'').toLocaleUpperCase('es-ES')});
+    if(filters().fee==='false')state.rows=state.rows.filter(m=>!m.cuota_al_dia);
+>>>>>>> Stashed changes
     state.summary=summary;
     state.count=Number(r.count||0);
     render();
@@ -45,6 +53,12 @@ async function load(){
   }
 }
 async function loadSeasonAbonos(rows){state.seasonAbonos=new Map();const ids=(rows||[]).map(x=>x.id).filter(Boolean);if(!ids.length)return;try{const db=window.FrenteDatabase.getClient(),campaign=await db.from('campanas_abonados').select('id').eq('temporada','2026/27').eq('tipo','historica').order('updated_at',{ascending:false}).limit(1).maybeSingle();if(campaign.error)throw campaign.error;if(!campaign.data?.id)return;const result=await db.from('campanas_registros').select('socio_id,zona_club,sector_club,precio_abono,created_at').eq('campana_id',campaign.data.id).in('socio_id',ids).order('created_at',{ascending:false});if(result.error)throw result.error;(result.data||[]).forEach(r=>{if(state.seasonAbonos.has(r.socio_id))return;state.seasonAbonos.set(r.socio_id,r);const m=rows.find(x=>x.id===r.socio_id);if(!m)return;const zona=String(r.zona_club||m.sector||'').trim(),sector=String(r.sector_club||m.sector_codigo_club||'').trim();m.sector=[zona,sector&&!zona.includes(sector)?`Sector ${sector}`:''].filter(Boolean).join(' · ')||null;if(r.precio_abono!=null)m.precio_abono=Number(r.precio_abono)})}catch(e){console.warn('No se pudo cargar el abono 2026/27 por temporada',e)}}
+<<<<<<< Updated upstream
+=======
+async function loadSeasonFees(rows){const ids=(rows||[]).map(x=>x.id).filter(Boolean);if(!ids.length)return;try{const db=window.FrenteDatabase.getClient(),season=await db.from('temporadas').select('id,nombre').eq('nombre','2026/27').limit(1).maybeSingle();if(season.error)throw season.error;if(!season.data?.id)return;const result=await db.from('cuotas_socios').select('socio_id,estado,importe,updated_at').eq('temporada_id',season.data.id).in('socio_id',ids).order('updated_at',{ascending:false});if(result.error)throw result.error;const seen=new Set();(result.data||[]).forEach(q=>{if(seen.has(q.socio_id))return;seen.add(q.socio_id);const m=rows.find(x=>x.id===q.socio_id);if(!m)return;const estado=String(q.estado||'').toLowerCase(),ok=['pagada','exenta'].includes(estado);m.cuota_al_dia=ok;m.cuota=estado==='exenta'||(ok&&Number(q.importe||0)===0)?'Exenta':ok?'Al día':'Pendiente'})}catch(e){console.warn('No se pudo comprobar la cuota real 2026/27',e)}}
+async function loadReconciledPayments(rows){const ids=(rows||[]).map(x=>x.id).filter(Boolean);if(!ids.length)return;try{const db=window.FrenteDatabase.getClient(),campaign=await db.from('campanas_abonados').select('id').eq('temporada','2026/27').eq('tipo','historica').order('updated_at',{ascending:false}).limit(1).maybeSingle();if(!campaign.data?.id)return;const result=await db.from('campanas_registros').select('socio_id,estado,importe_total,importe_pagado,cuota_final').eq('campana_id',campaign.data.id).in('socio_id',ids);if(result.error)throw result.error;(result.data||[]).forEach(r=>{const expected=Number(r.importe_total||0),paid=Number(r.importe_pagado||0),ok=String(r.estado||'').toLowerCase()==='pagado'&&paid+0.009>=expected;if(!ok)return;const m=rows.find(x=>x.id===r.socio_id);if(!m)return;m.cuota_al_dia=true;m.cuota=Number(r.cuota_final||0)===0?'Exenta':'Al día'})}catch(e){console.warn('No se pudo comprobar la conciliación 2026/27',e)}}
+async function persistReconciledFees(rows){const paid=(rows||[]).filter(m=>m.cuota_al_dia&&m.id).map(m=>m.id),pending=(rows||[]).filter(m=>!m.cuota_al_dia&&m.id).map(m=>m.id);try{const db=window.FrenteDatabase.getClient();if(paid.length)await db.from('socios').update({cuota_al_dia:true}).in('id',paid);if(pending.length)await db.from('socios').update({cuota_al_dia:false}).in('id',pending)}catch(e){console.warn('No se pudo sincronizar el indicador general de cuota',e)}}
+>>>>>>> Stashed changes
 function render(){renderStats();renderTable();renderPagination()}
 function renderStats(){const x=state.summary||{};$("membersTotal").textContent=x.total??0;$("membersActive").textContent=x.active??0;$("membersActivated").textContent=x.activated??0;$("membersNotActivated").textContent=x.notActivated??0;$("membersPending").textContent=x.pendingFees??0;$("membersChildren").textContent=x.children??0;$("membersYoung").textContent=x.young??0;$("membersAdult").textContent=x.adult??0}
 const pill=(text,kind="")=>`<span class="status-pill ${kind}">${esc(text||"—")}</span>`;
