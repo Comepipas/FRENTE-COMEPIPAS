@@ -86,3 +86,6 @@ end $$;
 
 comment on function public.commit407_refresh_census_categories(uuid) is
   'Recalcula la categoría visible del censo con los rangos de una campaña real; no modifica históricos.';
+
+-- Fuerza a la API de Supabase a reconocer inmediatamente columnas y relaciones añadidas.
+notify pgrst, 'reload schema';
