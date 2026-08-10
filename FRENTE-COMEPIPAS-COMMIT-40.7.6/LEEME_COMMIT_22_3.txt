@@ -1,0 +1,21 @@
+FRENTE COMEPIPAS · COMMIT 22.3
+RECUPERACIÓN DE CONTRASEÑA
+
+CAMBIOS
+- Añadido enlace "¿Has olvidado la contraseña?" en el acceso de Administración.
+- Nueva pantalla de recuperación válida para administradores y socios.
+- Compatible con enlaces Supabase PKCE (?code=...) e implícitos (#access_token...).
+- Formulario de contraseña con confirmación, reglas de seguridad y mostrar/ocultar.
+- Tras cambiarla, cierra la sesión temporal y vuelve al acceso correcto.
+
+INSTALACIÓN
+1. Sustituir los archivos del proyecto por los de este ZIP.
+2. No requiere ejecutar SQL.
+3. En Supabase > Authentication > URL Configuration, añadir a Redirect URLs:
+   - URL_PUBLICA/recuperar-clave.html
+   Ejemplo local: http://127.0.0.1:5500/recuperar-clave.html
+   Ejemplo Vercel: https://TU-DOMINIO.vercel.app/recuperar-clave.html
+4. Probar desde login.html > ¿Has olvidado la contraseña?
+
+IMPORTANTE
+Supabase solo redirige a URLs incluidas en la lista permitida. Si falta la URL pública, el correo puede abrir la portada en lugar del formulario.

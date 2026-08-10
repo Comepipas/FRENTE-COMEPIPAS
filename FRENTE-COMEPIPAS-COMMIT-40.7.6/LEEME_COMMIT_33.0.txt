@@ -1,0 +1,18 @@
+FRENTE COMEPIPAS · COMMIT 33.0
+
+CENTRO DE MIGRACIÓN OFICIAL
+
+1. Sustituye los archivos del proyecto por los de este ZIP.
+2. Ejecuta PASO_COMMIT_33_EJECUTAR_EN_SUPABASE.sql en Supabase.
+3. Publica y recarga con Ctrl+F5.
+4. Entra en Panel de administración > Centro de migración.
+5. Carga el listado oficial del Málaga CF y el Excel propio de la Peña.
+6. Revisa conflictos y confirma manualmente tutores de menores.
+7. Descarga el Excel Maestro y la copia de seguridad.
+8. Solo entonces ejecuta la importación.
+
+SEGURIDAD
+- No borra socios automáticamente.
+- La opción de registros de prueba solo da baja lógica a filas marcadas expresamente es_registro_prueba=true.
+- Los menores nunca se vinculan solo por compartir correo o teléfono; la directiva debe confirmar al tutor.
+- Padre, madre o tutor confirmado podrá representar al menor en futuras renovaciones.

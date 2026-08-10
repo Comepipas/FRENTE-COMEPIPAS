@@ -1,0 +1,17 @@
+FRENTE COMEPIPAS · COMMIT 35.1
+
+CORRECCIONES
+- La cuenta Auth ya no se cancela si falla un registro secundario de vinculación.
+- El formulario solo anuncia éxito cuando Supabase devuelve un usuario nuevo real.
+- Detecta la respuesta oculta de Supabase cuando el correo ya existe.
+- Nunca muestra {} como error.
+- Reenvío de confirmación con mensajes claros y aviso de spam.
+- Tras confirmar el correo, redirige automáticamente al inicio de sesión.
+- El correo queda rellenado en el formulario de acceso.
+
+INSTALACIÓN
+1. Sustituir el proyecto anterior por este Commit 35.1.
+2. Publicar en Vercel.
+3. Ejecutar PASO_COMMIT_35_1_EJECUTAR_EN_SUPABASE.sql en Supabase.
+4. Verificar en Authentication > URL Configuration que está admitida:
+   https://frente-comepipas.vercel.app/confirmacion-cuenta.html

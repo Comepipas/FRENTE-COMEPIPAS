@@ -1,0 +1,32 @@
+FRENTE COMEPIPAS · V22 COMMIT 16
+BASE SEGURA DE SOCIOS Y SUPABASE
+
+1. QUÉ AÑADE
+- Número único y permanente de socio gestionado por secuencia de PostgreSQL.
+- Fecha de nacimiento protegida en la propia base de datos.
+- Vinculación opcional de cada socio con un usuario de Supabase Auth.
+- Roles diferenciados entre directiva y socio.
+- Cada socio solo puede leer su propia ficha.
+- Registro de cambios sensibles (número, nacimiento y vinculación de cuenta).
+- Campañas de cuota con fecha de referencia.
+- Tramos de edad e importes configurables sin modificar código.
+- Función que calcula edad y cuota aplicable para una campaña.
+- Vista segura my_member_profile para construir el Área del Socio.
+- Exportación Excel con edad y autofiltros para ordenar todas las columnas.
+
+2. PASO OBLIGATORIO EN SUPABASE
+Abre Supabase > SQL Editor, pega y ejecuta:
+PASO_COMMIT_16_EJECUTAR_EN_SUPABASE.sql
+
+Haz antes una copia de seguridad de la base de datos. El script es no destructivo para datos,
+pero sustituye las políticas antiguas de socios por políticas más seguras.
+
+3. IMPORTANTE
+La aplicación nunca contiene la service_role key. Solo debe utilizar la clave anon pública.
+Las altas de usuarios y correos de activación se desarrollarán en el Commit 17.
+
+4. COMPROBACIÓN
+- Inicia sesión como administrador y abre socios-admin.html.
+- Crea o edita un socio con fecha de nacimiento.
+- Exporta Excel: aparecerán Edad actual y Número de socio, con filtros activados.
+- Un usuario normal vinculado mediante auth_user_id solo podrá leer su propia fila.

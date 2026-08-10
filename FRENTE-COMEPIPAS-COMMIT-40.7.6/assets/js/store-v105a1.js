@@ -1,0 +1,10 @@
+window.StoreV105A1={
+ version:"10.5-a.1",
+ ready:true,
+ modules:{
+   products:false,
+   categories:false,
+   orders:false,
+   stock:false
+ }
+};

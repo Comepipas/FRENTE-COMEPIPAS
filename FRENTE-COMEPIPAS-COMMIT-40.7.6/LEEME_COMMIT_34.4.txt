@@ -1,0 +1,25 @@
+FRENTE COMEPIPAS · COMMIT 34.4
+
+OBJETIVO
+Consolidar Socios, Cuotas y Temporadas para que todos trabajen con los mismos datos de Supabase.
+
+CAMBIOS PRINCIPALES
+- Cuotas faltantes generadas automáticamente para todos los socios activos.
+- Una sola cuota de Peña por socio y temporada, sin duplicados.
+- Al activar una temporada se generan sus cuotas automáticamente.
+- Infantiles/exentos quedan registrados como pagados por exención (0 €), no como deuda.
+- El estado "cuota al día" de la ficha se actualiza al cobrar, anular o reactivar.
+- Panel de Cuotas ampliado con socios activos, cobertura, exentos e ingresos.
+- Botón "Sincronizar temporada" para corregir diferencias sin duplicar.
+- Filtros por categoría y acceso directo a la ficha del socio.
+- Tabla y botones adaptados para verse completos en escritorio y móvil.
+- Nueva pestaña Cuotas en la ficha del socio con historial y acceso a cobro.
+
+INSTALACIÓN
+1. Sustituir el proyecto anterior por este Commit 34.4.
+2. Ejecutar PASO_COMMIT_34_4_EJECUTAR_EN_SUPABASE.sql.
+3. Publicar en GitHub/Vercel.
+4. Abrir la web con Ctrl + F5.
+
+NOTA SOBRE ABONOS
+La cuota de la Peña y el abono del Málaga siguen separados. Los pagos de abono continúan en Renovaciones; el Commit 34.4 no mezcla ambos conceptos.

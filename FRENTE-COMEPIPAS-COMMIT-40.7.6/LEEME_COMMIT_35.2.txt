@@ -1,0 +1,13 @@
+FRENTE COMEPIPAS · COMMIT 35.2
+
+INSTALACIÓN
+1. Publica todo el contenido de este ZIP en Vercel.
+2. Ejecuta PASO_COMMIT_35_2_EJECUTAR_EN_SUPABASE.sql en Supabase SQL Editor.
+3. Prueba el inicio de sesión de una cuenta confirmada pendiente de vincular.
+
+CORRECCIÓN PRINCIPAL
+- En el primer inicio de sesión busca primero una ficha activa con correo único.
+- Si no existe coincidencia por correo, usa nombre y apellidos normalizados como respaldo.
+- Comprueba que la actualización afectó exactamente a una ficha.
+- No devuelve éxito hasta verificar auth_user_id y cuenta_activada.
+- Repara automáticamente cuentas como la de Elsa, sin actualización manual.

@@ -1,0 +1,11 @@
+FRENTE COMEPIPAS · COMMIT 36.1
+
+Corrección del envío de solicitudes ON TOUR.
+
+Problema corregido:
+- PostgreSQL devolvía: column reference "id" is ambiguous.
+
+Instalación:
+1. Publicar este proyecto en Vercel.
+2. Ejecutar PASO_COMMIT_36_1_CORREGIR_ON_TOUR.sql en Supabase.
+3. Volver a enviar una solicitud de prueba.

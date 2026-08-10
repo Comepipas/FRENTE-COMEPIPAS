@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Frente Comepipas · Peña Malaguista</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/variables.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/responsive.css">
+  <style>
+    .v115-home-intro{padding:78px 0;background:#fff}.v115-home-intro-grid{display:grid;grid-template-columns:1fr;gap:30px;align-items:stretch}
+    .v115-panel{padding:34px;border-radius:28px;background:#f3f8fc;border:1px solid #dcebf5;box-shadow:0 18px 45px rgba(0,35,73,.08)}
+    .v115-panel h2{font-size:clamp(2.4rem,5vw,4.5rem);margin:.25rem 0 1rem}.v115-panel p{font-size:1.05rem;line-height:1.75;color:#405269}
+    .v115-socio-box{background:linear-gradient(145deg,#002d59,#0068a8);color:#fff}.v115-socio-box p{color:#e8f5ff}.v115-socio-links{display:grid;gap:10px;margin-top:22px}.v115-socio-links a{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-radius:14px;background:rgba(255,255,255,.12);color:#fff;font-weight:800;border:1px solid rgba(255,255,255,.16)}
+    .v115-shop-section,.v115-join-section,.v115-late-football{padding:82px 0}.v115-shop-section{background:#eef6fb}.v115-shop-card{display:grid;grid-template-columns:1fr 1fr;min-height:360px;overflow:hidden;border-radius:30px;background:#fff;box-shadow:0 22px 55px rgba(0,35,73,.12)}.v115-shop-card img{display:block;width:100%;height:100%;min-width:0;min-height:360px;object-fit:cover!important;object-position:center!important}.v115-shop-content{padding:44px;display:flex;flex-direction:column;justify-content:center}.v115-shop-content h2{font-size:clamp(2.6rem,5vw,4.6rem);margin:8px 0 14px}.v115-shop-content p{line-height:1.7;color:#405269}
+    .v115-join-section{background:linear-gradient(135deg,#003b70,#0076b8);color:#fff}.v115-join-wrap{display:grid;grid-template-columns:1fr auto;gap:30px;align-items:center}.v115-join-wrap h2{font-size:clamp(2.8rem,6vw,5.5rem);margin:0 0 12px}.v115-join-wrap p{max-width:760px;color:#e8f6ff;font-size:1.08rem;line-height:1.7}.v115-join-actions{display:grid;gap:12px;min-width:230px}
+    .v115-late-football{background:#f8fafc}.v115-calendar-cta{margin-top:24px;text-align:center}.v115-calendar-cta a{display:inline-flex;padding:13px 22px;border-radius:999px;background:#003b70;color:#fff;font-weight:900}
+    @media(max-width:850px){.v115-home-intro-grid,.v115-shop-card,.v115-join-wrap{grid-template-columns:1fr}.v115-shop-card img{min-height:260px}.v115-join-actions{min-width:0}}
+  
+    .v27-next-matches{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}.v27-match{background:#fff;border:1px solid #dcebf5;border-radius:22px;padding:24px;box-shadow:0 14px 35px rgba(0,35,73,.08)}.v27-match h3{font-size:1.55rem;margin:8px 0}.v27-match-teams{display:grid;gap:7px;margin:18px 0;font-weight:900}.v27-match-meta{color:#526579;line-height:1.6}.v27-home-link{display:inline-flex;margin-top:16px;font-weight:900;color:#0068a8}.v27-home-empty{grid-column:1/-1;text-align:center;padding:28px;background:#fff;border-radius:22px}.v27-loading{grid-column:1/-1;text-align:center;padding:24px}.v10-news-grid .v27-news-card img,.v10-gallery-grid .v27-gallery-card img{width:100%;height:220px;object-fit:cover}.v27-news-card,.v27-gallery-card{overflow:hidden;border-radius:22px;background:#fff;box-shadow:0 14px 35px rgba(0,35,73,.08)}.v27-card-body{padding:20px}.v27-card-body h3{margin:6px 0 10px}.v27-gallery-card{position:relative}.v27-gallery-card .v27-card-body{position:absolute;left:0;right:0;bottom:0;color:#fff;background:linear-gradient(transparent,rgba(0,25,50,.92));padding-top:70px}
+    @media(max-width:850px){.v27-next-matches{grid-template-columns:1fr}}
+
+    .v115-calendar-download{appearance:none;border:0;border-radius:999px;background:#004b87;color:#fff;padding:15px 26px;font:900 1rem Montserrat,sans-serif;cursor:pointer;box-shadow:0 12px 28px rgba(0,75,135,.24)}
+    .v115-calendar-download:hover{transform:translateY(-2px)}
+    .v27-match{position:relative;overflow:hidden;padding:0;min-height:420px;display:flex;flex-direction:column;justify-content:flex-end;color:#fff;background:#002d59}
+    .v27-match-stadium{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+    .v27-match::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,24,49,.08) 5%,rgba(0,24,49,.42) 42%,rgba(0,24,49,.96) 100%);z-index:1}
+    .v27-match-content{position:relative;z-index:2;padding:22px}
+    .v27-match .v10-eyebrow{color:#8ed8ff}
+    .v27-match h3{color:#fff;margin:8px 0 14px}
+    .v27-team-line{display:flex;align-items:center;gap:10px;font-weight:900;font-size:1rem}
+    .v27-team-line img{width:38px;height:38px;object-fit:contain;background:rgba(255,255,255,.95);border-radius:50%;padding:4px;box-shadow:0 4px 14px rgba(0,0,0,.18)}
+    .v27-match-teams{margin:10px 0 14px}.v27-vs{margin-left:48px;font-size:.72rem;opacity:.75}
+    .v27-match-meta{color:#eaf7ff}.v27-home-link{color:#fff}
+  
+    /* Commit 38.6.1: escudos oficiales y estadios visibles */
+    .v386-match{min-height:430px;background:#03284d}
+    .v386-stadium{filter:saturate(1.06) contrast(1.02);object-position:center}
+    .v386-shade{background:linear-gradient(180deg,rgba(1,22,43,.08) 0%,rgba(1,22,43,.20) 32%,rgba(1,22,43,.88) 73%,rgba(1,22,43,.98) 100%)}
+    .v386-content{padding:24px}
+    .v386-team{display:flex;align-items:center;gap:12px}
+    .v386-crest{width:48px;height:48px;display:grid;place-items:center;flex:0 0 48px;background:rgba(255,255,255,.96);border-radius:50%;padding:6px;box-shadow:0 4px 14px rgba(0,0,0,.22)}
+    .v386-crest img{width:100%;height:100%;object-fit:contain;display:block}
+    .v386-team>span:last-child{font-weight:900;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.55)}
+</style>
+
+<style id="v386-styles">
+.v386-match{position:relative;overflow:hidden;min-height:430px;border-radius:24px;background:#003b70;color:#fff;box-shadow:0 18px 42px rgba(0,35,73,.18)}
+.v386-stadium{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.v386-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,29,59,.10),rgba(0,29,59,.52) 38%,rgba(0,29,59,.98) 100%)}
+.v386-content{position:absolute;inset:auto 0 0;padding:24px;z-index:2}.v386-content h3{font-size:2rem;color:#fff;margin:8px 0 16px}.v386-teams{display:grid;gap:8px}.v386-team{display:flex;align-items:center;gap:12px;font-weight:900}.v386-team img{width:46px;height:50px;object-fit:contain;filter:drop-shadow(0 4px 8px rgba(0,0,0,.25))}.v386-vs{padding-left:58px;font-size:.72rem;opacity:.75}.v386-meta{display:grid;gap:4px;margin-top:16px}.v386-meta span{color:#dceef9}.v115-calendar-download{border:0!important;background:#005b99!important;color:#fff!important}.v386-modal[hidden]{display:none}.v386-modal{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;padding:24px}.v386-modal-backdrop{position:absolute;inset:0;background:rgba(0,20,42,.82);backdrop-filter:blur(6px)}.v386-modal-panel{position:relative;width:min(1180px,96vw);height:min(88vh,950px);background:#fff;border-radius:24px;padding:18px;box-shadow:0 30px 90px rgba(0,0,0,.4);overflow:auto}.v386-modal-close{position:sticky;top:0;float:right;z-index:2;border:0;border-radius:50%;width:44px;height:44px;background:#003b70;color:#fff;font-size:1.6rem;cursor:pointer}.v386-modal-panel img{display:block;width:100%;height:auto}.v386-modal-open{overflow:hidden}@media(max-width:850px){.v386-match{min-height:390px}.v386-modal{padding:8px}.v386-modal-panel{width:98vw;height:94vh;border-radius:16px;padding:10px}}
+</style>
+
+<style id="v387-professional-fixtures">
+.v27-next-matches{gap:18px}
+.v387-match{position:relative;min-height:530px;overflow:hidden;border-radius:24px;background:#001d3d;color:#fff;box-shadow:0 20px 48px rgba(0,35,73,.2)}
+.v387-stadium{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top}
+.v387-photo-fade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,25,55,.02) 0%,rgba(0,25,55,.08) 33%,rgba(0,25,55,.82) 58%,rgba(0,25,55,.98) 100%)}
+.v387-card-body{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:24px;z-index:2}
+.v387-round{align-self:flex-start;margin-bottom:20px;padding:7px 11px;border-radius:6px;background:#006fbe;color:#fff;font-size:.78rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;box-shadow:0 4px 16px rgba(0,0,0,.2)}
+.v387-fixture{display:grid;grid-template-columns:minmax(0,1fr) 38px minmax(0,1fr);align-items:center;gap:8px;padding-bottom:18px;border-bottom:1px solid rgba(255,255,255,.18)}
+.v387-team{display:grid;justify-items:center;gap:8px;text-align:center;min-width:0}
+.v387-team span{color:#fff;font-size:1rem;font-weight:900;line-height:1.2;text-shadow:0 2px 8px rgba(0,0,0,.8)}
+.v387-crest{width:76px;height:76px;object-fit:contain;filter:drop-shadow(0 5px 10px rgba(0,0,0,.45));background:transparent!important;border:0!important;border-radius:0!important;padding:0!important}
+.v387-vs{color:#2aa8ff;font-family:'Bebas Neue',sans-serif;font-size:1.75rem;text-align:center;text-shadow:0 2px 8px rgba(0,0,0,.8)}
+.v387-details{display:grid;gap:8px;padding-top:18px}
+.v387-details p{display:flex;align-items:center;gap:9px;margin:0;color:#fff;font-weight:700;text-shadow:0 2px 7px rgba(0,0,0,.85)}
+.v387-details p span{width:22px;text-align:center}
+.v387-status{justify-self:start;margin-top:5px;padding:7px 11px;border-radius:5px;background:#006fbe;color:#fff;font-size:.8rem;font-weight:900;letter-spacing:.04em}
+.v115-calendar-download{display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:0 26px;border-radius:999px!important;font-weight:900;box-shadow:0 12px 28px rgba(0,91,153,.24)}
+@media(max-width:1100px){.v387-match{min-height:500px}.v387-crest{width:66px;height:66px}.v387-team span{font-size:.92rem}}
+@media(max-width:850px){.v387-match{min-height:480px}.v387-crest{width:74px;height:74px}}
+</style>
+</head>
+<body class="v10-home">
+<header class="v10-header">
+  <div class="v10-header-inner">
+    <a class="v10-brand" href="index.html"><img src="assets/images/brand/escudo-transparente.png" alt="Escudo Frente Comepipas"><span><strong>Frente Comepipas</strong><small>Peña Malaguista</small></span></a>
+    <button class="v10-menu-toggle" aria-label="Abrir menú" aria-expanded="false"><span></span><span></span><span></span></button>
+    <nav class="v10-nav">
+      <a class="active" href="index.html">Inicio</a><a href="la-pena.html">La Peña</a><a href="noticias.html">Noticias</a><a href="galeria.html">Galería</a><a href="tienda.html">Material</a><a href="entradas.html">ON TOUR</a><a href="calendario.html">Calendario</a><a href="socios.html#login">Iniciar sesión</a><a class="v10-nav-cta" href="alta-socio.html">Hazte socio</a>
+    </nav>
+  </div>
+</header>
+<div class="v10-nav-backdrop"></div>
+<main>
+  <!-- PRIMER CONTENIDO VISIBLE: HERO + ESCUDO + ZONA DE SOCIOS -->
+  <section class="v10-hero hero">
+    <div class="v10-hero-overlay"></div><div class="v10-hero-glow"></div>
+    <div class="v10-hero-content">
+      <div class="v10-hero-badge">Peña Malaguista · Desde 2007</div>
+      <div class="v10-hero-crest"><img src="assets/images/brand/escudo-transparente.png" alt="Escudo 20.º aniversario de Frente Comepipas"></div>
+      <p class="v10-hero-kicker">Bienvenidos a nuestra web oficial</p>
+      <h1>Frente Comepipas</h1>
+      <p class="v10-hero-slogan">20 años compartiendo pasión, amistad y malaguismo</p>
+      <div class="v10-hero-actions">
+        <a class="v10-btn v10-btn-primary" href="alta-socio.html">Hazte socio</a>
+        <a class="v10-btn v10-btn-ghost" href="socios.html#login">Iniciar sesión</a>
+        <a class="v10-btn v10-btn-ghost" href="activar-cuenta.html">Activar cuenta</a>
+      </div>
+      <a class="v10-scroll-cue" href="#la-pena"><span></span></a>
+    </div>
+  </section>
+
+  <section id="la-pena" class="v115-home-intro">
+    <div class="v10-container v115-home-intro-grid">
+      <article class="v115-panel"><span class="v10-eyebrow">Más que una peña</span><h2>Una familia unida por el Málaga CF</h2><p>Frente Comepipas es convivencia, desplazamientos, amistad y apoyo incondicional a nuestros colores. Esta nueva web será también el punto de encuentro digital de socios y directiva.</p><a class="v10-btn v10-btn-primary" href="la-pena.html">Conoce la peña</a></article>
+    </div>
+  </section>
+
+  <section class="v10-news-section v10-reveal"><div class="v10-container"><div class="v10-section-heading"><span class="v10-eyebrow">Actualidad</span><h2>Noticias destacadas</h2></div><div id="v10NewsGrid" class="v10-news-grid"></div></div></section>
+  <section class="v115-late-football v10-reveal"><div class="v10-container"><div class="v10-section-heading"><span class="v10-eyebrow">Información deportiva</span><h2>Próximos 3 partidos</h2><p>Los tres siguientes encuentros oficiales del Málaga CF.</p></div><div id="v27NextMatches" class="v27-next-matches"></div><div class="v115-calendar-cta"><button type="button" id="viewMalagaCalendar" class="v115-calendar-download">Ver calendario completo</button></div></div></section>
+  <section class="v10-gallery-section v10-reveal"><div class="v10-container"><div class="v10-section-heading"><span class="v10-eyebrow">Momentos</span><h2>La peña en imágenes</h2></div><div id="v10Gallery" class="v10-gallery-grid"></div></div></section>
+
+  <section class="v115-shop-section v10-reveal"><div class="v10-container"><div class="v115-shop-card"><img id="v388MaterialImage" src="assets/images/home/tienda.jpg" alt="Material de la Peña"><div class="v115-shop-content"><span class="v10-eyebrow">Material de la Peña</span><h2>Lleva contigo los colores de la peña</h2><p>Consulta los productos disponibles. El descuento de socio se aplicará al iniciar sesión y la directiva gestionará cada pedido desde su panel.</p><a class="v10-btn v10-btn-primary" href="tienda.html">Ver material de la Peña</a></div></div></div></section>
+
+
+  <section class="v10-sponsors-section v10-reveal"><div class="v10-container"><div class="v10-section-heading v10-section-heading-center"><span class="v10-eyebrow">Colaboradores</span><h2>Patrocinadores</h2></div><div class="v10-sponsors-marquee"><div id="v10SponsorsTrack" class="v10-sponsors-track"></div></div></div></section>
+  <section class="v10-social-section v10-reveal"><div class="v10-container"><div><span class="v10-eyebrow">Síguenos</span><h2>La peña también se vive en redes</h2></div><div class="v10-social-grid"><a data-social="instagram" href="#">Instagram</a><a data-social="facebook" href="#">Facebook</a><a data-social="x" href="#">X</a><a data-social="tiktok" href="#">TikTok</a><a data-social="whatsapp" href="#">WhatsApp</a></div></div></section>
+</main>
+<footer class="v10-footer"><div class="v10-container v10-footer-grid"><div class="v10-footer-brand"><img src="assets/images/brand/escudo-transparente.png" alt="Escudo"><h3>Frente Comepipas</h3><p>Peña Malaguista · Desde 2007</p></div><div><h4>Enlaces</h4><a href="la-pena.html">La Peña</a><a href="entradas.html">ON TOUR</a><a href="tienda.html">Material</a><a href="socios.html">Socios</a></div><div><h4>Información</h4><a href="noticias.html">Noticias</a><a href="galeria.html">Galería</a><a href="calendario.html">Calendario</a><a href="contacto.html">Contacto</a></div><div><h4>Contacto</h4><p data-config="email">contacto@frentecomepipas.es</p><p data-config="ciudad">Málaga, Andalucía</p></div></div><div class="v10-footer-bottom"><div class="v10-container"><span>© 2007–2026 Frente Comepipas</span><span>Peña Malaguista</span></div></div></footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/supabase-config.js"></script>
+<script src="assets/js/supabase-client.js"></script>
+<script src="assets/js/site-settings.js"></script><script src="assets/js/site-settings-runtime.js"></script><script src="assets/js/features.js"></script><script src="assets/js/app.js"></script><script src="assets/js/home-config.js"></script><script src="assets/js/home-v10.js"></script><script src="assets/js/home-v10b.js"></script><script src="assets/js/home-v10c-config.js?v=38.8"></script><script src="assets/js/home-v10c.js?v=38.8"></script><script src="assets/js/matches-config.js?v=38.7"></script><script src="assets/js/matches-service.js?v=38.7"></script><script src="assets/js/gallery-service-v26.js?v=38.8"></script><script src="assets/js/home-v38.6.js?v=38.7"></script><script src="assets/js/cms-home-defaults.js?v=38.9.1"></script><script src="assets/js/cms-home-runtime.js?v=38.9.1"></script>
+<div id="v386CalendarModal" class="v386-modal" hidden role="dialog" aria-modal="true" aria-label="Calendario completo del Málaga CF"><div class="v386-modal-backdrop" data-close-calendar></div><div class="v386-modal-panel"><button type="button" class="v386-modal-close" data-close-calendar aria-label="Cerrar calendario">×</button><img id="v386CalendarImage" alt="Calendario completo del Málaga CF 2026/27"></div></div>
+<div id="v10Lightbox" class="v10-lightbox"><button data-close-lightbox>×</button><img src="" alt="Imagen ampliada"></div>
+</body></html>

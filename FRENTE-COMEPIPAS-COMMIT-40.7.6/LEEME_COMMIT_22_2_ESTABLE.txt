@@ -1,0 +1,18 @@
+FRENTE COMEPIPAS · V22 · COMMIT 22.2 ESTABLE
+
+ESTADO: CORRECCIÓN PROBADA Y CONFIRMADA
+
+INSTALACIÓN
+1. Sustituye los archivos de tu proyecto por los de esta carpeta.
+2. En Supabase abre SQL Editor.
+3. Ejecuta completo:
+   PASO_COMMIT_22_2_ESTABLE_EJECUTAR_EN_SUPABASE.sql
+4. Recarga Administración y crea una comunicación nueva.
+
+COMPORTAMIENTO ESPERADO
+- Canal email: solo cuenta socios con correo válido.
+- Canal interno o ambos: puede incluir socios sin email.
+- Segmento activos: selecciona socios cuyo estado sea activo.
+
+IMPORTANTE
+No es necesario volver a ejecutar los parches provisionales anteriores después de instalar este archivo.

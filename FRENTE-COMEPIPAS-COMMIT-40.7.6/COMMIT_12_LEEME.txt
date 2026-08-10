@@ -1,0 +1,13 @@
+FRENTE COMEPIPAS · V22 COMMIT 12
+CONCILIACIÓN BANCARIA POR CSV
+
+No requiere ejecutar SQL nuevo.
+
+PRUEBA:
+1. Sustituye los archivos del proyecto y recarga con Ctrl + F5.
+2. Abre Renovaciones > Cobros.
+3. Pulsa Descargar plantilla para ver el formato aceptado.
+4. Importa un CSV del banco con fecha, importe, concepto, referencia y numero_socio.
+5. Revisa la vista previa y pulsa Confirmar coincidencias.
+
+La aplicación busca coincidencias por número de socio e importe. Los movimientos sin coincidencia no se aplican automáticamente.

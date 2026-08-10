@@ -1,0 +1,21 @@
+FRENTE COMEPIPAS · COMMIT 26
+
+INCLUYE
+- ON TOUR sustituye visualmente a Entradas.
+- entradas.html redirige a viajes.html para no romper enlaces antiguos.
+- Pantalla pública ON TOUR con funcionamiento y estado de preparación.
+- Imagen ON TOUR definitiva incluida.
+- Galería profesional por álbumes.
+- Una imagen principal por álbum y varias fotos dentro.
+- Panel para crear, editar, publicar y eliminar álbumes.
+- Subida múltiple de fotografías a Supabase Storage.
+- Visor ampliado de fotografías.
+
+PASOS
+1. Ejecuta PASO_COMMIT_26_EJECUTAR_EN_SUPABASE.sql en Supabase SQL Editor.
+2. Copia SOLO el contenido de esta carpeta encima del repositorio FRENTE-COMEPIPAS.
+3. En GitHub Desktop escribe: Commit 26 - Galería y ON TOUR
+4. Pulsa Commit to main y después Push origin.
+
+IMPORTANTE
+Este paquete contiene únicamente archivos nuevos o modificados del Commit 26. No sustituye el proyecto completo.

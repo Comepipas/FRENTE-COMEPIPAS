@@ -1,0 +1,15 @@
+CAMBIAR LAS IMÁGENES DE LAS TARJETAS
+
+Sustituye cualquiera de estos archivos por tu propia foto manteniendo exactamente el mismo nombre:
+
+- viajes.jpg
+- tienda.jpg
+- socios.jpg
+- noticias.jpg
+
+Recomendaciones:
+- Formato horizontal
+- Tamaño recomendado: 1200 x 700 píxeles
+- JPG o JPEG
+- Mantener el mismo nombre del archivo
+- Después pulsa Ctrl + F5 en el navegador

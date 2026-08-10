@@ -1,0 +1,19 @@
+COMMIT 32.1 · FOTOGRAFÍAS DEL CATÁLOGO
+
+CORRECCIÓN PRINCIPAL
+- Las fotografías se redimensionan y convierten a WebP antes de subirlas.
+- Tamaño máximo del lado mayor: 1.800 px.
+- Objetivo de peso: menos de 2,2 MB.
+- Se evita el error «The object exceeded the maximum allowed size».
+
+OTRAS MEJORAS
+- Mensajes de error comprensibles en español.
+- El botón Guardar queda bloqueado mientras se prepara y sube la fotografía.
+- Si falla el guardado del artículo, se elimina la imagen recién subida para no dejar archivos huérfanos.
+- La foto anterior solo se borra después de que el artículo se haya guardado correctamente.
+
+SUPABASE
+Ejecutar una sola vez:
+PASO_COMMIT_32_1_EJECUTAR_EN_SUPABASE.sql
+
+Después publicar en GitHub/Vercel y recargar con Ctrl + F5.

@@ -1,0 +1,19 @@
+COMMIT 33.1 - CENTRO DE MIGRACIÓN PROFESIONAL
+
+INSTALACIÓN
+1. Sustituir los archivos del proyecto por los de este ZIP.
+2. No hace falta ejecutar un SQL nuevo si ya se ejecutó PASO_COMMIT_33_EJECUTAR_EN_SUPABASE.sql del Commit 33.0.
+3. Publicar y recargar con Ctrl + F5.
+
+MEJORAS
+- Dashboard con porcentaje de coincidencia y explicación de las cifras.
+- Filtros avanzados: correctos, conflictos, solo Club, solo Peña, duplicados, menores y campos vacíos.
+- Tarjetas visuales para resolver conflictos y edición manual.
+- Vista previa de cada ficha del Registro Maestro y origen de los datos.
+- Propuestas familiares confirmables o rechazables; nunca se enlazan automáticamente.
+- Simulación contra Supabase sin modificar datos.
+- La importación definitiva solo se habilita después de simular y descargar copia de seguridad.
+- Informes Excel y PDF.
+
+IMPORTANTE
+La simulación no modifica Supabase. La importación definitiva sí modifica la tabla socios y debe ejecutarse solo tras revisar el Registro Maestro.

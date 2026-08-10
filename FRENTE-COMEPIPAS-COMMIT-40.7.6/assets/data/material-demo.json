@@ -1,0 +1,42 @@
+[
+  {
+    "id": "bufanda-azul",
+    "name": "Bufanda Frente Comepipas",
+    "category": "Material",
+    "description": "Bufanda azul y blanca de la Peña.",
+    "availability": "Disponible",
+    "units": 18,
+    "emoji": "🧣",
+    "active": true
+  },
+  {
+    "id": "camiseta-aniversario",
+    "name": "Camiseta conmemorativa",
+    "category": "Material",
+    "description": "Camiseta de edición especial. Tallas sujetas a disponibilidad.",
+    "availability": "Consultar",
+    "units": 8,
+    "emoji": "👕",
+    "active": true
+  },
+  {
+    "id": "loteria-navidad",
+    "name": "Participación de lotería",
+    "category": "Lotería",
+    "description": "Solicitud de participaciones para recogida presencial.",
+    "availability": "Disponible",
+    "units": 60,
+    "emoji": "🎟️",
+    "active": true
+  },
+  {
+    "id": "viaje-aficion",
+    "name": "Plaza para viaje de la Peña",
+    "category": "Viajes",
+    "description": "Preinscripción para próximos desplazamientos organizados.",
+    "availability": "Lista abierta",
+    "units": 25,
+    "emoji": "🚌",
+    "active": true
+  }
+]

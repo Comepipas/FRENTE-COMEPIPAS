@@ -1,0 +1,16 @@
+FRENTE COMEPIPAS · V22 COMMIT 15
+
+CATÁLOGO DE MATERIAL SIN VENTA ONLINE
+
+- Se elimina el lenguaje visible de tienda, carrito, compra y pago de material.
+- El apartado público pasa a ser Catálogo de Material.
+- Botón "Me interesa" para enviar una solicitud sin compromiso.
+- Referencia única por solicitud y control de duplicados recientes.
+- Cantidad, talla/variante y preferencia de contacto.
+- Seguimiento en el dispositivo del solicitante.
+- Administración con estados: Nueva, Contactada, Confirmada, Entregada y Cancelada.
+- Notas internas, archivado y exportación Excel.
+- Fotos editables desde el PC, icono alternativo y opciones/tallas.
+- No se muestran precios, carrito, IVA, facturación ni pagos online.
+
+IMPORTANTE: esta entrega mantiene almacenamiento local para pruebas. La siguiente conexión con Supabase hará que solicitudes e imágenes sean compartidas entre dispositivos.

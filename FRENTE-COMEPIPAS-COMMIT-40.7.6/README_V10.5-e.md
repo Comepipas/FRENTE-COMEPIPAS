@@ -1,0 +1,1 @@
+Preparación del módulo tienda V10.5-e

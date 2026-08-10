@@ -1,0 +1,16 @@
+COMMIT 28.2 LOCAL — NO PUBLICAR TODAVÍA
+
+Cambios:
+- Un único dashboard: los antiguos dashboards redirigen al panel principal.
+- Menú lateral simplificado, más ancho y legible.
+- Botón «Volver al panel» en las pantallas de administración.
+- Indicadores del resumen cargados únicamente desde Supabase; no usa cifras locales inventadas.
+- Tablas compactadas para aprovechar el ancho disponible.
+- Imágenes de material con object-fit: contain para evitar recortes.
+- No requiere ejecutar SQL.
+
+Prueba local:
+1. Abre la carpeta con Visual Studio Code.
+2. Inicia Live Server desde index.html o admin.html.
+3. Revisa admin.html, socios-admin.html, cuotas-admin.html, tienda-admin.html y campanas-admin.html.
+4. No subas a GitHub/Vercel hasta aprobar la versión.

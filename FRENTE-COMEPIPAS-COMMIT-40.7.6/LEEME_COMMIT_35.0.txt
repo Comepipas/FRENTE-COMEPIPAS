@@ -1,0 +1,24 @@
+FRENTE COMEPIPAS · COMMIT 35.0
+
+ACTIVACIÓN DE CUENTAS ROBUSTA
+
+CAMBIOS
+- La comprobación de nombre y apellidos ignora mayúsculas y minúsculas.
+- Ignora tildes, diéresis y diferencias entre Ñ/N.
+- Ignora guiones, apóstrofes, puntos y espacios repetidos.
+- El correo se compara sin mayúsculas y sin espacios accidentales.
+- Mensaje claro tras crear la cuenta, indicando revisar spam o correo no deseado.
+- Mensajes diferenciados para ficha no encontrada, ficha duplicada y cuenta ya activada.
+- La vinculación automática y la reparación al iniciar sesión usan la misma normalización.
+- Se registra el evento cuenta_vinculada_35_0 para diagnóstico interno.
+
+INSTALACIÓN
+1. Sustituye el proyecto publicado por el contenido completo de este ZIP.
+2. En Supabase abre SQL Editor.
+3. Ejecuta completo: PASO_COMMIT_35_0_EJECUTAR_EN_SUPABASE.sql
+4. Publica de nuevo en Vercel.
+5. Prueba con un socio escribiendo su nombre con otra combinación de mayúsculas o sin tildes.
+
+RESULTADO ESPERADO
+Al pulsar “Activar cuenta”, si la ficha coincide, se crea el usuario y aparece:
+“Cuenta creada correctamente. Te hemos enviado un correo para confirmar tu cuenta. Si no lo recibes en unos minutos, revisa también la carpeta de spam o correo no deseado.”

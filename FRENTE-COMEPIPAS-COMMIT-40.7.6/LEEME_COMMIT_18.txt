@@ -1,0 +1,30 @@
+FRENTE COMEPIPAS · V22 COMMIT 18 · ENTRADAS CON SUPABASE
+============================================================
+
+CONTENIDO
+- Partidos y plazos de solicitudes almacenados en Supabase.
+- Cupo, precio, máximo por socio, apertura, cierre y estado.
+- Solicitud desde el Área del Socio autenticada.
+- Una solicitud por socio y partido.
+- Validación del plazo y cantidad mediante función segura de Supabase.
+- Estados: pendiente, admitida, lista de espera, rechazada, cancelada y entregada.
+- Gestión administrativa, entradas concedidas, pago y mensaje para el socio.
+- Estadísticas de cupo, solicitudes y asignaciones.
+- Filtros y exportación CSV compatible con Excel.
+- Políticas RLS: cada socio solo ve sus solicitudes; los administradores ven todas.
+
+INSTALACIÓN
+1. Haz una copia de seguridad del proyecto anterior.
+2. En Supabase abre SQL Editor > New query.
+3. Ejecuta PASO_COMMIT_18_EJECUTAR_EN_SUPABASE.sql completo.
+4. Publica esta carpeta sustituyendo la versión anterior.
+5. Cierra sesión y vuelve a entrar como administrador.
+6. Abre Administración > Entradas y solicitudes.
+7. Crea un partido de prueba y ponlo en estado Abierto.
+8. Entra como socio y abre Área del Socio > Entradas.
+
+IMPORTANTE
+- No es una tienda ni un sistema de venta de entradas.
+- Registrar una solicitud no garantiza que el club asigne entradas.
+- No se procesan pagos online en este commit.
+- Brevo podrá configurarse después; no es necesario para probar este módulo.

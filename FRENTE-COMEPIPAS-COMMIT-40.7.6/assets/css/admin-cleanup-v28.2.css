@@ -1,0 +1,21 @@
+
+/* COMMIT 28.2 LOCAL - limpieza visual del panel */
+:root{--fc-sidebar:292px}
+.admin-pro-shell{grid-template-columns:var(--fc-sidebar) minmax(0,1fr)!important;min-height:100vh}
+.admin-pro-sidebar{width:var(--fc-sidebar)!important;min-width:var(--fc-sidebar)!important;overflow-y:auto;overflow-x:hidden;padding:18px 14px!important;position:sticky!important;top:0;height:100vh}
+.admin-pro-brand{padding:4px 4px 18px!important}.admin-pro-brand img{width:46px!important;height:54px!important;object-fit:contain}
+.admin-pro-brand strong{font-size:1rem}.admin-pro-brand span{font-size:.69rem;line-height:1.25}
+.admin-pro-nav{display:grid;gap:4px}.admin-pro-nav .fc-nav-heading{color:#8db5db;font-size:.66rem;font-weight:900;letter-spacing:.14em;text-transform:uppercase;padding:16px 12px 5px;pointer-events:none}
+.admin-pro-nav a{display:flex!important;align-items:center;min-height:42px;padding:10px 12px!important;border-radius:11px;font-size:.82rem!important;line-height:1.25!important;white-space:normal!important;overflow:visible!important}
+.admin-pro-nav a.active{background:#1e4978!important}.admin-pro-main{min-width:0!important;padding:28px 30px 48px!important}.admin-pro-topbar h1{font-size:clamp(3.4rem,7vw,6rem)!important}
+.fc-back-panel{display:inline-flex;align-items:center;gap:7px;padding:9px 14px;border-radius:999px;background:#fff;border:1px solid #d5e0eb;color:#052b57;font-weight:800;font-size:.8rem;margin-bottom:14px}.fc-back-panel:hover{background:#edf6ff}
+.fc-local-badge{background:#fee2e2!important;color:#991b1b!important}.fc-online-badge{background:#dcfce7!important;color:#166534!important}.fc-loading-badge{background:#fef3c7!important;color:#92400e!important}
+.dashboard-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important}.dashboard-card strong[data-empty='true']{font-size:1.15rem;color:#64748b}.dashboard-shortcut{display:grid!important;gap:3px!important}.dashboard-shortcut strong,.dashboard-shortcut span{display:block!important}.dashboard-warning{display:none!important}
+.admin-table-wrap,.members-table-wrap,.m20-table-wrap,.table-responsive,[class*='table-wrap']{max-width:100%;overflow-x:auto}
+table{font-size:.82rem}th,td{overflow-wrap:anywhere}.fc-compact-table table{min-width:0!important;width:100%!important}.fc-compact-table th:nth-child(n+8),.fc-compact-table td:nth-child(n+8){display:none}
+.store-product>img,.m20-card-img img,.material-card-visual img,.material-admin-product-thumb img{object-fit:contain!important;background:#f5f7fa!important;padding:8px}
+@media(max-width:1200px){:root{--fc-sidebar:255px}.dashboard-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.admin-pro-main{padding:24px 22px 42px!important}}
+@media(max-width:820px){.admin-pro-shell{display:block!important}.admin-pro-sidebar{position:relative!important;width:100%!important;min-width:0!important;height:auto!important}.admin-pro-nav{grid-template-columns:repeat(2,minmax(0,1fr))}.admin-pro-nav .fc-nav-heading{grid-column:1/-1}.admin-pro-main{padding:20px 14px 40px!important}.dashboard-grid{grid-template-columns:1fr!important}}
+
+/* COMMIT 28.3 LOCAL · análisis seguro de socios reales */
+.c283-analysis{margin:18px 0;padding:18px;border:1px solid #d8e1ec;border-radius:18px;background:#fff}.c283-kpis{display:grid;grid-template-columns:repeat(6,minmax(120px,1fr));gap:12px}.c283-kpis article{padding:14px;border-radius:14px;background:#f2f6fb;display:flex;flex-direction:column;gap:6px}.c283-kpis article.warn{background:#fff3cd;border:1px solid #f2d06b}.c283-kpis span{font-size:.76rem;font-weight:800;text-transform:uppercase;color:#58708e}.c283-kpis strong{font-size:1.7rem;color:#092c57}.c283-note{margin-top:14px;padding:12px 14px;border-left:4px solid #e0a500;background:#fff8df}.c28-toolbar label{min-width:210px}.c28-toolbar select,.c28-toolbar input{width:100%}@media(max-width:1100px){.c283-kpis{grid-template-columns:repeat(3,1fr)}}@media(max-width:650px){.c283-kpis{grid-template-columns:repeat(2,1fr)}}
