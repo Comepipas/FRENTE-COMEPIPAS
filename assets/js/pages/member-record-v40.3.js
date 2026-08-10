@@ -44,7 +44,8 @@
     if(price&&m.precio_abono==null){price.placeholder="Importe sin informar";price.value=""}
     const sector=$('[name="sector"]');if(sector&&!m.sector)sector.placeholder="Zona pendiente";
     const fee=$('[name="cuota_al_dia"]');if(fee){fee.disabled=true;fee.closest("label")?.append(" (calculado desde Cuotas y pagos)")}
-    await addPaymentButton(db);
+    await addPaymentButton(db,m);
+    consolidateFeePanel();
     await setupCensusReview(db,m);
     await setupSeasonHistory(db);
   }
@@ -91,6 +92,7 @@
     box.querySelectorAll('[data-edit-season]').forEach(button=>button.onclick=()=>{const editor=box.querySelector(`[data-season-editor="${button.dataset.editSeason}"]`);if(editor)editor.hidden=false});
     box.querySelectorAll('[data-cancel-season]').forEach(button=>button.onclick=()=>{const editor=box.querySelector(`[data-season-editor="${button.dataset.cancelSeason}"]`);if(editor)editor.hidden=true});
     box.querySelectorAll('[data-save-season]').forEach(button=>button.onclick=async()=>{const id=button.dataset.saveSeason,card=box.querySelector(`[data-season-card="${id}"]`),editor=card?.querySelector('[data-season-editor]'),zona=editor?.querySelector('[data-season-zone]')?.value.trim()||null,sector=editor?.querySelector('[data-season-sector]')?.value.trim()||null;button.disabled=true;const {error}=await db.from('campanas_registros').update({zona_club:zona,sector_club:sector}).eq('id',id);button.disabled=false;if(error)return window.FrenteNotify.error(error.message);card.querySelector('[data-zone-value]').textContent=zona||'Sin informar';card.querySelector('[data-sector-value]').textContent=sector||'Sin informar';editor.hidden=true;window.FrenteNotify.success('Zona y sector guardados en esta temporada.')});
+    rows.forEach(row=>{const card=box.querySelector(`[data-season-card="${row.id}"]`),editor=card?.querySelector('[data-season-editor]'),save=card?.querySelector('[data-save-season]');if(!editor||!save)return;card.querySelector('[data-edit-season]').textContent='Editar datos de temporada';save.insertAdjacentHTML('beforebegin',`<label>Tipo del club<input data-season-category value="${esc(row.categoria_club||'')}" placeholder="Adulto, joven o infantil"></label><label>Precio inicial (€)<input type="number" min="0" step="0.01" data-season-original value="${esc(row.precio_original??'')}"></label><label>Descuento del club (€)<input type="number" min="0" step="0.01" data-season-discount value="${esc(row.descuento_club??'')}"></label><label>Precio final del club (€)<input type="number" min="0" step="0.01" data-season-price value="${esc(row.precio_abono??'')}"></label>`);save.textContent='Guardar datos de temporada';save.onclick=async()=>{const number=selector=>{const value=editor.querySelector(selector).value;if(value==='')return null;const parsed=Number(value);return Number.isFinite(parsed)?parsed:null};const payload={zona_club:editor.querySelector('[data-season-zone]').value.trim()||null,sector_club:editor.querySelector('[data-season-sector]').value.trim()||null,categoria_club:editor.querySelector('[data-season-category]').value.trim()||null,precio_original:number('[data-season-original]'),descuento_club:number('[data-season-discount]'),precio_abono:number('[data-season-price]')};save.disabled=true;const {error}=await db.from('campanas_registros').update(payload).eq('id',row.id);save.disabled=false;if(error)return window.FrenteNotify.error(error.message);window.FrenteNotify.success('Datos de la temporada guardados.');await setupSeasonHistory(db)}});
   }
 
   function money(v){return Number(v||0).toLocaleString('es-ES',{style:'currency',currency:'EUR'})}
@@ -113,10 +115,21 @@
     const feesLink=$('#recordFeesLink');if(feesLink){feesLink.insertAdjacentHTML('afterend','<p class="cms-note">La cuota se registra desde esta ficha cuando está pendiente. El resumen general de tesorería permanece separado.</p>');feesLink.remove()}
   }
 
+  function consolidateFeePanel(){
+    const feePanel=document.querySelector('[data-panel="cuotas"]'),pena=document.querySelector('[data-panel="pena"]');
+    if(!feePanel||!pena||document.querySelector('#memberFeeSummary'))return;
+    const details=document.createElement('details');details.id='memberFeeSummary';details.className='record-fee-summary';
+    details.innerHTML='<summary><strong>Cuota de la Peña e historial de pagos</strong><span>Información económica por temporada</span></summary><div class="record-fee-summary-body"></div>';
+    const body=details.querySelector('.record-fee-summary-body');
+    Array.from(feePanel.children).forEach(node=>{if(!node.matches('h2'))body.appendChild(node)});
+    pena.appendChild(details);document.querySelector('[data-tab="cuotas"]')?.remove();feePanel.remove();
+  }
+
   async function setupFamilyAdmin(db){
     const box=$('#guardiansBox');if(!box)return;
     if($('#familyInlineAdmin'))return;
-    box.insertAdjacentHTML('afterend','<div id="familyInlineAdmin" style="margin-top:18px"><h3>Añadir familiar autorizado</h3><div class="record-grid"><div class="record-field"><label>Buscar por número, DNI o nombre</label><input id="familyInlineQuery"></div><div class="record-field"><label>Quién realizará la gestión</label><select id="familyInlineDirection"><option value="current">Este socio gestionará al familiar</option><option value="found">El familiar gestionará a este socio</option></select></div><div class="record-field"><label>Parentesco</label><select id="familyInlineType"><option value="hijo">Hijo/a</option><option value="pareja">Pareja</option><option value="sobrino">Sobrino/a</option><option value="padre">Padre/madre</option><option value="otro_familiar">Otro familiar</option></select></div><div class="record-field full"><label>Autorización recibida</label><input id="familyInlineNote" placeholder="Ej.: autorización presencial del responsable"></div></div><button id="familyInlineSearch" type="button" class="btn btn-primary">Buscar familiar</button><div id="familyInlineResults" class="record-history" style="margin-top:12px"></div></div>');
+    box.insertAdjacentHTML('afterend','<div id="familyInlineAdmin" style="margin-top:18px"><button id="familyInlineToggle" type="button" class="btn btn-primary">+ Añadir familiar autorizado</button><div id="familyInlineForm" hidden><h3>Añadir familiar autorizado</h3><div class="record-grid"><div class="record-field"><label>Buscar por número, DNI o nombre</label><input id="familyInlineQuery"></div><div class="record-field"><label>Quién realizará la gestión</label><select id="familyInlineDirection"><option value="current">Este socio gestionará al familiar</option><option value="found">El familiar gestionará a este socio</option></select></div><div class="record-field"><label>Parentesco</label><select id="familyInlineType"><option value="hijo">Hijo/a</option><option value="pareja">Pareja</option><option value="sobrino">Sobrino/a</option><option value="padre">Padre/madre</option><option value="otro_familiar">Otro familiar</option></select></div><div class="record-field full"><label>Autorización recibida</label><input id="familyInlineNote" placeholder="Ej.: autorización presencial del responsable"></div></div><button id="familyInlineSearch" type="button" class="btn btn-primary">Buscar familiar</button><div id="familyInlineResults" class="record-history" style="margin-top:12px"></div></div></div>');
+    $('#familyInlineToggle').onclick=()=>{const form=$('#familyInlineForm');form.hidden=!form.hidden;$('#familyInlineToggle').textContent=form.hidden?'+ Añadir familiar autorizado':'Cerrar formulario'};
     const render=async()=>{const {data,error}=await db.rpc('commit405_family_list',{p_socio_id:memberId});if(error){box.innerHTML='<div class="record-empty">No se pudo cargar la familia. Comprueba que ejecutaste el SQL 040_5.</div>';return}box.innerHTML=data?.length?data.map(x=>`<article class="record-history-item"><strong>${esc(x.nombre)} ${esc(x.apellidos)}</strong><span>${esc(x.relacion||x.tipo_vinculo||'Familiar')} · socio ${esc(x.numero_socio||'pendiente')}</span>${x.socio_id!==memberId?`<button type="button" class="btn btn-dark-outline" data-unlink="${x.familia_id}|${x.socio_id}">Revocar vínculo</button>`:''}</article>`).join(''):'<div class="record-empty">No hay relaciones familiares registradas.</div>';box.querySelectorAll('[data-unlink]').forEach(b=>b.onclick=async()=>{if(!confirm('¿Revocar este vínculo familiar?'))return;const [family,socio]=b.dataset.unlink.split('|');const r=await db.rpc('commit405_family_unlink',{p_familia_id:family,p_socio_id:socio});if(r.error)return window.FrenteNotify.error(r.error.message);render()})};
     $('#familyInlineSearch').onclick=async()=>{const q=$('#familyInlineQuery').value.trim();if(q.length<2)return;const {data,error}=await db.rpc('family_admin_search',{p_query:q});if(error)return window.FrenteNotify.error(error.message);$('#familyInlineResults').innerHTML=(data||[]).filter(x=>x.id!==memberId).map(x=>`<article class="record-history-item"><strong>${esc(x.nombre)} ${esc(x.apellidos)}</strong><span>Socio ${esc(x.numero_socio||'pendiente')}</span><button type="button" class="btn btn-primary" data-add-family="${x.id}">Añadir</button></article>`).join('')||'Sin coincidencias';document.querySelectorAll('[data-add-family]').forEach(b=>b.onclick=async()=>{const note=$('#familyInlineNote').value.trim();if(!note)return window.FrenteNotify.error('Indica cómo se recibió la autorización.');const found=b.dataset.addFamily,currentManages=$('#familyInlineDirection').value==='current';const r=await db.rpc('family_admin_link',{p_gestor:currentManages?memberId:found,p_gestionado:currentManages?found:memberId,p_tipo:$('#familyInlineType').value,p_observaciones:note});if(r.error)return window.FrenteNotify.error(r.error.message);window.FrenteNotify.success('Familiar añadido sin eliminar los vínculos anteriores.');$('#familyInlineResults').innerHTML='';render()})};
     await render();
@@ -124,7 +137,7 @@
 
   async function showCalculatedCategory(db,m,container){
     if(!container||!m.fecha_nacimiento)return;
-    const {data:campaign}=await db.from("campanas_abonados").select("id,nombre,temporada,fecha_corte").in("estado",["abierta","revision","borrador"]).order("temporada",{ascending:false}).limit(1).maybeSingle();
+    const {data:campaign}=await db.from("campanas_abonados").select("id,nombre,temporada,fecha_corte,tipo,modo_pruebas").neq("tipo","piloto").or("modo_pruebas.is.null,modo_pruebas.eq.false").in("estado",["abierta","revision","borrador","historica","cerrada"]).order("temporada",{ascending:false}).limit(1).maybeSingle();
     if(!campaign)return;
     const {data:categories}=await db.from("campanas_categorias").select("nombre,nacimiento_desde,nacimiento_hasta,cuota,activa").eq("campana_id",campaign.id).eq("activa",true).order("orden");
     const list=categories||[];
@@ -134,12 +147,18 @@
     container.insertAdjacentHTML("beforeend",`<div class="record-field full"><label>Categoría y cuota calculadas</label><div class="record-history-item"><strong>${esc(category.nombre)} · ${Number(category.cuota||0).toLocaleString('es-ES',{style:'currency',currency:'EUR'})}</strong><span>${esc(campaign.temporada||campaign.nombre)} · nacimiento ${esc(m.fecha_nacimiento)} · fecha de corte ${esc(campaign.fecha_corte||'sin configurar')}</span><small>La tarifa puede modificarse desde Categorías y cuotas de la campaña.</small></div></div>`);
   }
 
-  async function addPaymentButton(db){
+  async function addPaymentButton(db,m){
     const box=$("#feesBox");if(!box)return;
     const {data:season}=await db.from("temporadas").select("id,nombre").eq("activa",true).limit(1).maybeSingle();
     if(!season)return;
     const {data:fee}=await db.from("cuotas_socios").select("id,estado,importe").eq("socio_id",memberId).eq("temporada_id",season.id).maybeSingle();
-    if(!fee||$("#recordMarkPaid")||$("#recordReviewPayment"))return;
+    if($("#recordMarkPaid")||$("#recordReviewPayment")||$("#recordCreateFee"))return;
+    if(!fee){
+      const suggested=m.es_directivo||String(m.categoria).toLowerCase()==='infantil'?0:String(m.categoria).toLowerCase()==='joven'?10:20;
+      box.insertAdjacentHTML('afterend',`<div id="recordFeeAction" style="margin-top:14px"><button id="recordCreateFee" type="button" class="btn btn-primary">Crear cuota de ${esc(season.nombre)}</button><small style="display:block;margin-top:8px">Para la revisión manual de 2026/27. Después podrás registrar el pago real.</small></div>`);
+      $('#recordCreateFee').onclick=async()=>{const raw=prompt('Importe de la cuota de Peña',String(suggested).replace('.',','));if(raw===null)return;const amount=Number(String(raw).replace(',','.'));if(!Number.isFinite(amount)||amount<0)return window.FrenteNotify.error('Introduce un importe válido.');const zero=amount===0;const {error}=await db.from('cuotas_socios').insert({socio_id:memberId,temporada_id:season.id,importe:amount,estado:zero?'exenta':'pendiente',observaciones:zero?'Exención registrada desde la ficha del socio':'Cuota creada durante la revisión del censo'});if(error)return window.FrenteNotify.error(error.message);window.FrenteNotify.success('Cuota creada correctamente.');setTimeout(()=>location.reload(),400)};
+      return;
+    }
     if(String(fee.estado).toLowerCase()==="pagada"){
       if(Number(fee.importe||0)<=0)return;
       box.insertAdjacentHTML("afterend",`<div style="margin-top:14px"><button id="recordReviewPayment" type="button" class="btn btn-dark-outline">Marcar este pago como pendiente de comprobar</button><small style="display:block;margin-top:8px">Úsalo si no puedes confirmar el ingreso de ${esc(season.nombre)}. No elimina la cuota.</small></div>`);
