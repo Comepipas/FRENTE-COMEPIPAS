@@ -1,0 +1,14 @@
+FRENTE COMEPIPAS - COMMIT 40.16
+
+GALERÍA
+
+- Corregida la edición de álbumes ya creados.
+- Corregida la identificación de álbumes de Supabase por UUID.
+- Subida múltiple de fotografías directamente desde el ordenador.
+- Selección visible de archivos y estado durante la subida.
+- Elección de cualquier fotografía como portada del álbum.
+- Eliminación de fotografías también en Supabase Storage.
+- Validación de formato y límite de 10 MB por imagen.
+- Diseño responsive y estados vacíos mejorados.
+
+Se mantiene toda la funcionalidad existente y la compatibilidad con Supabase.

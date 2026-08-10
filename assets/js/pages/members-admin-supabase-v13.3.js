@@ -2,9 +2,10 @@
 "use strict";
 const $=id=>document.getElementById(id),svc=()=>window.FrenteMembersService;
 const MEMBER_STATES=["pendiente","activo","bloqueado","baja"];
-const state={rows:[],count:0,summary:null,page:1,pageSize:50,loading:false,states:[...MEMBER_STATES],categories:[]};
+const state={rows:[],count:0,summary:null,page:1,pageSize:50,loading:false,states:[...MEMBER_STATES],categories:[],seasonAbonos:new Map()};
 const esc=v=>String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
 const money=v=>new Intl.NumberFormat("es-ES",{style:"currency",currency:"EUR"}).format(Number(v||0));
+const withTimeout=(promise,milliseconds,message)=>Promise.race([promise,new Promise((_,reject)=>setTimeout(()=>reject(new Error(message)),milliseconds))]);
 function setConnection(type,text){const el=$("membersConnection");el.className=`members-connection ${type}`;el.querySelector("strong").textContent=text}
 function setLoading(value,text="Cargando socios…"){
   state.loading=value;
@@ -21,11 +22,12 @@ function filters(){return{search:$("membersSearch").value,status:$("membersStatu
 async function load(){
   setLoading(true,"Cargando socios desde Supabase…");
   try{
-    const [r,summary]=await Promise.all([Promise.race([
-      svc().list(filters()),
-      new Promise((_,reject)=>setTimeout(()=>reject(new Error("La consulta de socios superó 15 segundos.")),15000))
-    ]),svc().summary()]);
+    const [r,summary]=await Promise.all([
+      withTimeout(svc().list(filters()),15000,"La consulta principal de socios superó 15 segundos."),
+      withTimeout(svc().summary(),15000,"El resumen de socios superó 15 segundos.")
+    ]);
     state.rows=r.rows||[];
+    await loadSeasonAbonos(state.rows);
     state.summary=summary;
     state.count=Number(r.count||0);
     render();
@@ -42,10 +44,11 @@ async function load(){
     setLoading(false);
   }
 }
+async function loadSeasonAbonos(rows){state.seasonAbonos=new Map();const ids=(rows||[]).map(x=>x.id).filter(Boolean);if(!ids.length)return;try{const db=window.FrenteDatabase.getClient(),campaign=await db.from('campanas_abonados').select('id').eq('temporada','2026/27').eq('tipo','historica').order('updated_at',{ascending:false}).limit(1).maybeSingle();if(campaign.error)throw campaign.error;if(!campaign.data?.id)return;const result=await db.from('campanas_registros').select('socio_id,zona_club,sector_club,precio_abono,created_at').eq('campana_id',campaign.data.id).in('socio_id',ids).order('created_at',{ascending:false});if(result.error)throw result.error;(result.data||[]).forEach(r=>{if(state.seasonAbonos.has(r.socio_id))return;state.seasonAbonos.set(r.socio_id,r);const m=rows.find(x=>x.id===r.socio_id);if(!m)return;const zona=String(r.zona_club||m.sector||'').trim(),sector=String(r.sector_club||m.sector_codigo_club||'').trim();m.sector=[zona,sector&&!zona.includes(sector)?`Sector ${sector}`:''].filter(Boolean).join(' · ')||null;if(r.precio_abono!=null)m.precio_abono=Number(r.precio_abono)})}catch(e){console.warn('No se pudo cargar el abono 2026/27 por temporada',e)}}
 function render(){renderStats();renderTable();renderPagination()}
 function renderStats(){const x=state.summary||{};$("membersTotal").textContent=x.total??0;$("membersActive").textContent=x.active??0;$("membersActivated").textContent=x.activated??0;$("membersNotActivated").textContent=x.notActivated??0;$("membersPending").textContent=x.pendingFees??0;$("membersChildren").textContent=x.children??0;$("membersYoung").textContent=x.young??0;$("membersAdult").textContent=x.adult??0}
 const pill=(text,kind="")=>`<span class="status-pill ${kind}">${esc(text||"—")}</span>`;
-function renderTable(){const b=$("membersTableBody");b.innerHTML=state.rows.length?state.rows.map(m=>`<tr><td>${esc(m.numero)}</td><td><strong>${esc(m.nombreCompleto)}</strong><br><small>${esc(m.email||"")}</small><br><a class="member-record-link member-record-link-inline" href="ficha-socio-admin.html?id=${encodeURIComponent(m.id)}">Abrir ficha del socio</a></td><td>${pill(m.categoria,"category-pill")}</td><td>${pill(m.cuenta,m.cuenta_activada?"fee-ok":"fee-pending")}</td><td>${pill(m.estado,String(m.estado).toLowerCase()==="activo"?"status-active":"status-inactive")}</td><td>${pill(m.cuota,m.cuota_al_dia?"fee-ok":"fee-pending")}</td><td><strong>${esc(m.sector||"Sin asignar")}</strong><br><small>${money(m.precio_abono)}</small></td><td class="members-actions-cell"><a class="member-record-link" href="ficha-socio-admin.html?id=${encodeURIComponent(m.id)}">Abrir ficha</a><button data-edit="${esc(m.id)}">Edición rápida</button>${String(m.estado).toLowerCase()==="baja"?`<button class="danger" data-hard-delete="${esc(m.id)}">Eliminar definitivamente</button>`:`<button class="danger" data-delete="${esc(m.id)}">Dar de baja</button>`}</td></tr>`).join(""):'<tr><td colspan="8" class="members-empty">No hay socios para estos filtros.</td></tr>';b.querySelectorAll("tr").forEach((tr,i)=>{const m=state.rows[i];if(!m)return;tr.title="Pulsa para abrir la ficha del socio";tr.onclick=e=>{if(e.target.closest("button,a,input,select,label"))return;location.href=`ficha-socio-admin.html?id=${encodeURIComponent(m.id)}`};tr.ondblclick=e=>{if(!e.target.closest("button,a,input,select,label"))location.href=`ficha-socio-admin.html?id=${encodeURIComponent(m.id)}`}});b.querySelectorAll("[data-edit]").forEach(x=>x.onclick=()=>openForm(x.dataset.edit));b.querySelectorAll("[data-delete]").forEach(x=>x.onclick=()=>softDelete(x.dataset.delete));b.querySelectorAll("[data-hard-delete]").forEach(x=>x.onclick=()=>hardDelete(x.dataset.hardDelete))}
+function renderTable(){const b=$("membersTableBody");b.innerHTML=state.rows.length?state.rows.map(m=>`<tr><td>${esc(m.numero)}</td><td><strong>${esc(m.nombreCompleto)}</strong><br><small>${esc(m.email||"")}</small><br><a class="member-record-link member-record-link-inline" href="ficha-socio-admin.html?id=${encodeURIComponent(m.id)}">Abrir ficha del socio</a></td><td>${pill(m.categoria,"category-pill")}</td><td>${pill(m.cuenta,m.cuenta_activada?"fee-ok":"fee-pending")}</td><td>${pill(m.estado,String(m.estado).toLowerCase()==="activo"?"status-active":"status-inactive")}</td><td>${pill(m.cuota,m.cuota_al_dia?"fee-ok":"fee-pending")}</td><td><strong>${esc(m.sector||"Sector pendiente")}</strong><br><small>${m.precio_abono==null?"Importe sin informar":money(m.precio_abono)}</small></td><td class="members-actions-cell"><a class="member-record-link" href="ficha-socio-admin.html?id=${encodeURIComponent(m.id)}">Abrir ficha</a><button data-edit="${esc(m.id)}">Edición rápida</button>${String(m.estado).toLowerCase()==="baja"?`<button class="danger" data-hard-delete="${esc(m.id)}">Eliminar definitivamente</button>`:`<button class="danger" data-delete="${esc(m.id)}">Dar de baja</button>`}</td></tr>`).join(""):'<tr><td colspan="8" class="members-empty">No hay socios para estos filtros.</td></tr>';b.querySelectorAll("tr").forEach((tr,i)=>{const m=state.rows[i];if(!m)return;tr.title="Pulsa para abrir la ficha del socio";tr.onclick=e=>{if(e.target.closest("button,a,input,select,label"))return;location.href=`ficha-socio-admin.html?id=${encodeURIComponent(m.id)}`};tr.ondblclick=e=>{if(!e.target.closest("button,a,input,select,label"))location.href=`ficha-socio-admin.html?id=${encodeURIComponent(m.id)}`}});b.querySelectorAll("[data-edit]").forEach(x=>x.onclick=()=>openForm(x.dataset.edit));b.querySelectorAll("[data-delete]").forEach(x=>x.onclick=()=>softDelete(x.dataset.delete));b.querySelectorAll("[data-hard-delete]").forEach(x=>x.onclick=()=>hardDelete(x.dataset.hardDelete))}
 function renderPagination(){const pages=Math.max(1,Math.ceil(state.count/state.pageSize));$("membersPageInfo").textContent=`Página ${state.page} de ${pages} · ${state.count} socios`;$("membersPrev").disabled=state.page<=1;$("membersNext").disabled=state.page>=pages}
 async function loadOptions(){try{const o=await svc().distinctOptions();state.states=[...new Set([...MEMBER_STATES,...(o.states||[])])];state.categories=o.categories||[];fillSelect($("membersStatus"),state.states,"Todos los estados");fillSelect($("membersCategory"),state.categories,"Todas las categorías");fillSelect($("formEstado"),state.states,"Usar valor predeterminado");fillSelect($("formCategoria"),state.categories,"Sin categoría")}catch(e){console.warn("No se pudieron cargar opciones",e);state.states=[...MEMBER_STATES];fillSelect($("membersStatus"),state.states,"Todos los estados");fillSelect($("formEstado"),state.states,"Usar valor predeterminado")}}
 function fillSelect(el,values,first){const current=el.value;el.innerHTML=`<option value="">${esc(first)}</option>`+values.map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join("");if(values.includes(current))el.value=current}
@@ -66,8 +69,8 @@ async function init(){
       window.FrenteDatabase.init(),
       new Promise((_,reject)=>setTimeout(()=>reject(new Error("La conexión superó 15 segundos.")),15000))
     ]);
-    await loadOptions();
     await load();
+    loadOptions().catch(e=>console.warn("Los filtros se cargarán al reconectar",e));
   }catch(e){
     console.error("Error inicializando socios:",e);
     setConnection("error","Sin acceso a socios");
