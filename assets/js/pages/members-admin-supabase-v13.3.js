@@ -5,6 +5,7 @@ const MEMBER_STATES=["pendiente","activo","bloqueado","baja"];
 const state={rows:[],count:0,summary:null,page:1,pageSize:50,loading:false,states:[...MEMBER_STATES],categories:[]};
 const esc=v=>String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
 const money=v=>new Intl.NumberFormat("es-ES",{style:"currency",currency:"EUR"}).format(Number(v||0));
+const withTimeout=(promise,milliseconds,message)=>Promise.race([promise,new Promise((_,reject)=>setTimeout(()=>reject(new Error(message)),milliseconds))]);
 function setConnection(type,text){const el=$("membersConnection");el.className=`members-connection ${type}`;el.querySelector("strong").textContent=text}
 function setLoading(value,text="Cargando socios…"){
   state.loading=value;
@@ -21,10 +22,10 @@ function filters(){return{search:$("membersSearch").value,status:$("membersStatu
 async function load(){
   setLoading(true,"Cargando socios desde Supabase…");
   try{
-    const [r,summary]=await Promise.all([Promise.race([
-      svc().list(filters()),
-      new Promise((_,reject)=>setTimeout(()=>reject(new Error("La consulta de socios superó 15 segundos.")),15000))
-    ]),svc().summary()]);
+    const [r,summary]=await Promise.all([
+      withTimeout(svc().list(filters()),15000,"La consulta principal de socios superó 15 segundos."),
+      withTimeout(svc().summary(),15000,"El resumen de socios superó 15 segundos.")
+    ]);
     state.rows=r.rows||[];
     state.summary=summary;
     state.count=Number(r.count||0);
@@ -66,8 +67,8 @@ async function init(){
       window.FrenteDatabase.init(),
       new Promise((_,reject)=>setTimeout(()=>reject(new Error("La conexión superó 15 segundos.")),15000))
     ]);
-    await loadOptions();
     await load();
+    loadOptions().catch(e=>console.warn("Los filtros se cargarán al reconectar",e));
   }catch(e){
     console.error("Error inicializando socios:",e);
     setConnection("error","Sin acceso a socios");
