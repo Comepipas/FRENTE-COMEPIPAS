@@ -70,7 +70,7 @@
     document.querySelector('#markCensusReviewed').onclick=()=>setState('revisado');
     document.querySelector('#nextCensusMember').onclick=async()=>{const {data,error}=await db.from('socios').select('id').or('es_registro_prueba.is.null,es_registro_prueba.eq.false').neq('datos_revision_estado','revisado').neq('id',memberId).order('nombre').order('apellidos').limit(1).maybeSingle();if(error)return window.FrenteNotify.error(error.message);if(!data)return window.FrenteNotify.success('No quedan fichas pendientes.');location.href=`ficha-socio-admin.html?id=${encodeURIComponent(data.id)}`};
     const permanentTab=document.querySelector('[data-tab="pena"]');if(permanentTab)permanentTab.textContent='Datos de la Peña';
-    const seasonTab=document.querySelector('[data-tab="abono"]');if(seasonTab)seasonTab.textContent='Historial de abonos';
+    const seasonTab=document.querySelector('[data-tab="abono"]');if(seasonTab)seasonTab.textContent='Economía y pagos';
     const familyTab=document.querySelector('[data-tab="tutor"]');if(familyTab)familyTab.textContent='Familia / incidencias';
     ['categoria','gestion_abono_preferida','continuidad_estado','sector','sector_codigo_club','tipo_abono','precio_abono'].forEach(name=>{const field=document.querySelector(`[name="${name}"]`)?.closest('.record-field');if(field)field.hidden=true});
     const account=document.querySelector('[name="cuenta_activada"]')?.closest('label');if(account)account.hidden=false;
@@ -78,6 +78,7 @@
 
   async function setupSeasonHistory(db){
     const panel=document.querySelector('[data-panel="abono"]');if(!panel)return;
+    const title=panel.querySelector('.record-section-title');if(title)title.textContent='Abono, cuota y pagos por temporada';
     panel.querySelector('.record-grid')?.classList.add('season-master-hidden');
     const old=document.querySelector('#renewalsBox');if(old)old.hidden=true;
     let box=document.querySelector('#seasonHistory406');if(!box){panel.insertAdjacentHTML('beforeend','<div id="seasonHistory406" class="season-history-406">Cargando historial por temporada…</div>');box=document.querySelector('#seasonHistory406')}
@@ -123,13 +124,13 @@
   }
 
   function consolidateFeePanel(){
-    const feePanel=document.querySelector('[data-panel="cuotas"]'),pena=document.querySelector('[data-panel="pena"]');
-    if(!feePanel||!pena||document.querySelector('#memberFeeSummary'))return;
-    const details=document.createElement('details');details.id='memberFeeSummary';details.className='record-fee-summary';
-    details.innerHTML='<summary><strong>Cuota de la Peña e historial de pagos</strong><span>Información económica por temporada</span></summary><div class="record-fee-summary-body"></div>';
+    const feePanel=document.querySelector('[data-panel="cuotas"]'),economy=document.querySelector('[data-panel="abono"]');
+    if(!feePanel||!economy||document.querySelector('#memberFeeSummary'))return;
+    const details=document.createElement('details');details.id='memberFeeSummary';details.className='record-fee-summary';details.open=true;
+    details.innerHTML='<summary><strong>Cuota de la Peña y cobros</strong><span>Abierto para facilitar la revisión del censo</span></summary><div class="record-fee-summary-body"></div>';
     const body=details.querySelector('.record-fee-summary-body');
     Array.from(feePanel.children).forEach(node=>{if(!node.matches('h2'))body.appendChild(node)});
-    pena.appendChild(details);document.querySelector('[data-tab="cuotas"]')?.remove();feePanel.remove();
+    economy.appendChild(details);document.querySelector('[data-tab="cuotas"]')?.remove();feePanel.remove();
   }
 
   async function setupFamilyAdmin(db){
