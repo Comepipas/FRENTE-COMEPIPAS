@@ -119,11 +119,11 @@
     const client = await MemberAuth.client();
     const { data, error } = await client
       .from('campanas_registros')
-      .select('importe_pagado,precio_abono,cuota_final,forma_pago,estado,zona_club,fecha_pago,created_at,campanas(temporada)')
+      .select('importe_pagado,precio_abono,cuota_final,forma_pago,estado,zona_club,fecha_pago,created_at,campanas(temporada,tipo,modo_pruebas)')
       .eq('socio_id', profile.id)
       .order('created_at', { ascending: false });
     if (error) throw error;
-    return data || [];
+    return (data || []).filter(row => row.campanas?.tipo !== 'piloto' && row.campanas?.modo_pruebas !== true);
   }
 
   function renderFees(rows) {
@@ -426,3 +426,6 @@
     });
   });
 })();
+
+/* Commit 40.2 · módulo familiar privado */
+(function(){var css=document.createElement('link');css.rel='stylesheet';css.href='assets/css/family-v40.2.css?v=40.2';document.head.appendChild(css);var js=document.createElement('script');js.src='assets/js/family-member-v40.2.js?v=40.2';document.body.appendChild(js)})();
