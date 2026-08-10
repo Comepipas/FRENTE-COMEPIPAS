@@ -39,6 +39,12 @@
       var href=(a.getAttribute('href')||'').split('?')[0].toLowerCase();
       a.classList.toggle('active',href===current || (current==='dashboard-admin.html'&&href==='admin.html'));
     });
+    if(nav&&!nav.querySelector('a[href="familias-admin.html"]')){
+      var familyLink=document.createElement('a');familyLink.href='familias-admin.html';familyLink.textContent='Familias y autorizaciones';
+      var membersLink=nav.querySelector('a[href="socios-admin.html"]');
+      if(membersLink)membersLink.insertAdjacentElement('afterend',familyLink);else nav.appendChild(familyLink);
+      familyLink.classList.toggle('active',current==='familias-admin.html');
+    }
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
 })();
