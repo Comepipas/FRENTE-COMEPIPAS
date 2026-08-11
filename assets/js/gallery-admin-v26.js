@@ -7,9 +7,11 @@ document.addEventListener('DOMContentLoaded',()=>{
   const filesInput=document.querySelector('#photoFiles');
   const albumFiles=document.querySelector('#albumFiles');
   const albumFilePreview=document.querySelector('#albumFilePreview');
+  albumFilePreview?.insertAdjacentHTML('beforebegin','<div id="albumExistingPhotos"></div>');
+  const albumExistingPhotos=document.querySelector('#albumExistingPhotos');
   let current=null;
   let pendingFiles=[];
-  let pendingCoverIndex=0;
+  let pendingCoverIndex=null;
   const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 
   function showError(error, fallback='No se pudo completar la operación.'){
@@ -19,9 +21,15 @@ document.addEventListener('DOMContentLoaded',()=>{
 
   function resetPendingFiles(){
     pendingFiles=[];
-    pendingCoverIndex=0;
+    pendingCoverIndex=current?.photos?.length?null:0;
     if(albumFiles) albumFiles.value='';
     if(albumFilePreview) albumFilePreview.innerHTML='';
+  }
+
+  function renderExistingPhotos(){
+    if(!albumExistingPhotos)return;
+    const existing=current?.photos||[];
+    albumExistingPhotos.innerHTML=existing.length?`<div class="album-existing-title"><strong>Fotografías guardadas (${existing.length})</strong><small>Se conservarán al añadir otras nuevas</small></div><div class="album-existing-photos">${existing.map(photo=>`<div class="album-existing-photo"><img src="${esc(photo.imagen_url)}" alt="${esc(photo.titulo||'Fotografía guardada')}">${current.portada_url===photo.imagen_url?'<span>Portada</span>':''}</div>`).join('')}</div>`:'';
   }
 
   function renderPendingFiles(){
@@ -52,7 +60,7 @@ document.addEventListener('DOMContentLoaded',()=>{
       </div></article>`).join('')||'<p>No hay álbumes creados.</p>';
     grid.querySelectorAll('[data-edit]').forEach(b=>b.onclick=async()=>{
       try{
-        const a=await GalleryV26.album(b.dataset.edit); current=a; resetPendingFiles();
+        const a=await GalleryV26.album(b.dataset.edit); current=a; resetPendingFiles();renderExistingPhotos();
         Object.keys(a).forEach(k=>{if(form.elements[k]) form.elements[k].type==='checkbox'?form.elements[k].checked=!!a[k]:form.elements[k].value=a[k]??''});
         modal.classList.add('open');
       }catch(error){showError(error)}
@@ -96,11 +104,11 @@ document.addEventListener('DOMContentLoaded',()=>{
     }catch(error){showError(error)}
   }
 
-  document.querySelector('#newAlbum').onclick=()=>{current=null;form.reset();form.elements.id.value='';resetPendingFiles();modal.classList.add('open')};
+  document.querySelector('#newAlbum').onclick=()=>{current=null;form.reset();form.elements.id.value='';resetPendingFiles();renderExistingPhotos();modal.classList.add('open')};
   document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>b.closest('.store-modal').classList.remove('open'));
   albumFiles?.addEventListener('change',()=>{
     pendingFiles=[...albumFiles.files];
-    pendingCoverIndex=0;
+    pendingCoverIndex=current?.photos?.length?null:0;
     renderPendingFiles();
   });
 
@@ -119,10 +127,10 @@ document.addEventListener('DOMContentLoaded',()=>{
         button.textContent=`Subiendo ${index+1} de ${pendingFiles.length}…`;
         const file=pendingFiles[index];
         const url=await GalleryV26.upload(albumId,file);
-        await GalleryV26.addPhoto({album_id:albumId,imagen_url:url,titulo:file.name,orden:index});
+        await GalleryV26.addPhoto({album_id:albumId,imagen_url:url,titulo:file.name,orden:(current?.photos?.length||0)+index});
         uploaded.push(url);
       }
-      if(uploaded.length){
+      if(uploaded.length&&(pendingCoverIndex!==null||!current?.portada_url)){
         const coverUrl=uploaded[Math.min(pendingCoverIndex,uploaded.length-1)];
         await GalleryV26.setCover(albumId,coverUrl);
       }

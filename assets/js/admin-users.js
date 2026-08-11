@@ -1,26 +1,4 @@
-window.FRENTE_ADMIN_USERS = [
-  {
-    id: "admin-1",
-    nombre: "Administrador principal",
-    email: "admin@frentecomepipas.es",
-    password: "2007",
-    rol: "superadmin",
-    activo: true
-  },
-  {
-    id: "admin-2",
-    nombre: "Presidente",
-    email: "presidente@frentecomepipas.es",
-    password: "2007",
-    rol: "presidente",
-    activo: true
-  },
-  {
-    id: "admin-3",
-    nombre: "Tesorero",
-    email: "tesorero@frentecomepipas.es",
-    password: "2007",
-    rol: "tesorero",
-    activo: true
-  }
-];
+/* Las cuentas administrativas se autentican exclusivamente con Supabase.
+   Este archivo se conserva por compatibilidad, pero nunca contiene usuarios
+   ni contraseñas dentro de la web pública. */
+window.FRENTE_ADMIN_USERS = [];

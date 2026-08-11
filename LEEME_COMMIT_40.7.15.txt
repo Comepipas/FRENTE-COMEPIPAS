@@ -1,0 +1,21 @@
+FRENTE COMEPIPAS · COMMIT 40.7.15
+
+AUDITORÍA FUNCIONAL Y DE SEGURIDAD
+
+- Dashboard Enterprise conectado a las tablas reales socios y cuotas_socios.
+- KPIs de socios, ingresos y cuotas pendientes corregidos.
+- Consulta de pagos del Área del Socio corregida para campanas_abonados.
+- Los partidos cuyo plazo terminó ya no aparecen como disponibles.
+- Usuarios y permisos deja de depender de usuarios locales antiguos.
+- Eliminadas del código público las contraseñas administrativas de demostración.
+- Nombres de Cuotas unificados en mayúsculas y sin duplicación nombre/nombre.
+- Los números de socio sin asignar muestran Pendiente en vez de 0000.
+- Eliminados enlaces de Calendario repetidos en los pies de página.
+- Retirado el texto técnico visible en el calendario público.
+- Se mantienen las mejoras acumulativas de socios, campañas, familias y galería.
+
+SUPABASE
+
+No hay que ejecutar ningún SQL para este commit.
+No se modifican tablas, políticas ni datos existentes.
+

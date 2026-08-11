@@ -1,0 +1,12 @@
+FRENTE COMEPIPAS - COMMIT 40.6.3
+
+CORRECCIÓN DEL BUSCADOR DE SOCIOS
+- Permite buscar nombre y apellido juntos aunque estén guardados en columnas separadas.
+- Cada palabra puede coincidir en nombre, apellidos, DNI, correo, teléfono o número.
+- Ignora diferencias de mayúsculas, tildes y espacios.
+- Mantiene la paginación y los filtros de estado, cuenta, categoría y cuota.
+
+SQL
+Este commit no añade SQL nuevo.
+Si no se ejecutó con la entrega anterior, sigue siendo obligatorio ejecutar:
+supabase/migrations/040_6_2_season_zone_sector.sql
