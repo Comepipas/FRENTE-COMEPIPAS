@@ -7,8 +7,6 @@ document.addEventListener('DOMContentLoaded',()=>{
   const filesInput=document.querySelector('#photoFiles');
   const albumFiles=document.querySelector('#albumFiles');
   const albumFilePreview=document.querySelector('#albumFilePreview');
-  albumFilePreview?.insertAdjacentHTML('beforebegin','<div id="albumExistingPhotos"></div>');
-  const albumExistingPhotos=document.querySelector('#albumExistingPhotos');
   let current=null;
   let pendingFiles=[];
   let pendingCoverIndex=null;
@@ -26,11 +24,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     if(albumFilePreview) albumFilePreview.innerHTML='';
   }
 
-  function renderExistingPhotos(){
-    if(!albumExistingPhotos)return;
-    const existing=current?.photos||[];
-    albumExistingPhotos.innerHTML=existing.length?`<div class="album-existing-title"><strong>Fotografías guardadas (${existing.length})</strong><small>Se conservarán al añadir otras nuevas</small></div><div class="album-existing-photos">${existing.map(photo=>`<div class="album-existing-photo"><img src="${esc(photo.imagen_url)}" alt="${esc(photo.titulo||'Fotografía guardada')}">${current.portada_url===photo.imagen_url?'<span>Portada</span>':''}</div>`).join('')}</div>`:'';
-  }
+  function renderExistingPhotos(){/* La gestión de fotos guardadas se hace en “Fotos y portada”. */}
 
   function renderPendingFiles(){
     if(!albumFilePreview)return;
