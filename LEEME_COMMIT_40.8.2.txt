@@ -1,0 +1,48 @@
+FRENTE COMEPIPAS - COMMIT 40.8.2
+=================================
+
+NO HAY QUE EJECUTAR NINGÚN SQL PARA ESTE COMMIT.
+
+QUÉ SE HA CORREGIDO
+-------------------
+1. El Área del Socio vuelve a cargar el material disponible usando la estructura actual de Supabase.
+2. El material disponible y el historial de solicitudes quedan separados y claros.
+3. Al abrir el catálogo desde el Área del Socio se oculta el bloque redundante «Ir al área del socio».
+4. La portada conserva su texto y muestra un carrusel automático con todas las fotografías activas del material.
+5. El carrusel tiene anterior, siguiente, indicadores, pausa al pasar el ratón y diseño adaptable al móvil.
+6. Las tarjetas de próximos partidos colocan la información arriba y muestran mejor la parte útil del estadio.
+7. Los accesos incorporan el botón Ver/Ocultar contraseña.
+8. La recuperación de contraseña acepta correctamente enlaces con código o token y evita canjear el mismo enlace dos veces.
+9. Se corrige el tamaño del título de recuperación para que no salga de la tarjeta blanca.
+10. Las solicitudes de material invocan la notificación por correo después de guardarse.
+
+PASO NECESARIO EN SUPABASE (NO ES SQL)
+--------------------------------------
+Después de publicar la web, actualiza la MISMA Edge Function llamada:
+
+send-request-notification
+
+En Supabase > Edge Functions > send-request-notification > Code:
+1. Sustituye el contenido por el archivo incluido:
+   supabase/functions/send-request-notification/index.ts
+2. Pulsa «Deploy updates».
+3. No hace falta crear otra función ni cambiar los secretos de Brevo que ya configuraste.
+
+RECUPERACIÓN DE CONTRASEÑA
+--------------------------
+En Supabase > Authentication > URL Configuration > Redirect URLs debe estar permitida:
+
+https://frente-comepipas.vercel.app/recuperar-clave.html
+
+Puedes añadir también esta regla para las páginas del mismo dominio:
+
+https://frente-comepipas.vercel.app/**
+
+PRUEBAS RECOMENDADAS
+--------------------
+1. Entrar como socio y abrir Material > Material disponible.
+2. Pulsar Solicitar y comprobar que se guarda y llega el correo.
+3. Abrir el catálogo desde el Área del Socio y confirmar que no aparece el bloque redundante de acceso.
+4. Revisar en Inicio el carrusel de material y los tres próximos partidos.
+5. Probar Ver/Ocultar contraseña.
+6. Pedir un enlace NUEVO de recuperación y usar solamente el correo más reciente.

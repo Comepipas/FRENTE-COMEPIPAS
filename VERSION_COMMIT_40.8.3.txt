@@ -1,0 +1,2 @@
+FRENTE COMEPIPAS - COMMIT 40.8.3
+Hotfix de recuperación de contraseña Supabase.

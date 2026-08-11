@@ -1,0 +1,9 @@
+COMMIT 40.8.5 - LIMPIEZA DE CAMPAÑAS
+
+Se elimina de Campañas de abonados la pestaña duplicada "Categorías y cuotas" y todo su contenido visual.
+La gestión correcta continúa disponible desde el apartado independiente "Categorías y cuotas" del menú lateral.
+
+NO HAY QUE EJECUTAR SQL.
+NO HAY QUE MODIFICAR NI DESPLEGAR FUNCIONES DE SUPABASE.
+
+Después de publicar, cierra la pestaña antigua de la web y abre una nueva.
