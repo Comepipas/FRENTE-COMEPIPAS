@@ -1,0 +1,13 @@
+FRENTE COMEPIPAS - COMMIT 40.14
+
+REDES SOCIALES EN LA PORTADA
+
+- Instagram y X aparecen en el inicio usando los datos compartidos de Supabase.
+- La portada consulta tanto el CMS de portada como Configuración general.
+- El CMS tiene prioridad; Configuración general funciona como respaldo.
+- Se admiten direcciones completas y nombres de usuario con o sin @.
+- WhatsApp admite un número y lo convierte automáticamente en enlace wa.me.
+- Los enlaces sociales se abren en una pestaña nueva de forma segura.
+- Los botones sin dirección continúan ocultos para no mostrar enlaces vacíos.
+- Se mantiene el nuevo orden de la portada y toda la funcionalidad acumulada.
+- El commit 41 continúa aparcado.

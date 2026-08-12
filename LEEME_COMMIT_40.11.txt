@@ -1,0 +1,23 @@
+FRENTE COMEPIPAS - COMMIT 40.11
+
+HISTORIA DE LA PEÑA
+
+- La introducción respeta los saltos de párrafo escritos desde Administración.
+- Diseño público profesional en dos columnas y completamente responsive.
+- Valores convertidos automáticamente en etiquetas visuales separadas por comas.
+- Cronología con línea vertical, marcadores, tarjetas y animaciones suaves.
+- Editor mejorado con ayuda de escritura.
+- Botones para subir, bajar y eliminar etapas.
+- Botón "Usar cronología sugerida" que prepara cuatro hitos editables sin publicarlos hasta pulsar Guardar cambios.
+- Contenido inicial más completo para restaurar o utilizar como plantilla.
+- La historia continúa guardándose en Supabase y es común para todos los dispositivos.
+- Se conserva toda la funcionalidad anterior y el commit 41 continúa aparcado.
+
+USO RECOMENDADO
+
+1. Entra en Administración > Historia de la Peña.
+2. Separa los párrafos de la introducción dejando una línea en blanco.
+3. Separa los valores con comas.
+4. Pulsa "Usar cronología sugerida" si quieres partir de la plantilla.
+5. Personaliza años, títulos y textos con los datos reales de la Peña.
+6. Pulsa "Guardar cambios" para publicar en Supabase.
