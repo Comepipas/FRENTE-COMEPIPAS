@@ -1,0 +1,31 @@
+FRENTE COMEPIPAS · COMMIT 40.8.0
+
+IMPORTANTE: SÍ HAY QUE EJECUTAR SQL.
+
+1. Publica primero todos los archivos de este ZIP.
+2. En Supabase > SQL Editor ejecuta completo:
+   supabase/migrations/040_8_0_consolidacion_operativa.sql
+3. Despliega la función:
+   supabase/functions/send-request-notification/index.ts
+4. La función utiliza las mismas variables de correo de Brevo que Comunicaciones:
+   BREVO_API_KEY y BREVO_FROM_EMAIL.
+5. En Administración > Configuración indica:
+   - correo que recibirá solicitudes de material;
+   - correo que recibirá altas y contactos.
+
+El SQL:
+- crea la configuración compartida y las solicitudes de contacto;
+- elimina solamente las comunicaciones de prueba identificadas;
+- elimina solamente las dos campañas piloto 2027/28 identificadas;
+- guarda copia y elimina duplicados exactos no vinculados del histórico 2026/27.
+
+NO elimina socios, cuentas activadas, cuotas, fotografías ni módulos históricos.
+
+PRUEBAS RECOMENDADAS
+- Abrir Socios y comprobar que el abono corresponde a la temporada activa.
+- Abrir Categorías y cuotas desde el menú de Administración.
+- En Configuración guardar los dos correos de avisos.
+- Enviar un formulario de Contacto.
+- Enviar una solicitud de material desde un socio.
+- Abrir Galería, añadir fotos y confirmar que conserva las anteriores.
+- Comprobar web pública y área del socio en móvil y ordenador.

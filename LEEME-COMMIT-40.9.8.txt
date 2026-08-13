@@ -1,0 +1,22 @@
+FRENTE COMEPIPAS - COMMIT 40.9.8
+
+PASO OBLIGATORIO EN SUPABASE
+
+1. Entra en Supabase > SQL Editor.
+2. Abre este archivo del proyecto:
+   supabase/migrations/040_9_8_on_tour_companions.sql
+3. Copia todo su contenido, ejecútalo y comprueba que aparece:
+   Commit 40.9.8 ON TOUR instalado correctamente
+
+QUÉ INCORPORA
+
+- Cada socio puede incluir un máximo de 3 acompañantes.
+- El acompañante debe ser un socio real y se comprueba mediante DNI y número de abonado.
+- El acompañante verá en su Área del Socio que otra persona ya solicitó su entrada.
+- No se permite solicitar dos veces una entrada para la misma persona y el mismo ON TOUR.
+- Por privacidad solo se muestra el nombre y la inicial del responsable, nunca el censo.
+- El solicitante puede cancelar una solicitud pendiente.
+- Al cancelar desde el Área del Socio o desde administración quedan libres todas las personas incluidas.
+- Después de una cancelación se puede presentar una nueva solicitud para ese ON TOUR.
+
+No requiere configurar nuevas claves ni servicios externos.

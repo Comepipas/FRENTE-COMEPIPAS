@@ -1,0 +1,12 @@
+COMMIT 40.10.0 - CORRECCION DEFINITIVA DEL CALENDARIO ON TOUR
+
+1. Copia TODO el contenido del ZIP sobre el repositorio.
+2. Publica los cambios en GitHub Desktop.
+3. No hay que ejecutar ningun SQL en Supabase.
+4. Abre una pestaña nueva de la web y entra en ON TOUR.
+
+La correccion utiliza archivos con nombres nuevos para impedir que Vercel o el
+navegador reutilicen la version antigua. El selector muestra el calendario
+completo. Los partidos locales y los desplazamientos sin horario confirmado
+se ven, pero quedan desactivados. Solo se puede crear un ON TOUR a partir de un
+desplazamiento con dia y hora confirmados.
