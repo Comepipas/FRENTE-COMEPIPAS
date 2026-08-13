@@ -1,0 +1,19 @@
+COMMIT 40.9.2
+
+CAMBIOS
+- Retirada de la pantalla duplicada Cuotas y pagos.
+- La gestión de cuotas queda centralizada en Gestión de socios.
+- Los enlaces antiguos a cuotas redirigen al filtro de cuotas pendientes.
+- Se conservan intactos todos los pagos, cuotas e históricos de 2026/27.
+
+SUPABASE
+- Este commit no necesita ejecutar ningún SQL nuevo.
+- Si todavía no se ejecutó el SQL del Commit 40.9.0, debe ejecutarse
+  PASO_COMMIT_40_9_0_EJECUTAR_EN_SUPABASE.sql para habilitar la eliminación
+  segura de socios dados de baja.
+
+COMPROBACIÓN
+1. Publicar todos los archivos del ZIP.
+2. Abrir Gestión de socios.
+3. Seleccionar Pendiente en el filtro de cuotas.
+4. Deben aparecer los tres socios con cuota pendiente.

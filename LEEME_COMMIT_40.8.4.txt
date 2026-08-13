@@ -1,0 +1,9 @@
+COMMIT 40.8.4 - MATERIAL EN EL ÁREA DE SOCIO
+
+Corrige la carga del material disponible dentro de la zona privada del socio.
+La pantalla utiliza ahora los campos actuales del catálogo.
+
+NO HAY QUE EJECUTAR SQL.
+NO HAY QUE MODIFICAR NI DESPLEGAR FUNCIONES DE SUPABASE.
+
+Después de publicar, cierra la pestaña antigua de la web y abre una nueva.

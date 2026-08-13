@@ -1,0 +1,4 @@
+COMMIT 40.9.0
+
+Consolidación de cuotas reales, bajas seguras y simplificación de campañas.
+Incluye acumulativamente 40.8.4 y 40.8.5.

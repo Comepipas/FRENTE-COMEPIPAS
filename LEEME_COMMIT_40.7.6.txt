@@ -1,0 +1,19 @@
+FRENTE COMEPIPAS - COMMIT 40.7.6
+
+CONCILIACIÓN AUTOMÁTICA DEL EXCEL 2026/27
+- DESCUADRE = 0: pagado y conciliado automáticamente por transferencia.
+- Recupera el importe PAGADO y la fecha PAGADO2 del Excel.
+- Descuadre distinto de cero, error o vacío: incidencia económica pendiente.
+- La incidencia aparece en Campañas > Incidencias y en la ficha del socio.
+- Los DNI compartidos por menores se distinguen también por nombre y no se descartan automáticamente.
+- Solo se consideran duplicadas las filas con el mismo DNI y el mismo nombre.
+- La vista previa muestra cuántos quedan conciliados y cuántos requieren revisión.
+- Se mejora la alineación de la tabla Categorías y cuotas.
+
+USO
+Seleccionar la campaña real 2026/27, abrir Importar Excel, elegir el Excel del Málaga y analizarlo.
+Revisar los totales de la simulación y confirmar la importación.
+
+SQL
+No hay SQL nuevo para 40.7.6.
+Es necesario haber ejecutado previamente 040_7_5_season_payments.sql.

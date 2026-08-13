@@ -1,0 +1,4 @@
+COMMIT 40.9.1
+
+Corrección del filtro de cuotas pendientes.
+La lista y el contador usan ahora el mismo registro real de cuotas_socios.
