@@ -1,0 +1,15 @@
+FRENTE COMEPIPAS - COMMIT 40.9.1 ACUMULATIVO
+
+CORRECCIÓN
+- El contador y el listado de cuotas pendientes utilizan la misma fuente real.
+- Los pagos históricos solo se usan como respaldo cuando no existe una cuota de temporada.
+- Al seleccionar Pendiente deben mostrarse los mismos socios que forman el contador.
+- Un filtro sin resultados ya no se presenta erróneamente como un problema de conexión.
+
+INCLUYE TODOS LOS CAMBIOS ANTERIORES, incluido el Commit 40.9.0.
+
+SQL
+Si todavía no ejecutaste el SQL del Commit 40.9.0, ejecuta:
+PASO_COMMIT_40_9_0_EJECUTAR_EN_SUPABASE.sql
+
+Si ya lo ejecutaste, no tienes que ejecutar ningún SQL adicional para 40.9.1.

@@ -4,17 +4,20 @@ window.FrenteMembersService=(()=>{
  const db=()=>window.FrenteDatabase.getClient();
  function cleanText(v){const x=String(v??"").trim();return x||null}
  function norm(v){return String(v??"").trim().toLowerCase()}
+ function searchNorm(v){return String(v??"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9@.+-]+/g," ").trim()}
  function canonicalCategory(v){const x=norm(v);return ["adulto","joven","infantil"].includes(x)?x:(x||null)}
  function ageAt(birth,reference=new Date()){if(!birth)return null;const b=new Date(`${birth}T00:00:00`);if(Number.isNaN(b.getTime()))return null;let age=reference.getFullYear()-b.getFullYear();const m=reference.getMonth()-b.getMonth();if(m<0||(m===0&&reference.getDate()<b.getDate()))age--;return age>=0?age:null}
- function map(row){const pending=!row.numero_socio||norm(row.numero_socio_estado)!=="asignado";return {...row,numero:pending?"Pendiente":String(row.numero_socio).padStart(4,"0"),numeroSocioPendiente:pending,nombreCompleto:`${row.nombre||""} ${row.apellidos||""}`.trim(),cuenta:row.cuenta_activada?"Activada":"Pendiente de activar",cuota:row.cuota_al_dia?"Al día":"Pendiente",nacimiento:row.fecha_nacimiento,edadActual:ageAt(row.fecha_nacimiento),alta:row.fecha_alta,precioAbono:Number(row.precio_abono||0),observaciones:row.observaciones_internas}}
+ function map(row){const pending=!row.numero_socio||norm(row.numero_socio_estado)!=="asignado";const provisional=row.numero_socio_provisional?`P-${String(row.numero_socio_provisional).padStart(4,"0")}`:null;return {...row,emailAcceso:row.email,email:row.email||row.email_contacto||null,numero:pending?(provisional||"Pendiente de validar"):String(row.numero_socio).padStart(4,"0"),numeroProvisional:provisional,numeroSocioPendiente:pending,nombreCompleto:`${row.nombre||""} ${row.apellidos||""}`.trim(),cuenta:row.cuenta_activada?"Activada":"Pendiente de activar",cuota:row.cuota_al_dia?"Al día":"Pendiente",nacimiento:row.fecha_nacimiento,edadActual:ageAt(row.fecha_nacimiento),alta:row.fecha_alta,precioAbono:row.precio_abono==null?null:Number(row.precio_abono),observaciones:row.observaciones_internas}}
  async function list({search="",status="",category="",account="",fee="",page=1,pageSize=cfg().pageSize}={}){
-   let query=db().from(cfg().table).select(cfg().select,{count:"exact"});
    const term=String(search||"").trim().replace(/[,%()]/g," ");
-   if(term){const numeric=Number(term);const clauses=[`nombre.ilike.%${term}%`,`apellidos.ilike.%${term}%`,`dni.ilike.%${term}%`,`email.ilike.%${term}%`,`telefono.ilike.%${term}%`,`numero_abonado_malaga.ilike.%${term}%`];if(Number.isInteger(numeric))clauses.push(`numero_socio.eq.${numeric}`);query=query.or(clauses.join(","))}
-   if(status)query=query.eq("estado",status);
-   if(category)query=query.ilike("categoria",String(category).trim());
-   if(account!=="")query=query.eq("cuenta_activada",account==="true");
-   if(fee!=="")query=query.eq("cuota_al_dia",fee==="true");
+   const applyFilters=query=>{if(status)query=query.eq("estado",status);if(category)query=query.ilike("categoria",String(category).trim());if(account!=="")query=query.eq("cuenta_activada",account==="true");if(fee!=="")query=query.eq("cuota_al_dia",fee==="true");return query};
+   if(term){
+    let all=[],batch=0;
+    while(true){const query=applyFilters(db().from(cfg().table).select(cfg().select)).order("nombre",{ascending:true}).order("apellidos",{ascending:true}).range(batch*1000,batch*1000+999),{data,error}=await query;if(error)throw error;all.push(...(data||[]));if(!data||data.length<1000)break;batch++}
+    const words=searchNorm(term).split(/\s+/).filter(Boolean),filtered=all.filter(row=>{const haystack=searchNorm([row.nombre,row.apellidos,row.dni,row.email,row.email_contacto,row.telefono,row.numero_socio,row.numero_socio_provisional,row.numero_abonado_malaga].join(" "));return words.every(word=>haystack.includes(word))});
+    const from=(page-1)*pageSize;return{rows:filtered.slice(from,from+pageSize).map(map),count:filtered.length,page,pageSize};
+   }
+   let query=applyFilters(db().from(cfg().table).select(cfg().select,{count:"exact"}));
    const from=(page-1)*pageSize,to=from+pageSize-1;
    const {data,error,count}=await query.order("nombre",{ascending:true}).order("apellidos",{ascending:true}).range(from,to);
    if(error)throw error;
@@ -26,9 +29,12 @@ window.FrenteMembersService=(()=>{
    const p={
     numero_socio:cleanText(form.numero_socio)?Number(form.numero_socio):null,nombre:String(form.nombre||"").trim(),apellidos:String(form.apellidos||"").trim(),dni:cleanText(form.dni)?.toUpperCase()||null,
     fecha_nacimiento:cleanText(form.fecha_nacimiento),telefono:cleanText(form.telefono),email:cleanText(form.email)?.toLowerCase()||null,direccion:cleanText(form.direccion),foto_url:cleanText(form.foto_url),
-    fecha_alta:cleanText(form.fecha_alta),categoria:canonicalCategory(form.categoria),numero_socio_estado:cleanText(form.numero_socio)?"asignado":"pendiente",cuenta_activada:Boolean(form.cuenta_activada),cuota_al_dia:Boolean(form.cuota_al_dia),sector:cleanText(form.sector),fila:cleanText(form.fila),asiento:cleanText(form.asiento),
-    tipo_abono:cleanText(form.tipo_abono),precio_abono:Number(form.precio_abono||0),numero_abonado_malaga:cleanText(form.numero_abonado_malaga),observaciones_internas:cleanText(form.observaciones_internas),es_directivo:Boolean(form.es_directivo),cargo_directiva:Boolean(form.es_directivo)?cleanText(form.cargo_directiva):null
+    fecha_alta:cleanText(form.fecha_alta),categoria:canonicalCategory(form.categoria),numero_socio_estado:cleanText(form.numero_socio)?"asignado":"pendiente",sector:cleanText(form.sector),sector_codigo_club:cleanText(form.sector_codigo_club),fila:cleanText(form.fila),asiento:cleanText(form.asiento),
+    tipo_abono:cleanText(form.tipo_abono),precio_abono:cleanText(form.precio_abono)==null?null:Number(form.precio_abono),numero_abonado_malaga:cleanText(form.numero_abonado_malaga),gestion_abono_preferida:cleanText(form.gestion_abono_preferida)||"por_confirmar",continuidad_estado:cleanText(form.continuidad_estado)||"por_confirmar",observaciones_internas:cleanText(form.observaciones_internas),es_directivo:Boolean(form.es_directivo),cargo_directiva:Boolean(form.es_directivo)?cleanText(form.cargo_directiva):null
    };
+   if(form.menor_sin_dni!==undefined)p.menor_sin_dni=Boolean(form.menor_sin_dni);
+   if(form.correo_compartido_familiar!==undefined){p.correo_compartido_familiar=Boolean(form.correo_compartido_familiar);if(p.correo_compartido_familiar){p.email_contacto=p.email;p.email=null}}
+   if(form.datos_revision_estado!==undefined)p.datos_revision_estado=cleanText(form.datos_revision_estado)||"pendiente";
    if(form.estado)p.estado=form.estado;
    if(!editing&&p.fecha_alta===null)p.fecha_alta=new Date().toISOString().slice(0,10);
    if(!editing&&!p.numero_socio)p.numero_socio=null;

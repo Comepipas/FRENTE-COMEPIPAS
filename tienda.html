@@ -7,34 +7,22 @@
   <link rel="stylesheet" href="assets/css/variables.css">
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/responsive.css">
-  <link rel="stylesheet" href="assets/css/material-v32.2.css?v=32.2">
+  <link rel="stylesheet" href="assets/css/material-v32.2.css?v=40.9.5">
+  <link rel="stylesheet" href="assets/css/commit-40.8.css?v=40.9.5">
 </head>
 <body>
-<header class="site-header">
-  <div class="container nav">
-    <a class="brand" href="index.html"><img src="assets/images/brand/escudo-transparente.png" alt="Escudo Frente Comepipas"><div><span>FRENTE COMEPIPAS</span><small>PEÑA MALAGUISTA</small></div></a>
-    <nav class="nav-links"><a href="index.html">Inicio</a><a href="la-pena.html">La Peña</a><a href="noticias.html">Noticias</a><a class="active" href="tienda.html">Material</a><a href="viajes.html">ON TOUR</a><a href="socios.html">Socios</a><a href="galeria.html">Galería</a><a href="contacto.html">Contacto</a></nav>
-  </div>
-</header>
+<header class="site-header"><div class="container nav"><a class="brand" href="index.html"><img src="assets/images/brand/escudo-transparente.png" alt="Escudo Frente Comepipas"><div><span>FRENTE COMEPIPAS</span><small>PEÑA MALAGUISTA</small></div></a><nav class="nav-links"><a href="index.html">Inicio</a><a href="la-pena.html">La Peña</a><a href="noticias.html">Noticias</a><a class="active" href="tienda.html">Material</a><a href="viajes.html">ON TOUR</a><a href="socios.html">Socios</a><a href="galeria.html">Galería</a><a href="contacto.html">Contacto</a></nav></div></header>
 <main>
-  <section class="page-hero"><div class="container"><span class="kicker">Material de la Peña</span><h1>CATÁLOGO DE MATERIAL</h1><p>Consulta el material disponible de Frente Comepipas.</p></div></section>
+  <section class="page-hero"><div class="container"><span class="kicker">Material de la Peña</span><h1>CATÁLOGO DE MATERIAL</h1><p>Descubre el material disponible de Frente Comepipas.</p></div></section>
   <section class="section"><div class="container m322-shell">
-    <div class="m322-info"><strong>Material de la Peña Frente Comepipas</strong><p>Este catálogo es únicamente informativo. La Peña Malaguista Frente Comepipas no realiza venta online. Si estás interesado en cualquier artículo, pulsa sobre él o en “Solicitar” y nos pondremos en contacto contigo.</p></div>
-    <div class="m322-layout">
-      <div class="m322-main">
-        <div class="m322-toolbar"><label>Categoría<select id="m20Category"><option value="">Todas</option></select></label><label>Buscar<input id="m20Search" type="search" placeholder="Bufanda, bandera, mochila..."></label></div>
-        <div id="m20Grid" class="m322-grid" aria-live="polite"></div>
-      </div>
-      <aside class="m322-member-card"><h2>Área del socio</h2><p>Inicia sesión para consultar tus solicitudes y mantener tus datos actualizados.</p><ul><li>Solicitar material</li><li>Consultar solicitudes</li><li>Ver su estado</li></ul><a href="area-socio.html" class="btn btn-dark-outline">Ir al área del socio</a></aside>
-    </div>
+    <div class="m322-info"><strong>Material de la Peña Frente Comepipas</strong><p>Este escaparate es informativo y no realiza venta online. Pulsa en un artículo si te interesa: si eres socio podrás acceder a tu área privada; si no lo eres, podrás enviarnos una consulta.</p></div>
+    <div class="m322-layout"><div class="m322-main"><div class="m322-toolbar"><label>Categoría<select id="m20Category"><option value="">Todas</option></select></label><label>Buscar<input id="m20Search" type="search" placeholder="Bufanda, bandera, mochila..."></label></div><div id="m20Grid" class="m322-grid" aria-live="polite"></div></div><aside class="m322-member-card"><h2>Área del socio</h2><p>Inicia sesión para consultar precios, solicitar material y revisar tus solicitudes.</p><ul><li>Consultar precios</li><li>Solicitar material</li><li>Ver el estado</li></ul><a href="login.html" class="btn btn-dark-outline">Iniciar sesión</a></aside></div>
   </div></section>
 </main>
-
-<dialog id="m322ProductDialog" class="m322-dialog m322-product-dialog">
-  <div class="m322-product-view"><button type="button" class="m322-close" data-close-product aria-label="Cerrar">×</button><div id="m322ProductContent"></div></div>
-</dialog>
+<dialog id="m322ProductDialog" class="m322-dialog m322-product-dialog"><div class="m322-product-view"><button type="button" class="m322-close" data-close-product aria-label="Cerrar">×</button><div id="m322ProductContent"></div></div></dialog>
 <dialog id="m322Lightbox" class="m322-dialog m322-lightbox"><div><button type="button" class="m322-close" data-close-lightbox aria-label="Cerrar">×</button><img id="m322LightboxImage" alt="Fotografía ampliada"></div></dialog>
-<dialog id="m20RequestDialog" class="m322-dialog"><form method="dialog" id="m20RequestForm"><h2>Solicitar material</h2><input type="hidden" name="material_id"><div id="m20Summary"></div><div class="m322-form"><label>Nombre y apellidos<input name="nombre" required autocomplete="name"></label><label>Teléfono<input name="telefono" required autocomplete="tel"></label><label>Correo<input name="email" type="email" autocomplete="email"></label><label>Cantidad<input name="cantidad" type="number" min="1" max="20" value="1"></label><label>Talla o variante<input name="variante"></label><label class="full">Observaciones<textarea name="observaciones" rows="3"></textarea></label></div><input type="hidden" name="preferencia_contacto" value="WhatsApp"><p><label class="m322-consent"><input type="checkbox" required> Entiendo que esta solicitud no es una compra ni una reserva definitiva.</label></p><div class="m322-actions"><button value="cancel" class="btn btn-dark-outline">Cancelar</button><button value="default" class="btn btn-primary">Enviar solicitud</button></div></form></dialog>
-<dialog id="m20ConfirmDialog" class="m322-dialog"><div><h2>Solicitud recibida</h2><div id="m20Confirm" class="m322-confirm"></div><div class="m322-actions"><button id="m20CloseConfirm" class="btn btn-primary">Cerrar</button></div></div></dialog>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/supabase-config.js"></script><script src="assets/js/supabase-client.js?v=20"></script><script src="assets/js/material-service-v32.2.js?v=32.2"></script><script src="assets/js/material-public-v32.2.js?v=32.2"></script>
+<dialog id="m322InterestDialog" class="m322-dialog"><div><button type="button" class="m322-close" data-close-interest aria-label="Cerrar">×</button><h2>¿Eres socio de la Peña?</h2><p>Los precios y las solicitudes de material están disponibles en el área privada de socios.</p><div class="m322-actions"><a id="m322MemberAccess" class="btn btn-primary" href="login.html">Sí, soy socio</a><button type="button" id="m322NotMember" class="btn btn-dark-outline">No soy socio</button></div></div></dialog>
+<dialog id="m20RequestDialog" class="m322-dialog"><form method="dialog" id="m20RequestForm"><button type="button" class="m322-close" data-close-request aria-label="Cerrar">×</button><h2 id="m20RequestTitle">Consulta sobre material</h2><input type="hidden" name="material_id"><div id="m20Summary"></div><div class="m322-form"><label>Nombre<input name="nombre" required autocomplete="given-name"></label><label>Apellidos<input name="apellidos" required autocomplete="family-name"></label><label>Teléfono<input name="telefono" required autocomplete="tel"></label><label>Correo<input name="email" type="email" autocomplete="email"></label><label class="m20-member-only">Cantidad<input name="cantidad" type="number" min="1" max="20" value="1"></label><label class="m20-member-only">Talla o variante<input name="variante"></label><label class="full">Observaciones<textarea name="observaciones" rows="3"></textarea></label></div><input type="hidden" name="preferencia_contacto" value="WhatsApp"><p><label class="m322-consent"><input type="checkbox" required> Entiendo que esto es una consulta y no una compra ni una reserva definitiva.</label></p><div class="m322-actions"><button value="cancel" class="btn btn-dark-outline">Cancelar</button><button value="default" class="btn btn-primary">Enviar consulta</button></div></form></dialog>
+<dialog id="m20ConfirmDialog" class="m322-dialog"><div><h2>Consulta recibida</h2><div id="m20Confirm" class="m322-confirm"></div><div class="m322-actions"><button id="m20CloseConfirm" class="btn btn-primary">Cerrar</button></div></div></dialog>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/supabase-config.js"></script><script src="assets/js/supabase-client.js?v=20"></script><script src="assets/js/material-service-v32.2.js?v=40.9.5"></script><script src="assets/js/material-public-v32.2.js?v=40.9.5"></script><script src="assets/js/commit-40.8.2.js?v=40.9.5"></script>
 </body></html>

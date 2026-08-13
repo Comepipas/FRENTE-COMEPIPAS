@@ -1,0 +1,20 @@
+FRENTE COMEPIPAS - COMMIT 40.10.1
+
+CORRECCIONES REALIZADAS
+
+- El botón "Solicitar entrada" de un ON TOUR conserva el desplazamiento elegido.
+- Si el socio ya tiene sesión, se abre directamente el formulario de ese ON TOUR.
+- Si necesita iniciar sesión, al acceder continúa automáticamente en el desplazamiento elegido.
+- Si el socio ya está incluido en ese ON TOUR, no se genera una solicitud duplicada.
+- Corregidos los caracteres extraños, acentos y símbolos del área de socio.
+
+COMPROBACIÓN RECOMENDADA
+
+1. Abrir un ON TOUR publicado.
+2. Pulsar "Solicitar entrada".
+3. Comprobar que el área de socio muestra el formulario del ON TOUR seleccionado.
+4. Revisar que "Peña", "Próximo", "Información" y los iconos se ven correctamente.
+
+SUPABASE
+
+NO hay que ejecutar ningún SQL para este commit.

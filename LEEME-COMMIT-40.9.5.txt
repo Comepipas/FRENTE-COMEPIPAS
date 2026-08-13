@@ -1,0 +1,25 @@
+FRENTE COMEPIPAS - COMMIT 40.9.5
+
+CAMBIOS EN MATERIAL
+
+- La portada pública ya no muestra precios ni mensajes de descuento.
+- El catálogo público muestra los artículos, pero oculta todos los precios.
+- Al pulsar en un producto se pregunta si la persona es socia.
+- Si es socia, se le dirige al inicio de sesión para acceder a precios y solicitudes.
+- Si no es socia, puede enviar una consulta con nombre, apellidos y teléfono obligatorios.
+- El producto consultado queda seleccionado automáticamente y la consulta llega al correo configurado para material.
+- Dentro de una sesión de socio sí se muestran los precios y se mantiene la solicitud habitual.
+
+SUPABASE
+
+No hay que ejecutar ningún SQL.
+
+Para que el correo distinga claramente entre "Consulta pública de material" y "Solicitud de material de socio", vuelve a desplegar la función:
+
+send-request-notification
+
+Usa el archivo incluido en:
+
+supabase/functions/send-request-notification/index.ts
+
+No hay que cambiar los secretos de Brevo que ya están configurados.
