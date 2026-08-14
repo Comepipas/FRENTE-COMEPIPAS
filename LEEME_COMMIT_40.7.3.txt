@@ -1,0 +1,9 @@
+FRENTE COMEPIPAS - COMMIT 40.7.3
+
+Corrección acumulativa del listado de socios:
+- Se elimina completamente el complemento visual que podía bloquear el navegador.
+- El acceso a Categorías y edades queda añadido directamente en el HTML.
+- El listado principal se carga antes que los filtros secundarios.
+- Todas las consultas iniciales tienen tiempo máximo y muestran el error real si Supabase no responde.
+
+SQL: no requiere ejecutar ni repetir ningún SQL.

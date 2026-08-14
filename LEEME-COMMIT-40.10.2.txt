@@ -1,0 +1,35 @@
+FRENTE COMEPIPAS - COMMIT 40.10.2
+=================================
+
+Este ZIP es acumulativo: incluye todo lo preparado en 40.10.1.
+No publiques ni instales primero el ZIP 40.10.1.
+
+PASO OBLIGATORIO EN SUPABASE
+----------------------------
+1. Abre Supabase > SQL Editor.
+2. Copia y ejecuta completo este archivo del ZIP:
+   supabase/migrations/040_10_2_on_tour_current_abonado.sql
+3. Cuando aparezca "Success", publica el contenido de este ZIP.
+
+QUE CORRIGE
+-----------
+- ON TOUR pide el numero de abonado vigente que necesita el Malaga CF.
+- Ya no compara ese numero con el de la temporada anterior.
+- La identidad se comprueba de forma privada por nombre y DNI.
+- Los acompanantes tambien se validan por nombre y DNI y no pueden duplicarse.
+- La solicitud guarda el numero de abonado actual indicado para cada persona.
+- La solicitud se abre directamente desde el desplazamiento elegido.
+- Portada ON TOUR mas compacta, con la solicitud visible antes de la explicacion.
+- Nueva imagen del Santiago Bernabeu y fotografia complementaria de Madrid.
+- Las tarjetas de noticias de inicio se pueden pulsar completas.
+- Incluye las correcciones de sesion, redireccion y caracteres de 40.10.1.
+
+PRUEBA RAPIDA
+-------------
+1. Abre un ON TOUR y pulsa "Solicitar entradas ahora".
+2. Inicia sesion si fuera necesario.
+3. Escribe nombre, DNI y numero de abonado ACTUAL.
+4. Comprueba que no exige que coincida con el numero de la temporada pasada.
+5. Anade acompanantes y verifica que identifica con claridad a quien tenga datos incorrectos.
+
+El historico y los pagos 2026/27 no se eliminan ni se modifican.

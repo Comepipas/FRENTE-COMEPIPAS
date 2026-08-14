@@ -1,0 +1,18 @@
+FRENTE COMEPIPAS - COMMIT 40.9.0
+
+INCLUYE TODO LO ANTERIOR, también los cambios 40.8.4 y 40.8.5.
+
+CAMBIOS PRINCIPALES
+- Las cuotas pendientes se calculan desde las cuotas reales de la temporada activa.
+- El filtro de cuotas y el resumen de Socios muestran el mismo resultado que el Dashboard.
+- Los socios de baja pueden reactivarse sin perder su historial.
+- La eliminación definitiva queda bloqueada si existen pagos, cuotas, abonos o cualquier historial.
+- La campaña histórica 2026/27 y sus pagos no se modifican ni se eliminan.
+- Campañas de abonados queda más sencilla: se retiran las pantallas duplicadas de categorías, piloto y motor técnico.
+- Se mantienen los apartados útiles: Resumen, Configuración, Importar Excel, Abonados y cobros e Incidencias.
+
+SQL OBLIGATORIO
+Sí. Ejecuta en Supabase SQL Editor el archivo:
+PASO_COMMIT_40_9_0_EJECUTAR_EN_SUPABASE.sql
+
+Este SQL no modifica ni elimina pagos de 2026/27. Solo hace segura la eliminación definitiva de socios.

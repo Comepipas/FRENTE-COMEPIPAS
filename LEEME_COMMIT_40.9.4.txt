@@ -1,0 +1,16 @@
+FRENTE COMEPIPAS · COMMIT 40.9.4
+
+CAMBIOS
+- La ficha del socio permite marcar una cuota pendiente como pagada, aunque pertenezca a una temporada histórica cerrada.
+- Se añade una acción independiente para indicar que el socio renovó el abono directamente con el Málaga CF.
+- Si el abono se gestiona con el club, su precio queda sin informar para la Peña y no se confunde con un abono de 0 euros.
+- En las próximas campañas, el socio puede elegir que la Peña gestione el abono o renovarlo directamente con el club.
+- Si elige renovación directa con el club, la web calcula y cobra únicamente la cuota de la Peña.
+
+IMPORTANTE
+- Marcar la renovación con el club NO marca automáticamente la cuota de la Peña como pagada.
+- Marcar la cuota como pagada NO afirma que la Peña haya gestionado el abono.
+- Los pagos históricos de 2026/27 se conservan intactos.
+
+SUPABASE
+No hay que ejecutar ningún SQL nuevo para este commit.

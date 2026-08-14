@@ -1,0 +1,13 @@
+COMMIT 40.10.6 - NÚMERO DE ABONADO ACTUAL EN ON TOUR
+
+- El número de abonado del solicitante ya no se carga desde su ficha.
+- El solicitante debe escribir el número de abonado vigente cada vez que solicita entradas.
+- Ese número se guarda únicamente dentro de la solicitud ON TOUR para comunicarlo al Málaga CF.
+- No se actualiza ni se utiliza como dato permanente de la ficha del socio.
+- Los acompañantes siguen siendo opcionales y solo se exigen sus datos cuando se activa su casilla.
+
+SUPABASE
+No hay SQL nuevo para este commit.
+
+Si todavía no ejecutaste el SQL del commit 40.10.5, ejecuta en Supabase:
+PASO_COMMIT_40_10_5_EJECUTAR_EN_SUPABASE.sql
