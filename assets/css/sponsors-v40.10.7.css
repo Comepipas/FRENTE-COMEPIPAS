@@ -1,0 +1,9 @@
+.v10-sponsors-marquee{overflow:hidden!important}
+@media(max-width:760px){
+  .v10-sponsors-section{overflow:hidden!important;padding-inline:0!important}
+  .v10-sponsors-section .v10-container{width:100%!important;max-width:none!important;padding-inline:20px!important}
+  .v10-sponsors-track{display:flex!important;width:max-content!important;min-width:0!important;gap:14px!important;transform:none;animation:v10Sponsors 24s linear infinite!important;will-change:transform}
+  .v10-sponsor-logo{display:flex!important;flex:0 0 210px!important;width:210px!important;height:130px!important;align-items:center!important;justify-content:center!important;padding:16px!important}
+  .v10-sponsor-logo img{display:block!important;width:100%!important;height:100%!important;max-width:178px!important;max-height:98px!important;object-fit:contain!important;opacity:1!important}
+}
+@media(prefers-reduced-motion:reduce){.v10-sponsors-track{animation:none!important}}

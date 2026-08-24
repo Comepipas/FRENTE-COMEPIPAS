@@ -1,0 +1,28 @@
+FRENTE COMEPIPAS · COMMIT 40.9.9
+
+CORRECCIÓN DEL PANEL ON TOUR
+
+- El selector carga ahora las 38 jornadas del calendario configurado.
+- Se conservan por separado los partidos de ida y vuelta contra el mismo rival.
+- Los partidos en casa se muestran informativamente, pero no pueden crear un ON TOUR.
+- Solo se pueden seleccionar desplazamientos con día y hora confirmados.
+- Al elegir un desplazamiento se completan automáticamente:
+  rival, fecha y hora, estadio, ciudad, kilómetros desde La Rosaleda,
+  duración aproximada, escudo e imagen del destino.
+- Se mantienen las solicitudes con hasta tres acompañantes y el bloqueo de duplicados.
+
+SUPABASE
+
+No hay que ejecutar ningún SQL para este commit.
+
+COMPROBACIÓN
+
+1. Publica todos los archivos del ZIP.
+2. Abre Administración > ON TOUR.
+3. Pulsa Crear ON TOUR.
+4. El selector debe mostrar todo el calendario; los desplazamientos sin horario
+   aparecen desactivados y los confirmados pueden seleccionarse.
+5. Al seleccionar Atlético de Madrid o Real Madrid deben rellenarse todos los
+   datos del destino automáticamente.
+
+Si el navegador conserva una versión anterior, cierra la pestaña y abre de nuevo.

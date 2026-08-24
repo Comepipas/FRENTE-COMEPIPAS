@@ -1,0 +1,23 @@
+COMMIT 40.10.9 - CORRECCION DEL SQL DE ON TOUR
+
+QUE HA OCURRIDO
+El SQL 40.10.8 utilizaba el nombre on_tour, pero la tabla real del proyecto se llama travel_events.
+Tambien utilizaba tres campos que no existen en la base real.
+
+QUE CORRIGE
+- Usa la tabla real travel_events.
+- Usa apertura, cierre y plazas_totales, que son los campos reales.
+- Comprueba duplicados mediante la solicitud asociada.
+- Mantiene la verificacion conjunta de DNI y nombre.
+- No modifica socios, cuotas, pagos ni solicitudes existentes.
+
+PASO OBLIGATORIO EN SUPABASE
+1. No vuelvas a ejecutar el SQL 40.10.8.
+2. Abre Supabase > SQL Editor.
+3. Abre en este ZIP el archivo supabase/migrations/040_10_9_on_tour_tabla_real.sql.
+4. Copia todo su contenido, pegalo en SQL Editor y pulsa Run.
+5. Debe aparecer Success. No rows returned.
+
+PRUEBA
+Vuelve a enviar la solicitud ON TOUR con los datos de Elsa.
+

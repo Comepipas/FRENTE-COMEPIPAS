@@ -1,0 +1,22 @@
+FRENTE COMEPIPAS - COMMIT 40.8.1
+
+IMPORTANTE:
+- NO HAY QUE EJECUTAR NINGÚN SQL.
+- Hay que publicar todos los archivos del ZIP.
+- Hay que actualizar la función de Supabase send-request-notification.
+
+PASOS EN SUPABASE:
+1. Abre Edge Functions > send-request-notification > Code.
+2. Sustituye todo el contenido por el archivo:
+   supabase/functions/send-request-notification/index.ts
+3. Pulsa Deploy updates.
+
+PRUEBA:
+1. Abre Material en la web.
+2. Solicita un artículo.
+3. Comprueba que la solicitud aparece en administración.
+4. Comprueba que llega el correo al destinatario configurado para Material.
+
+CORRECCIÓN:
+El catálogo usaba un servicio diferente al área del socio. Guardaba correctamente
+la solicitud, pero no llamaba a la función de correo. Ahora la llama siempre.

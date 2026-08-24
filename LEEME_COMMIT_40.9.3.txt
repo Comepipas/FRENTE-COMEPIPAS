@@ -1,0 +1,11 @@
+COMMIT 40.9.3
+
+CAMBIOS
+- La tarjeta Cuotas pendientes abre Gestión de socios filtrada por Pendiente.
+- La alerta de cuotas abre el mismo listado mediante la redirección integrada.
+- La tarjeta Operaciones abiertas identifica que se trata de solicitudes de material.
+- La tarjeta Operaciones abiertas abre la gestión de solicitudes pendientes.
+- Incluye acumulativamente la retirada de la pantalla duplicada Cuotas y pagos.
+
+SUPABASE
+- No necesita ejecutar ningún SQL nuevo.

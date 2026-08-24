@@ -1,0 +1,18 @@
+FRENTE COMEPIPAS · COMMIT 40.1
+
+Dashboard Enterprise profesional
+
+- Nuevo centro de control responsive en admin.html.
+- Estadísticas reales con carga tolerante a fallos desde Supabase y modo local.
+- Actividad reciente unificada: auditoría, socios, material, noticias y ON TOUR.
+- Panel de alertas para conexión, cuotas, solicitudes y stock.
+- Indicador global de salud operativa.
+- Accesos rápidos y buscador de módulos.
+- Navegación completa: no se elimina ningún módulo existente.
+- No requiere migraciones SQL ni modifica el esquema de Supabase.
+
+Prueba recomendada:
+1. Abrir login.html e iniciar sesión como administrador.
+2. Acceder a admin.html.
+3. Comprobar versión de escritorio, tablet y móvil.
+4. Pulsar actualizar y confirmar el estado de conexión.

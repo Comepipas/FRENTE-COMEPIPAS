@@ -1,0 +1,23 @@
+FRENTE COMEPIPAS - COMMIT 40.8.3
+
+REPARACIÓN URGENTE DE RECUPERACIÓN DE CONTRASEÑA
+
+- Valida correctamente los enlaces de Supabase que incluyen la sesión en la dirección.
+- Evita aceptar por error una sesión anterior abierta en el navegador.
+- Permite crear, confirmar y guardar la contraseña nueva.
+- Devuelve al acceso de socio o administrador según el lugar desde el que se solicitó.
+- Traduce los mensajes y corrige el título de la pantalla.
+
+SUPABASE
+- No hay que ejecutar SQL.
+- No hay que crear ni modificar Edge Functions.
+- Debe mantenerse autorizada esta URL:
+  https://frente-comepipas.vercel.app/recuperar-clave.html
+- La URL restablecer-clave.html puede eliminarse porque esa página no existe.
+
+PRUEBA
+1. Publicar el contenido del ZIP.
+2. Esperar a que Vercel termine.
+3. Solicitar un único correo nuevo desde "He olvidado mi contraseña".
+4. Abrir únicamente el último correo recibido.
+5. Crear una contraseña nueva y comprobar el acceso.

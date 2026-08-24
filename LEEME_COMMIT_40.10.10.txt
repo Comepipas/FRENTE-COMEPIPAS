@@ -1,0 +1,19 @@
+COMMIT 40.10.10 - CORRECCION ON TOUR
+
+PROBLEMA CORREGIDO
+La solicitud mostraba:
+invalid input value for enum estado_socio: ""
+
+CAUSA
+El estado del socio en Supabase es un tipo especial (enum) y la funcion 40.10.9
+intentaba tratarlo directamente como texto.
+
+PASO OBLIGATORIO
+1. Abre Supabase > SQL Editor.
+2. Ejecuta completo:
+   supabase/migrations/040_10_10_on_tour_estado_socio_enum.sql
+3. Vuelve al area del socio y envia de nuevo la solicitud.
+
+NO vuelvas a ejecutar 40.10.8 ni 40.10.9.
+Este SQL no borra ni modifica socios, cuotas, pagos, ON TOUR ni solicitudes.
+

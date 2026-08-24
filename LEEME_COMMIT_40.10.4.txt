@@ -1,0 +1,26 @@
+FRENTE COMEPIPAS - COMMIT 40.10.4
+
+CORRECCION INCLUIDA
+- ON TOUR ya reconoce correctamente nombres escritos con o sin tilde.
+- Tambien admite diferencias normales de mayusculas, espacios, puntos y guiones.
+- El DNI completo sigue siendo obligatorio y se comprueba incluida su letra.
+- No se rebaja la seguridad: el acompanante debe coincidir por DNI y nombre completo.
+- No se modifican socios, pagos, solicitudes anteriores ni numeros de abonado.
+
+POR QUE FALLABA ELSA
+- En la solicitud figuraba "Elsa Gonzalez Chaves" con tilde en Gonzalez.
+- En la ficha figuraba "ELSA GONZALEZ CHAVES" sin tilde.
+- La normalizacion anterior eliminaba la letra acentuada en lugar de convertirla.
+
+SQL / SUPABASE OBLIGATORIO
+1. Abrir Supabase > SQL Editor > New query.
+2. Copiar todo el archivo PASO_COMMIT_40_10_4_EJECUTAR_EN_SUPABASE.sql.
+3. Pulsar Run.
+
+COMPROBACION
+1. Volver al area del socio y recargar la pagina.
+2. Abrir la solicitud ON TOUR.
+3. Introducir a Elsa con DNI 77670285K y su nombre completo.
+4. La comprobacion ya no debe rechazarla por la tilde.
+
+Este ZIP es acumulativo; no es necesario descargar commits anteriores.

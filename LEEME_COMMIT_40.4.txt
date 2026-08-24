@@ -1,0 +1,18 @@
+COMMIT 40.4 · FICHA MAESTRA Y SANEAMIENTO
+
+ANTES DE PUBLICAR
+1. Ejecute primero en Supabase SQL Editor:
+   supabase/migrations/040_3_member_data_consistency.sql
+   (solo si todavía no ejecutó el SQL del Commit 40.3)
+2. Ejecute después:
+   supabase/migrations/040_4_master_member_data.sql
+3. Publique el contenido del ZIP en la raíz del repositorio.
+
+CAMBIOS PRINCIPALES
+- MENOR deja de guardarse como DNI ficticio repetido.
+- Correo familiar compartido queda identificado sin crear cuentas duplicadas.
+- Cada ficha puede marcarse pendiente, incompleta, posible duplicado o revisada.
+- Categoría y cuota se muestran calculadas con nacimiento y campaña.
+- Directivo tiene una tarifa configurable; no se fuerza automáticamente a 0 €.
+- Los datos de campañas piloto quedan fuera del historial económico real del socio.
+- Los importes de prueba no se presentan como pagos reales.

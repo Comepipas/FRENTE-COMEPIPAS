@@ -6,6 +6,13 @@
   const PUBLIC_BUCKET=window.FRENTE_SUPABASE_CONFIG?.storageBuckets?.publicImages||'public-images';
   const src=value=>cmsImageSrc(value,'assets/images/patrocinadores/');
 
+  const localSave=window.saveCmsHomeData;
+  window.saveCmsHomeData=function(data){
+    localSave(data);
+    window.saveCmsHomeDataRemote?.(data).catch(error=>console.error('No se pudo compartir la configuración de portada.',error));
+    return true;
+  };
+
   function message(id,text,isError=false){
     const el=$(id);if(!el)return;
     el.textContent=text;

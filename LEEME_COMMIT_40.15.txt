@@ -1,0 +1,14 @@
+FRENTE COMEPIPAS - COMMIT 40.15
+
+CORRECCIÓN DEFINITIVA DEL ORDEN DE PORTADA
+
+- Comprobado en la web publicada: Material y Hazte socio estaban ocupando las dos primeras posiciones.
+- Se añade un controlador final de orden con archivo versionado para evitar versiones antiguas en la caché de Vercel o del navegador.
+- Material de la Peña queda siempre como penúltimo bloque.
+- Hazte socio queda siempre como último bloque antes del pie de página.
+- El bloqueo vuelve a comprobar el orden después de cargar Supabase y el CMS.
+- Se elimina cualquier botón Hazte socio que una configuración antigua intente introducir en la cabecera.
+- La cabecera mantiene Área de socios y Activar cuenta.
+- El CMS de la portada adopta el layout Enterprise con menú unificado, título proporcionado, KPIs, tablas legibles, formularios limpios y diseño responsive.
+- No se modifican los contenidos ya guardados en noticias, patrocinadores o redes.
+- Se conserva toda la funcionalidad acumulada y el commit 41 continúa aparcado.

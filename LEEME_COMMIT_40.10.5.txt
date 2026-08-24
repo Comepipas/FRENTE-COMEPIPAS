@@ -1,0 +1,14 @@
+COMMIT 40.10.5 - ACOMPANANTES OPCIONALES EN ON TOUR
+
+CAMBIOS
+- La entrada del socio solicitante es la unica obligatoria.
+- Hay tres acompanantes opcionales, cada uno con su propia casilla para activarlo.
+- Un acompanante desmarcado y vacio no bloquea ni se envia.
+- Si se activa un acompanante, entonces si son obligatorios nombre, DNI y numero actual de abonado.
+- Los DNI con letra (por ejemplo, terminados en K) se aceptan y se validan normalmente.
+
+PASO OBLIGATORIO EN SUPABASE
+Ejecuta en SQL Editor el archivo:
+PASO_COMMIT_40_10_5_EJECUTAR_EN_SUPABASE.sql
+
+Este SQL no borra solicitudes ni socios. Solo actualiza la funcion que registra solicitudes ON TOUR.

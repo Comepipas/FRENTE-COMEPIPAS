@@ -1,0 +1,3 @@
+COMMIT 40.8 · CONFIGURACIÓN ENTERPRISE
+
+Identidad, contacto, redes sociales, imágenes, colores y vista previa integrados en Administración Enterprise. Se conserva el guardado existente, la optimización de imágenes y la compatibilidad con Supabase.

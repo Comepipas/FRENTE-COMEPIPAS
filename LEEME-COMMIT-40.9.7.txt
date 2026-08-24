@@ -1,0 +1,28 @@
+FRENTE COMEPIPAS - COMMIT 40.9.7
+
+MEJORA DE ON TOUR
+
+- El selector usa el calendario completo de 38 jornadas.
+- Los partidos locales aparecen identificados, pero no permiten crear ON TOUR.
+- Los desplazamientos sin día y hora confirmados aparecen como pendientes y tampoco pueden seleccionarse.
+- Al elegir un desplazamiento confirmado se rellenan automáticamente:
+  rival, fecha y hora, estadio, ciudad, escudo, kilómetros aproximados,
+  duración aproximada por carretera e imagen del destino.
+- Las distancias, duración e imagen siguen siendo editables antes de guardar.
+- Se incluyen localmente los escudos y fotografías de los 19 posibles destinos.
+- El calendario antiguo de ON TOUR queda unificado con el calendario completo de la web.
+
+SUPABASE
+
+No hay que ejecutar ningún SQL para este commit.
+No hay que crear tablas ni modificar datos existentes.
+
+COMPROBACIÓN RECOMENDADA
+
+1. Abrir Administración > ON TOUR > Crear ON TOUR.
+2. Comprobar que aparecen las 38 jornadas.
+3. Verificar que los partidos locales y los pendientes de horario no se pueden elegir.
+4. Elegir Atlético de Madrid - Málaga CF.
+5. Comprobar que se rellenan automáticamente Madrid, Riyadh Air Metropolitano,
+   escudo, kilómetros, duración, fecha e imagen.
+6. Guardar primero como borrador.

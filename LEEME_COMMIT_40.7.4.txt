@@ -1,0 +1,9 @@
+FRENTE COMEPIPAS - COMMIT 40.7.4
+
+Reorganización acumulativa de la ficha de socio:
+- La pestaña "Historial de abonos" pasa a llamarse "Economía y pagos".
+- Abono del club, descuento, cuota de Peña, cobros y diferencias quedan juntos.
+- El bloque de cuota se muestra abierto por defecto para revisar socios uno a uno.
+- En Datos de la Peña permanece únicamente el estado automático "Cuota al día".
+
+SQL: no requiere ejecutar ningún SQL.

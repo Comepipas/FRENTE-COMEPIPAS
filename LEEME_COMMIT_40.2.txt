@@ -1,0 +1,11 @@
+FRENTE COMEPIPAS · COMMIT 40.2
+
+1. Antes de probar, abra Supabase > SQL Editor.
+2. Copie y ejecute completo el archivo:
+   supabase/migrations/040_2_family_campaign_pilot.sql
+3. Entre en Campañas de abonados y seleccione “Simulación completa 2027/28”.
+4. Añada socios como participantes de la campaña piloto si desea restringir la prueba.
+5. El socio prueba la campaña desde campana-socio.html.
+6. La directiva gestiona vínculos desde familias-admin.html.
+
+IMPORTANTE: todos los cobros del piloto son ficticios. No se conecta con bancos ni tarjetas reales.

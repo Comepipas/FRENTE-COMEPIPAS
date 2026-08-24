@@ -1,0 +1,17 @@
+COMMIT 40.10.8 - CORRECCION DE VERIFICACION ON TOUR
+
+QUE CORRIGE
+- Busca al acompanante por la combinacion exacta de DNI y nombre.
+- No toma por error la primera ficha cuando un DNI esta repetido o compartido.
+- Acepta diferencias de mayusculas, tildes, espacios, puntos y guiones.
+- Mantiene intactos socios, cuotas, pagos y solicitudes existentes.
+
+PASO OBLIGATORIO EN SUPABASE
+1. Abre Supabase > SQL Editor.
+2. Abre en el ZIP el archivo:
+   supabase/migrations/040_10_8_on_tour_identidad_duplicada.sql
+3. Copia todo su contenido, pegalo en SQL Editor y pulsa Run.
+
+PRUEBA
+- Vuelve a enviar la solicitud con ELSA GONZALEZ CHAVES y DNI 77670285K.
+- El numero de abonado puede ser el actual de esta temporada.

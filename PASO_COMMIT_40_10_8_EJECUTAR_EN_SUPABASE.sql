@@ -1,0 +1,6 @@
+-- COMMIT 40.10.8
+-- IMPORTANTE: el editor web de Supabase no admite incluir otro archivo con \i.
+-- Abre y ejecuta completo este archivo del ZIP:
+-- supabase/migrations/040_10_8_on_tour_identidad_duplicada.sql
+--
+-- La correccion es acumulativa y no modifica pagos, cuotas ni solicitudes existentes.

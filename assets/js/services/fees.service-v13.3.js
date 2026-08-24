@@ -8,10 +8,14 @@ window.FrenteFeesService = (() => {
     const member = members.get(row.socio_id) || {};
     const season = seasons.get(row.temporada_id) || {};
     const category = categories.get(row.categoria_cuota_id) || {};
+    const first = String(member.nombre || "").trim();
+    const last = String(member.apellidos || "").trim();
+    const sameName = first && last && first.localeCompare(last, "es", { sensitivity: "base" }) === 0;
+    const displayName = (sameName ? first : `${last}${last && first ? ", " : ""}${first}`).trim() || "Socio no encontrado";
     return {
       ...row,
-      numeroSocio: String(member.numero_socio ?? "").padStart(4, "0"),
-      socioNombre: `${member.apellidos || ""}, ${member.nombre || ""}`.replace(/^,\s*/, "").trim() || "Socio no encontrado",
+      numeroSocio: member.numero_socio ? String(member.numero_socio).padStart(4, "0") : "Pendiente",
+      socioNombre: displayName.toLocaleUpperCase("es-ES"),
       socioCategoria: String(member.categoria || category.nombre || "Sin categoría").trim().toLowerCase(),
       temporada: season.nombre || "Sin temporada",
       categoriaCuota: category.nombre || member.categoria || "Sin categoría",

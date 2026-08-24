@@ -1,3 +1,4 @@
+if(!window.FC4082){var fc4082=document.createElement('script');fc4082.src='assets/js/commit-40.8.2.js?v=40.8.2';document.body.appendChild(fc4082)}
 document.addEventListener('DOMContentLoaded', async () => {
   'use strict';
   const requestForm = document.getElementById('requestRecoveryForm');
@@ -27,14 +28,21 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   const recoveryInUrl =
     params.has('code') ||
+    params.has('token_hash') ||
     params.get('type') === 'recovery' ||
     location.hash.includes('type=recovery') ||
     location.hash.includes('access_token=');
 
   async function hasRecoverySession() {
+    const current = await client.auth.getSession();
+    if (current.error) throw current.error;
+    if (current.data.session) return true;
     if (params.has('code')) {
       const { error } = await client.auth.exchangeCodeForSession(params.get('code'));
-      if (error && !/already|expired/i.test(error.message || '')) throw error;
+      if (error) throw error;
+    } else if (params.has('token_hash')) {
+      const { error } = await client.auth.verifyOtp({token_hash:params.get('token_hash'),type:'recovery'});
+      if (error) throw error;
     }
     const { data, error } = await client.auth.getSession();
     if (error) throw error;

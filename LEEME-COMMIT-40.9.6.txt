@@ -1,0 +1,12 @@
+FRENTE COMEPIPAS - COMMIT 40.9.6
+
+CAMBIO REALIZADO
+- Eliminada la línea vertical que atravesaba los años en la cronología de "Nuestra historia".
+- Los años quedan limpios y claramente separados dentro de sus respectivas tarjetas.
+
+SUPABASE
+- No hay que ejecutar ningún SQL.
+- No hay que volver a desplegar ninguna Edge Function.
+
+PUBLICACIÓN
+- Publicar el contenido completo de este ZIP como en los commits anteriores.

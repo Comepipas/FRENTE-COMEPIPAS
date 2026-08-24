@@ -2,15 +2,20 @@ const MATCHES_CACHE_KEY="frente_matches_cache_v12";
 function getMatchesConfig(){return window.FRENTE_MATCHES_CONFIG||{mode:"manual",manualMatches:[]}}
 function readMatchesCache(){try{return JSON.parse(localStorage.getItem(MATCHES_CACHE_KEY))}catch{return null}}
 function saveMatchesCache(v){localStorage.setItem(MATCHES_CACHE_KEY,JSON.stringify(v))}
-function normalizeMatch(m,i=0){return{id:m.id||`match-${i}`,competition:m.competition||m.competicion||"Partido",home:m.home||m.local||"",away:m.away||m.visitante||"",date:m.date||m.fecha||m.fecha_partido||"",stadium:m.stadium||m.estadio||"",status:m.status||m.estado||"Programado",confirmed:m.confirmed??m.confirmado??true,source:m.source||m.fuente||"Calendario de la Peña"}}
+function normalizeMatch(m,i=0){return{id:m.id||`match-${i}`,competition:m.competition||m.competicion||"Partido",home:m.home||m.local||"",away:m.away||m.visitante||"",date:m.date||m.fecha||m.fecha_partido||"",stadium:m.stadium||m.estadio||"",status:m.status||m.estado||"Programado",confirmed:m.confirmed??m.confirmado??true,timeConfirmed:m.timeConfirmed??m.horario_confirmado??m.confirmed??m.confirmado??true,source:m.source||m.fuente||"Calendario de la Peña"}}
 function normalizeDbMatch(m,i=0){
   const title=String(m.titulo||''); const rival=m.rival||title.replace(/^.*?·\s*/, '').trim()||'Rival por confirmar';
   const local=String(m.local_visitante||m.condicion||'').toLowerCase();
   const isHome=local==='local'||local==='casa'||/málaga\s*cf\s*(vs|v|-)/i.test(title);
   return normalizeMatch({id:m.id,competition:m.competicion||'Partido',home:isHome?'Málaga CF':rival,away:isHome?rival:'Málaga CF',date:m.fecha_partido,stadium:m.estadio,status:m.estado,confirmed:true,source:'Partidos administrados'},i);
 }
+function fixtureName(value){
+  const name=String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]/g,'');
+  const aliases={atleti:'atleticodemadrid',atleticomadrid:'atleticodemadrid',malaga:'malagacf'};
+  return aliases[name]||name;
+}
 function fixtureKey(m){
-  const names=[String(m.home||'').trim().toLowerCase(),String(m.away||'').trim().toLowerCase()].sort();
+  const names=[fixtureName(m.home),fixtureName(m.away)].sort();
   return names.join('|');
 }
 function manualMatches(){
@@ -38,7 +43,7 @@ async function loadMatches(force=false){
     // Se agrupa por enfrentamiento, no por fecha, para evitar duplicados cuando
     // el administrador corrige día u hora de un partido ya presente en el calendario base.
     const byKey=new Map(fallback.map(m=>[fixtureKey(m),m]));
-    shared.forEach(m=>byKey.set(fixtureKey(m),m));
+    shared.forEach(m=>{const previous=byKey.get(fixtureKey(m))||{};byKey.set(fixtureKey(m),{...previous,...m,stadium:m.stadium||previous.stadium||'',timeConfirmed:m.timeConfirmed??previous.timeConfirmed??true})});
     const merged=[...byKey.values()].sort((a,b)=>new Date(a.date)-new Date(b.date));
     const p={matches:merged,updatedAt:new Date().toISOString(),mode:'supabase+calendar',error:null};saveMatchesCache(p);return p
   }}catch(e){console.warn('[38.5.2] Calendario compartido no disponible:',e.message||e)}

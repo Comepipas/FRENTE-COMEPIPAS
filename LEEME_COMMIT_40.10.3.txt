@@ -1,0 +1,23 @@
+FRENTE COMEPIPAS - COMMIT 40.10.3
+
+MEJORA INCLUIDA
+- El botón de ON TOUR ahora descarga un archivo Excel (.xlsx), no un CSV.
+- Las solicitudes se ordenan desde la inscripción más antigua a la más reciente.
+- Cada solicitud recibe un número correlativo: 1, 2, 3...
+- La fecha incluye día, mes, año, hora, minutos y segundos exactos.
+- La hoja "Solicitudes" resume cada petición y el total de entradas.
+- La hoja "Personas" desglosa al solicitante y todos sus acompañantes.
+- Se incluyen DNI, número de abonado del Málaga CF, estado y ON TOUR.
+- Se fuerza la carga de esta versión para evitar que el navegador conserve el ON TOUR anterior.
+- Los logotipos de patrocinadores vuelven a mostrarse en móvil y pueden desplazarse horizontalmente.
+
+SQL / SUPABASE
+NO hay que ejecutar ningún SQL nuevo para este commit.
+Este ZIP es acumulativo; no es necesario instalar por separado los commits anteriores.
+
+COMPROBACIÓN
+1. Entrar en Administración > ON TOUR.
+2. Pulsar "Exportar Excel".
+3. Abrir el archivo on-tour-solicitudes_FECHA_HORA.xlsx.
+4. Comprobar que la primera hoja está numerada y ordenada cronológicamente.
+5. Comprobar que la segunda hoja incluye solicitante y acompañantes.

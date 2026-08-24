@@ -1,0 +1,18 @@
+FRENTE COMEPIPAS - COMMIT 40.10
+
+PUBLICACIÓN COMPARTIDA ENTRE DISPOSITIVOS
+
+- El Editor de portada guarda y lee su configuración desde Supabase.
+- La Configuración general guarda y lee sus datos desde Supabase.
+- El CMS de portada guarda y lee patrocinadores, redes e imágenes desde Supabase.
+- Las imágenes nuevas del Editor de portada se suben al bucket public-images.
+- Se conserva una copia local únicamente como respaldo temporal de lectura.
+- Si Supabase rechaza un guardado, Administración muestra el error y no confirma una publicación falsa.
+- La web pública consulta los mismos registros compartidos, por lo que los cambios se ven desde todos los ordenadores y móviles.
+- Se conserva la portada recuperada, los tres próximos partidos y toda la funcionalidad anterior.
+- El commit 41 continúa aparcado.
+
+IMPORTANTE
+
+Para publicar cambios hay que entrar con un usuario activo de admin_profiles.
+Después de subir la carpeta completa a GitHub/Vercel, realiza un primer guardado desde cada editor que quieras personalizar. Supabase creará automáticamente sus registros compartidos.

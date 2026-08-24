@@ -1,0 +1,14 @@
+FRENTE COMEPIPAS - COMMIT 40.12
+
+HISTORIA - ADMINISTRACIÓN ENTERPRISE
+
+- Historia integrada visualmente con el resto del panel de Administración.
+- Menú lateral Enterprise con acceso a todos los módulos principales.
+- Barra superior y buscador de módulos.
+- Título reducido y jerarquía tipográfica coherente.
+- Formulario dentro de una tarjeta profesional con campos, botones y mensajes unificados.
+- Cronología editable conservada con sus controles de ordenación.
+- Navegación móvil mediante menú lateral desplegable.
+- No se modifica ni se sustituye el contenido que el administrador ya haya guardado en Supabase.
+- Se mantiene la publicación compartida entre todos los dispositivos.
+- Se conserva toda la funcionalidad acumulada y el commit 41 continúa aparcado.
