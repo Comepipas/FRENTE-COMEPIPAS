@@ -1,0 +1,25 @@
+ENTREGA PARCIAL 40.10.11 — 9 de octubre de 2026
+
+Este ZIP contiene el proyecto completo del ZIP original, sin su carpeta .git, y las siguientes correcciones locales:
+- ON TOUR público: próximos separados de pasados; historial compacto desplegable al final; mensaje sin próximos y sin solicitudes abiertas.
+- Botón de solicitud condicionado por estado, fecha, apertura y cierre. No cambia las validaciones del servidor.
+- Eliminada la asociación automática de cualquier destino que contenga Madrid con el Bernabéu: se utiliza la imagen configurada del desplazamiento.
+- Noticias: no se muestran borradores ni publicaciones programadas para el futuro en el listado/detalle público.
+- Ajustes iniciales de móvil: tamaño de campos y botones, formularios y ventanas ON TOUR, disposición de pagos familiares.
+- Corregido el error de sintaxis del servicio histórico travel-service-v19.js.
+
+VERIFICACIÓN
+203 archivos JS y 30 bloques inline sin errores de sintaxis. Ninguna referencia local literal inexistente detectada en HTML. Pruebas aisladas de clasificación/plazos ON TOUR y filtrado de noticias correctas. No se ha verificado visualmente en navegador ni contra Supabase real.
+
+PENDIENTE — NO ES LA ENTREGA DE TODOS LOS ARREGLOS
+- Sustituir escudos provisionales y fotos de relleno por recursos reales.
+- Adaptación y comprobación completa de TODAS las pantallas en móvil.
+- Campaña de prueba aislada, renovación familiar definitiva, conciliación y liquidaciones al club.
+- Correcciones de permisos, contacto, copias, calendario y correo descritas en el informe de auditoría.
+Los módulos antiguos de pagos simulados siguen siendo simulaciones: no usar para cobros reales.
+
+INSTALACIÓN
+Probar primero en una copia de la web. No se ha desplegado nada ni modificado Supabase.
+Este cambio no requiere ejecutar SQL. Los SQL incluidos son los originales históricos; NO ejecutarlos todos.
+Se conserva la configuración original de Supabase: una copia de la web seguirá apuntando al mismo servidor salvo que se cambie esa configuración.
+La revisión de móvil es inicial, no una certificación de funcionamiento integral.

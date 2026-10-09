@@ -1,0 +1,10 @@
+ENTREGA 40.10.12 — NAVEGACIÓN MÓVIL
+Incluye todos los cambios de 40.10.11 y estos nuevos cambios:
+- Botón Menú en cabeceras que ocultaban los enlaces sin ofrecer botón en móvil.
+- Estado accesible abierto/cerrado, cierre con Escape, al seguir un enlace y al pulsar fuera.
+- Tablas dentro de regiones desplazables, sin duplicar datos ni controles; incluye tablas creadas dinámicamente.
+- Ajustes de formularios, pestañas y ventanas administrativas para pantallas pequeñas.
+
+VALIDACIÓN: navegador Edge sin conexiones remotas, páginas entradas, tienda y contacto a 360, 390 y 768 px. Sin desbordamiento horizontal de página en esos nueve casos. Apertura/cierre con Escape correctos donde se incorpora el botón. Revisión sintáctica de todos los JS e inline y referencias HTML locales.
+Esta prueba no valida sesiones reales, datos de Supabase ni todos los recorridos administrativos. La adaptación integral y la campaña de prueba siguen pendientes, al igual que escudos/fotos reales y el resto del informe. No se ha ejecutado SQL ni desplegado esta versión.
+Usar esta entrega acumulativa en lugar de 40.10.11. Los scripts SQL son históricos: no ejecutarlos todos. Probar primero en una copia; la configuración Supabase sigue siendo la original.

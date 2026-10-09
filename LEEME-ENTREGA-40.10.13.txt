@@ -1,0 +1,14 @@
+ENTREGA 40.10.13 — PROTECCIÓN DE SIMULACIONES
+Acumulativa: incluye 40.10.11 y 40.10.12.
+La pantalla campana-socio.html solo selecciona campañas piloto abiertas, modo_pruebas=true y asignadas al socio mediante campanas_piloto_participantes.
+Ya no crea registros al entrar ni inventa precios para personas sin renovación preparada. Solo lee registros existentes en la campaña piloto.
+Las opciones de pago y modalidad se simulan EN MEMORIA: no se guardan en Supabase y se reinician al recargar. Las incidencias no se envían ni guardan. No se muestra cuenta bancaria para ingresar.
+Esta entrega sustituye el comportamiento anterior que escribía pagos ficticios en la base de datos. No modifica pagos existentes.
+
+NO ES TODAVÍA LA CAMPAÑA DE ENSAYO COMPLETA
+Falta crear un entorno aislado con personas ficticias, importación, órdenes persistentes de prueba, conciliación y liquidación simulada al club. El piloto actual necesita socios autorizados y registros previamente preparados, que no se crean con este ZIP.
+Estos controles son de interfaz; no sustituyen revisar las políticas del servidor. No se han cambiado políticas ni ejecutado SQL ni desplegado nada.
+Persisten los pendientes de imágenes reales, revisión móvil integral y demás puntos del informe.
+
+Validado: sintaxis de 204 JS y 30 bloques inline; referencias locales HTML; ausencia de escrituras en el módulo de simulación; exclusión de campañas reales, cerradas, no asignadas y sin modo pruebas; error de lectura visible. No probado con una sesión real de Supabase.
+Probar en copia. La configuración de conexión sigue siendo la original. No ejecutar los SQL históricos incluidos.

@@ -32,12 +32,14 @@
       const initialized=await window.FrenteSupabase.init();
       const {data,error}=await initialized.client.from('news').select('*').order('fecha',{ascending:false}).order('created_at',{ascending:false});
       if(error)throw error;
-      NEWS=(data||[]).map(normalize);
+      NEWS=(data||[]).map(normalize).filter(published);
     }catch(error){
       console.warn('Noticias: se usan datos iniciales porque Supabase no respondió.',error);
-      NEWS=(window.FRENTE_NEWS||[]).map(normalize).filter(item=>item.estado==='Publicada');
+      NEWS=(window.FRENTE_NEWS||[]).map(normalize).filter(published);
     }
   }
+
+  function published(item){return item.estado==='Publicada' && (!item.programadaPara || new Date(item.programadaPara).getTime()<=Date.now());}
 
   function getNewsById(id){return NEWS.find(item=>item.id===id);}
 
