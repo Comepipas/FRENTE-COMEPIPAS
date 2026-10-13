@@ -10,7 +10,34 @@
     async categories(admin=false){let q=(await client()).from("material_categories").select("*").order("orden");if(!admin)q=q.eq("activa",true);const r=await q;if(r.error)throw r.error;return r.data||[]},
     async items(admin=false){const c=await client();let q=c.from(admin?"material_admin_summary":"material_items").select(admin?"*":"*,material_categories(nombre,slug)").order("destacado",{ascending:false}).order("orden");if(!admin)q=q.eq("visible",true);const r=await q;if(r.error)throw r.error;const rows=r.data||[];if(!rows.length)return rows;const ids=rows.map(x=>x.id);const ir=await c.from("material_item_images").select("*").in("material_id",ids).order("principal",{ascending:false}).order("orden");if(ir.error)throw ir.error;const by={};(ir.data||[]).forEach(x=>(by[x.material_id]??=[]).push(x));return rows.map(x=>({...x,imagenes:by[x.id]||[]}))},
     async images(itemId){const r=await(await client()).from("material_item_images").select("*").eq("material_id",itemId).order("principal",{ascending:false}).order("orden");if(r.error)throw r.error;return r.data||[]},
-    async saveItem(o,files=[]){const c=await client(),id=o.id||null;delete o.id;delete o.fotos;["unidades_orientativas","orden"].forEach(k=>o[k]=Number(o[k]||0));o.precio=o.precio===""||o.precio==null?null:Number(o.precio);["visible","destacado","nuevo","mostrar_precio"].forEach(k=>o[k]=!!o[k]);let saved;const r=id?await c.from("material_items").update(clean(o)).eq("id",id).select().single():await c.from("material_items").insert(clean(o)).select().single();if(r.error)throw friendly(r.error);saved=r.data;const uploaded=[];try{if(files.length){const existing=await this.images(saved.id);let order=(existing.at(-1)?.orden||0)+10;for(const file of files){const u=await uploadImage(c,file,saved.id,order);uploaded.push(u.imagen_path);const ins=await c.from("material_item_images").insert({...u,material_id:saved.id,principal:existing.length===0&&order===10}).select().single();if(ins.error)throw ins.error;order+=10}}return saved}catch(e){if(uploaded.length)await c.storage.from(BUCKET).remove(uploaded).catch(()=>{});throw friendly(e)}},
+    async saveItem(values,files=[]){
+      const c=await client(),o={...values},id=o.id||null;
+      delete o.id;delete o.fotos;
+      ["unidades_orientativas","orden"].forEach(k=>o[k]=Number(o[k]||0));
+      o.precio=o.precio===""||o.precio==null?null:Number(o.precio);
+      ["visible","destacado","nuevo","mostrar_precio"].forEach(k=>o[k]=!!o[k]);
+      const r=id?await c.from("material_items").update(clean(o)).eq("id",id).select().single():await c.from("material_items").insert(clean(o)).select().single();
+      if(r.error)throw friendly(r.error);
+      const saved=r.data;let completed=0;
+      try{
+        if(files.length){
+          const existing=await this.images(saved.id);
+          let order=Math.max(0,...existing.map(image=>Number(image.orden)||0))+10;
+          for(const file of files){
+            const u=await uploadImage(c,file,saved.id,order);
+            // Preserve files after uncertain network responses: the row may already exist.
+            const ins=await c.from("material_item_images").insert({...u,material_id:saved.id,principal:existing.length===0&&completed===0}).select().single();
+            if(ins.error)throw ins.error;
+            completed++;order+=10;
+          }
+        }
+        return saved;
+      }catch(e){
+        const error=new Error('El artículo se guardó y '+completed+' foto(s) se confirmaron. No se han borrado las fotos anteriores. Recarga el catálogo antes de reintentar. Detalle: '+friendly(e).message);
+        error.savedItemId=saved.id;error.completedImages=completed;
+        throw error;
+      }
+    },
     async setPrimary(itemId,imageId){const c=await client();const a=await c.from("material_item_images").update({principal:false}).eq("material_id",itemId);if(a.error)throw a.error;const b=await c.from("material_item_images").update({principal:true}).eq("id",imageId);if(b.error)throw b.error},
     async moveImage(imageId,order){const r=await(await client()).from("material_item_images").update({orden:order}).eq("id",imageId);if(r.error)throw r.error},
     async deleteImage(image){const c=await client();const r=await c.from("material_item_images").delete().eq("id",image.id);if(r.error)throw r.error;if(image.imagen_path)await c.storage.from(BUCKET).remove([image.imagen_path]).catch(()=>{})},

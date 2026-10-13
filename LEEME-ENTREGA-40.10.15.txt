@@ -1,0 +1,19 @@
+ENTREGA 40.10.15 — CORRECCIONES DEL CATÁLOGO DE MATERIAL
+Acumulativa: incluye las entregas 40.10.11 a 40.10.14.
+
+CAMBIOS
+- Nombres y descripciones del catálogo del socio se insertan como texto escapado; se protegen también atributos de imagen.
+- Solo se admiten imágenes mediante direcciones HTTP/HTTPS o rutas relativas resueltas a esos protocolos.
+- Al fallar una subida múltiple se conservan las fotos ya registradas. Se informa de que el artículo quedó guardado parcialmente y cuántas fotos se confirmaron.
+- El guardado deja de modificar el objeto original del formulario.
+- Actualización de referencias para renovar la caché de los archivos modificados.
+
+LÍMITES
+Una respuesta de red incierta puede dejar una imagen subida sin registro confirmado. Se conserva para no borrar un archivo que pudiera estar referenciado: esta entrega no implementa limpieza automática de archivos huérfanos ni una transacción de servidor. Recargar y revisar antes de reintentar; no volver a enviar indiscriminadamente todas las fotos.
+La corrección de escape afecta a los renderizados commit-40.8.js y commit-40.8.4.js; no constituye una auditoría de seguridad completa.
+Pruebas aisladas: texto con etiquetas, rechazo de URL javascript, fallo de segunda foto, conservación de primera y objeto del formulario. Sin pruebas contra Supabase real.
+
+INSTALACIÓN
+No requiere ejecutar SQL ni cambiar Supabase. Probar en una copia de la web. Se conserva la conexión original.
+No ejecutar los SQL históricos del paquete.
+Siguen pendientes escudos y fotos reales de rivales/estadios, campaña completa con Excel, revisión móvil integral y los demás puntos de la auditoría.

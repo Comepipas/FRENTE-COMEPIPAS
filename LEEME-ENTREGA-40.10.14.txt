@@ -1,0 +1,36 @@
+ENTREGA 40.10.14 — ENSAYO INDEPENDIENTE DE RENOVACIÓN FAMILIAR
+
+Incluye las entregas anteriores y una nueva página:
+ensayo-renovaciones.html
+Abrirla desde la carpeta extraída o desde la misma ruta en una copia de la web. No está enlazada desde el menú público de socios.
+
+CÓMO PROBAR
+1. Entrar en Vista del socio y seleccionar las personas ficticias.
+2. Elegir para cada persona si renueva con la peña o directamente con el club.
+3. Preparar el pago ficticio conjunto.
+4. Cambiar a Vista de la directiva e introducir el importe recibido ficticio.
+5. Confirmar el ingreso. Un importe diferente al esperado bloquea la confirmación.
+6. Simular la liquidación al club y confirmar por separado sus renovaciones.
+7. Reiniciar ensayo para recuperar los datos ficticios iniciales.
+
+CAMBIOS
+- Cuatro personas ficticias: adulto, joven, infantil y directivo.
+- Abono original y descuento separados; cuota exenta cuando es cero.
+- Pago familiar conjunto sin incluir dos veces una persona en órdenes activas.
+- Cancelación de una orden pendiente para permitir preparar otra.
+- Resumen de cuotas cobradas, abonos cobrados, importe liquidado y pendiente del club.
+- La liquidación excluye las cuotas de la peña.
+- Pago confirmado y renovación confirmada por el club son estados separados.
+
+ALCANCE
+Es un prototipo independiente, guardado solo en el navegador. No conecta a Supabase ni al banco, no envía correos y no modifica datos reales. Los botones de socio/directiva son vistas de demostración, no roles de acceso. No introducir datos personales reales.
+Aún no incluye importación Excel, categorías editables por temporada, pagos parciales/devoluciones, conciliación bancaria ni liquidaciones seleccionables por persona. La liquidación de este ensayo agrupa todo el importe pendiente. No es una campaña lista para producción.
+
+VERIFICACIÓN
+Prueba de navegador a 390 px: adulto y joven suman 370 EUR (340 de abonos, 30 de cuotas). Se rechaza un ingreso de 1 EUR, se confirma 370 EUR y se liquidan 340 EUR. Se bloquea una segunda orden para esas personas y una segunda liquidación del mismo saldo. Sin peticiones HTTPS externas ni desbordamiento horizontal en el recorrido probado. Validación sintáctica del JavaScript y referencias HTML locales.
+
+INSTALACIÓN
+Entrega acumulativa. Conservar copia de la versión anterior y probar primero en una copia.
+No requiere SQL nuevo. No ejecutar los SQL históricos incluidos.
+El resto de la web conserva la configuración Supabase original: solo la página de ensayo es independiente.
+Siguen pendientes escudos/fotos reales, revisión móvil completa y los demás arreglos de la auditoría.

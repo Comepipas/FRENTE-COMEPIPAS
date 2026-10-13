@@ -1,0 +1,18 @@
+ENTREGA 40.10.16 — CONTACTO PÚBLICO
+Incluye todas las entregas anteriores.
+
+CAMBIOS
+El formulario inserta la solicitud sin solicitar su lectura posterior. Esto evita exigir al visitante permisos SELECT sobre solicitudes privadas.
+Genera una referencia antes del envío y conserva la misma en reintentos con datos idénticos durante esa página abierta.
+Distingue solicitud guardada y aviso por correo confirmado. Si el correo falla, no pide reenviar la solicitud ya guardada.
+Conserva los datos cuando falla el guardado, bloquea envíos simultáneos y añade límites de longitud acordes al SQL incluido.
+
+SUPABASE
+No incluye SQL nuevo y no requiere cambiar las políticas existentes si ya está instalada la tabla contact_requests con las políticas del proyecto. No se ha comprobado el esquema desplegado. El correo sigue dependiendo de la función send-request-notification y su configuración existente. No ejecutar los scripts SQL históricos del ZIP.
+No se ha enviado ningún mensaje ni insertado información en vuestra base de datos durante las pruebas.
+
+VERIFICACIÓN
+Pruebas aisladas con API simulada: inserción sin SELECT; éxito; correo fallido; fallo de guardado y reintento con misma referencia. Revisión sintáctica y de referencias HTML.
+Pendiente validación en vuestro despliegue. No se ha implementado limitación de abuso de la función de correo ni cola de reintentos. La referencia de reintento no persiste después de recargar la página. No garantiza ausencia de duplicados entre pestañas o sesiones.
+La web requiere HTTPS para las funciones de navegador utilizadas.
+Los demás pendientes de la auditoría y de imágenes/campaña completa continúan pendientes.
